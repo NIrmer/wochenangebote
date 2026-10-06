@@ -19,9 +19,17 @@
   "🍮": "Proteinpudding / High Protein",
   "🍗": "Hähnchen",
   "🥔": "Kartoffeln",
-  "🧂": "Gewürze",
   "🍵": "Marken-Tee"
  },
+ "ausgeblendet": [
+  "LIDL Milbona Skyr Natur",
+  "LIDL Milbona Skyr",
+  "REWE REWE Bio Gemüsepfanne mediterraner Art",
+  "LIDL Milbona High Protein Kaffeegetränk",
+  "REWE Share Protein Bites",
+  "LIDL Hähnchen-Hackfleisch",
+  "LIDL Sansibar Deluxe Gewürzmischung"
+ ],
  "maerkte": [
   {
    "id": "lidl",
@@ -29,6 +37,7 @@
    "adresse": "Celler Straße 81",
    "angebote": [
     {
+     "id": "9e0f8931-250a-4857-b7eb-ee68a3b0da7f",
      "emoji": "🌱",
      "kategorie": "Vegane Alternativen",
      "produkt": "Rügenwalder Mühle Veganer Aufschnitt",
@@ -38,9 +47,13 @@
      "app": false,
      "normal": 1.59,
      "ersparnis": 30,
-     "grundpreis": "13.88 €/kg"
+     "aktion": false,
+     "grundpreis": "13.88 €/kg",
+     "bild": "https://content-media.bonial.biz/9e0f8931-250a-4857-b7eb-ee68a3b0da7f/main.jpg",
+     "seite": 61
     },
     {
+     "id": "66f3672b-d542-4138-a798-99ff0bf7fa0b",
      "emoji": "🌱",
      "kategorie": "Vegane Alternativen",
      "produkt": "Planted. Vegane Filetwürfel Alternative",
@@ -50,9 +63,13 @@
      "app": false,
      "normal": 3.99,
      "ersparnis": 25,
-     "grundpreis": "16.61 €/kg"
+     "aktion": false,
+     "grundpreis": "16.61 €/kg",
+     "bild": "https://content-media.bonial.biz/66f3672b-d542-4138-a798-99ff0bf7fa0b/main.jpg",
+     "seite": 62
     },
     {
+     "id": "0bd9f241-c8f5-4a59-a317-7f0e65deb95d",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "Schwip Schwap / 7UP",
@@ -62,9 +79,13 @@
      "app": false,
      "normal": 1.49,
      "ersparnis": 41,
-     "grundpreis": "0.70 €/l"
+     "aktion": false,
+     "grundpreis": "0.70 €/l",
+     "bild": "https://content-media.bonial.biz/0bd9f241-c8f5-4a59-a317-7f0e65deb95d/main.jpg",
+     "seite": 61
     },
     {
+     "id": "66ca0c8f-a972-4ffc-8a44-a8f2e948996a",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "FUZE TEA",
@@ -74,9 +95,13 @@
      "app": false,
      "normal": 1.69,
      "ersparnis": 30,
-     "grundpreis": "0.95 €/l"
+     "aktion": false,
+     "grundpreis": "0.95 €/l",
+     "bild": "https://content-media.bonial.biz/66ca0c8f-a972-4ffc-8a44-a8f2e948996a/main.jpg",
+     "seite": 16
     },
     {
+     "id": "259de7c9-28c6-439a-9f87-ef10acf07af3",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "Coca-Cola / Fanta",
@@ -85,46 +110,30 @@
      "preis": 8.49,
      "app": false,
      "normal": null,
-     "ersparnis": null,
-     "grundpreis": "1.43 €/l"
+     "ersparnis": 52,
+     "aktion": false,
+     "grundpreis": "1.43 €/l",
+     "bild": "https://content-media.bonial.biz/259de7c9-28c6-439a-9f87-ef10acf07af3/main.jpg",
+     "seite": 61
     },
     {
+     "id": "41e23cae-0228-46d3-a003-66f831190faf",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "Red Bull Energy Drink",
      "warn": true,
-     "info": "Versch. Sorten, Taurin- und koffeinhaltig. Je 0,25 l zzgl. 0.25 Pfand",
+     "info": "Versch. Sorten, Taurin- und koffeinhaltig. Je 0,25 l zzgl. 0.25 Pfand Versch. Sorten, Taurin- und koffeinhaltig. 0,25 l zzgl. 0.25 Pfand",
      "preis": 0.79,
      "app": false,
      "normal": 1.49,
      "ersparnis": 47,
-     "grundpreis": null
+     "aktion": false,
+     "grundpreis": null,
+     "bild": "https://content-media.bonial.biz/41e23cae-0228-46d3-a003-66f831190faf/main.jpg",
+     "seite": 12
     },
     {
-     "emoji": "🥛",
-     "kategorie": "Skyr",
-     "produkt": "Milbona Skyr Natur",
-     "warn": false,
-     "info": "Gekühlt. Je 500 g",
-     "preis": 1.29,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "2.58 €/kg"
-    },
-    {
-     "emoji": "🥛",
-     "kategorie": "Skyr",
-     "produkt": "Milbona Skyr",
-     "warn": false,
-     "info": "Versch. Sorten. Gekühlt. 500 g",
-     "preis": 1.49,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "2.98 €/kg"
-    },
-    {
+     "id": "7f8eda5c-f1b5-4647-b355-b7f975c5f0e8",
      "emoji": "🥪",
      "kategorie": "Herta Finesse Aufschnitt",
      "produkt": "Herta Finesse Hähnchenbrust oder Schinken",
@@ -134,9 +143,13 @@
      "app": false,
      "normal": 2.59,
      "ersparnis": 50,
-     "grundpreis": "12.90 €/kg"
+     "aktion": false,
+     "grundpreis": "12.90 €/kg",
+     "bild": "https://content-media.bonial.biz/7f8eda5c-f1b5-4647-b355-b7f975c5f0e8/main.jpg",
+     "seite": 64
     },
     {
+     "id": "d4d7965c-6a29-4716-bd2d-fd50897b43f6",
      "emoji": "🍕",
      "kategorie": "Gustavo Gusto",
      "produkt": "Gustavo Gusto Steinofenpizza",
@@ -146,21 +159,13 @@
      "app": false,
      "normal": 4.99,
      "ersparnis": 30,
-     "grundpreis": null
+     "aktion": false,
+     "grundpreis": null,
+     "bild": "https://content-media.bonial.biz/d4d7965c-6a29-4716-bd2d-fd50897b43f6/main.jpg",
+     "seite": 13
     },
     {
-     "emoji": "🍮",
-     "kategorie": "Proteinpudding / High Protein",
-     "produkt": "Milbona High Protein Kaffeegetränk",
-     "warn": false,
-     "info": "Gekühlt. Je 330 ml zzgl. 0.25 Pfand",
-     "preis": 1.15,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "3.48 €/l"
-    },
-    {
+     "id": "b3cfdad1-e284-43ea-b527-d07df7384e74",
      "emoji": "🍮",
      "kategorie": "Proteinpudding / High Protein",
      "produkt": "Zott Protein Pudding",
@@ -170,21 +175,13 @@
      "app": false,
      "normal": 1.49,
      "ersparnis": 34,
-     "grundpreis": "4.95 €/kg"
+     "aktion": false,
+     "grundpreis": "4.95 €/kg",
+     "bild": "https://content-media.bonial.biz/b3cfdad1-e284-43ea-b527-d07df7384e74/main.jpg",
+     "seite": 16
     },
     {
-     "emoji": "🍗",
-     "kategorie": "Hähnchen",
-     "produkt": "Hähnchen-Hackfleisch",
-     "warn": false,
-     "info": "Marke: Metzgerfrisch · Gewürzt, je 800 g",
-     "preis": 4.99,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "6.24 €/kg"
-    },
-    {
+     "id": "8e4e3c39-287f-4873-ad20-e94ec4412d48",
      "emoji": "🍗",
      "kategorie": "Hähnchen",
      "produkt": "Frische Hähnchen-Brustfilets",
@@ -194,9 +191,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "8.65 €/kg"
+     "aktion": true,
+     "grundpreis": "8.65 €/kg",
+     "bild": "https://content-media.bonial.biz/8e4e3c39-287f-4873-ad20-e94ec4412d48/main.jpg",
+     "seite": 11
     },
     {
+     "id": "6b8bae0f-c249-40b4-af7e-49a2dec31ff5",
      "emoji": "🍗",
      "kategorie": "Hähnchen",
      "produkt": "Frische Hähnchen-Unterkeulen",
@@ -206,19 +207,10 @@
      "app": false,
      "normal": 5.59,
      "ersparnis": 21,
-     "grundpreis": null
-    },
-    {
-     "emoji": "🧂",
-     "kategorie": "Gewürze",
-     "produkt": "Sansibar Deluxe Gewürzmischung",
-     "warn": false,
-     "info": "Versch. Sorten. je 60/80/85 g",
-     "preis": 3.99,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": null
+     "aktion": false,
+     "grundpreis": null,
+     "bild": "https://content-media.bonial.biz/6b8bae0f-c249-40b4-af7e-49a2dec31ff5/main.jpg",
+     "seite": 11
     }
    ]
   },
@@ -228,6 +220,7 @@
    "adresse": "Wendenring 2",
    "angebote": [
     {
+     "id": "f132be9a-d3e0-414c-9fb7-c2b70170f089",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "Coca-Cola",
@@ -237,9 +230,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "0.95 €/l"
+     "aktion": true,
+     "grundpreis": "0.95 €/l",
+     "bild": "https://content-media.bonial.biz/f132be9a-d3e0-414c-9fb7-c2b70170f089/main.jpg",
+     "seite": 13
     },
     {
+     "id": "de700c30-9254-4ef3-8e3d-6a409279d17d",
      "emoji": "🥛",
      "kategorie": "Skyr",
      "produkt": "Exquisa Milder Skyr Drink / Fitline Protein",
@@ -249,21 +246,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "5.96 €/kg"
+     "aktion": true,
+     "grundpreis": "5.96 €/kg",
+     "bild": "https://content-media.bonial.biz/de700c30-9254-4ef3-8e3d-6a409279d17d/main.jpg",
+     "seite": 12
     },
     {
-     "emoji": "🥦",
-     "kategorie": "TK Gemüsemischung",
-     "produkt": "REWE Bio Gemüsepfanne mediterraner Art",
-     "warn": false,
-     "info": "tiefgefroren 600-g-Btl.",
-     "preis": 2.49,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "4.15 €/kg"
-    },
-    {
+     "id": "46a59ebd-0bf9-49ab-9f87-bdbcc369cd2c",
      "emoji": "🌾",
      "kategorie": "Haferflocken",
      "produkt": "Kölln Haferflocken",
@@ -273,9 +262,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "2.38 €/kg"
+     "aktion": true,
+     "grundpreis": "2.38 €/kg",
+     "bild": "https://content-media.bonial.biz/46a59ebd-0bf9-49ab-9f87-bdbcc369cd2c/main.jpg",
+     "seite": 17
     },
     {
+     "id": "f1efc934-96e4-4b84-83f7-eaff0aff377d",
      "emoji": "🍮",
      "kategorie": "Proteinpudding / High Protein",
      "produkt": "Alpro High Protein Joghurtalternative / High Protein Pudding",
@@ -285,9 +278,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "5.95 €/kg"
+     "aktion": true,
+     "grundpreis": "5.95 €/kg",
+     "bild": "https://content-media.bonial.biz/f1efc934-96e4-4b84-83f7-eaff0aff377d/main.jpg",
+     "seite": 12
     },
     {
+     "id": "8532e0da-206e-4b19-a853-91b523c0018e",
      "emoji": "🍮",
      "kategorie": "Proteinpudding / High Protein",
      "produkt": "Tress Brüder Bio Indisches Curry / Bio High Protein Curry",
@@ -297,31 +294,26 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "6.23 €/kg"
+     "aktion": true,
+     "grundpreis": "6.23 €/kg",
+     "bild": "https://content-media.bonial.biz/8532e0da-206e-4b19-a853-91b523c0018e/main.jpg",
+     "seite": 7
     },
     {
-     "emoji": "🍮",
-     "kategorie": "Proteinpudding / High Protein",
-     "produkt": "Share Protein Bites",
-     "warn": false,
-     "info": "Coconut Almond 40-g-Riegel",
-     "preis": 2.29,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "grundpreis": "57.25 €/kg"
-    },
-    {
+     "id": "426ba5db-0f4e-4ae1-ab14-c244dd62bbbb",
      "emoji": "🥔",
      "kategorie": "Kartoffeln",
      "produkt": "REWE Beste Wahl Die Feinen",
      "warn": false,
-     "info": "Deutschland/Belgien/Frankreich Speisekartoffeln, Sorte: siehe Etikett, Kocheigenschaft: fe",
+     "info": "Deutschland/Belgien/Frankreich Speisekartoffeln, Sorte: siehe Etikett, Kocheigenschaft: festkochend, Qualität I 1-kg-Schale",
      "preis": 1.79,
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": null
+     "aktion": true,
+     "grundpreis": null,
+     "bild": "https://content-media.bonial.biz/426ba5db-0f4e-4ae1-ab14-c244dd62bbbb/main.jpg",
+     "seite": 9
     }
    ]
   },
@@ -331,6 +323,7 @@
    "adresse": "Hamburger Str. 280",
    "angebote": [
     {
+     "id": "edeka-20-0",
      "emoji": "🥤",
      "kategorie": "Softdrinks Zero",
      "produkt": "Pepsi, Schwip Schwap oder Seven up",
@@ -340,9 +333,13 @@
      "app": true,
      "normal": 1.49,
      "ersparnis": 47,
-     "grundpreis": "0.71 €/l"
+     "aktion": false,
+     "grundpreis": "0.71 €/l",
+     "bild": null,
+     "seite": 20
     },
     {
+     "id": "edeka-14-1",
      "emoji": "🥦",
      "kategorie": "TK Gemüsemischung",
      "produkt": "EDEKA Herzstücke Wirsing",
@@ -352,9 +349,13 @@
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "2.98 €/kg"
+     "aktion": false,
+     "grundpreis": "2.98 €/kg",
+     "bild": null,
+     "seite": 14
     },
     {
+     "id": "edeka-14-2",
      "emoji": "🍲",
      "kategorie": "Frosta Fertiggerichte",
      "produkt": "Frosta Fertiggerichte",
@@ -364,33 +365,45 @@
      "app": true,
      "normal": 4.79,
      "ersparnis": 52,
-     "grundpreis": "6.48 €/kg"
+     "aktion": false,
+     "grundpreis": "6.48 €/kg",
+     "bild": null,
+     "seite": 14
     },
     {
+     "id": "edeka-14-3",
      "emoji": "🐟",
      "kategorie": "Iglo Schlemmerfilet",
      "produkt": "Iglo Schlemmerfilet oder Filegro",
      "warn": false,
-     "info": "tiefgefroren, versch. Sorten 220/240/250/380g Packung 1kg = 13,60/12,46/11,96/7,87",
+     "info": "tiefgefroren, versch. Sorten 220/240/250/380g Packung",
      "preis": 2.99,
      "app": false,
      "normal": 4.89,
      "ersparnis": 39,
-     "grundpreis": "13.60 €/kg"
+     "aktion": false,
+     "grundpreis": "13.60 €/kg",
+     "bild": null,
+     "seite": 14
     },
     {
+     "id": "edeka-10-4",
      "emoji": "🥣",
      "kategorie": "Körniger Frischkäse",
      "produkt": "Exquisa Frischkäsezubereitung oder Körniger Frischkäse",
      "warn": false,
-     "info": "versch. Sorten und Fettstufen 175/200g Becher 1kg = 5,66/4,95",
+     "info": "versch. Sorten und Fettstufen 175/200g Becher",
      "preis": 0.99,
      "app": false,
      "normal": 1.89,
      "ersparnis": 48,
-     "grundpreis": "5.66 €/kg"
+     "aktion": false,
+     "grundpreis": "5.66 €/kg",
+     "bild": null,
+     "seite": 10
     },
     {
+     "id": "edeka-16-5",
      "emoji": "🌾",
      "kategorie": "Haferflocken",
      "produkt": "Kölln Blütenzarte oder kernige Haferflocken",
@@ -400,45 +413,61 @@
      "app": true,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "1.98 €/kg"
+     "aktion": false,
+     "grundpreis": "1.98 €/kg",
+     "bild": null,
+     "seite": 16
     },
     {
+     "id": "edeka-10-6",
      "emoji": "🌾",
      "kategorie": "Haferflocken",
      "produkt": "Milram Porridge",
      "warn": false,
-     "info": "versch. Sorten 160g Becher 1kg = 7,44",
+     "info": "versch. Sorten 160g Becher",
      "preis": 1.19,
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "7.44 €/kg"
+     "aktion": false,
+     "grundpreis": "7.44 €/kg",
+     "bild": null,
+     "seite": 10
     },
     {
+     "id": "edeka-11-7",
      "emoji": "🍮",
      "kategorie": "Proteinpudding / High Protein",
      "produkt": "YouCook Fertiggerichte",
      "warn": false,
-     "info": "versch. Sorten, aus dem Kühlregal, z. B.: Indisches-Butter-Chicken 420g, High Protein Past",
+     "info": "versch. Sorten, aus dem Kühlregal, z. B.: Indisches-Butter-Chicken 420g, High Protein Pasta",
      "preis": 3.79,
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "9.02 €/kg"
+     "aktion": false,
+     "grundpreis": "9.02 €/kg",
+     "bild": null,
+     "seite": 11
     },
     {
+     "id": "edeka-6-8",
      "emoji": "🍗",
      "kategorie": "Hähnchen",
      "produkt": "Hähnchen-Innenfilet",
      "warn": false,
-     "info": "Marke: Gut & Günstig · in Streifen geschnitten, SB-verpackt 400g Packung 1kg = 12,48",
+     "info": "Marke: Gut & Günstig · in Streifen geschnitten, SB-verpackt 400g Packung",
      "preis": 4.99,
      "app": false,
      "normal": null,
      "ersparnis": null,
-     "grundpreis": "12.48 €/kg"
+     "aktion": false,
+     "grundpreis": "12.48 €/kg",
+     "bild": null,
+     "seite": 6
     },
     {
+     "id": "edeka-4-9",
      "emoji": "🥔",
      "kategorie": "Kartoffeln",
      "produkt": "EDEKA Regional Bio-Speisekartoffeln",
@@ -448,21 +477,29 @@
      "app": false,
      "normal": 1.99,
      "ersparnis": 10,
-     "grundpreis": "1.19 €/kg"
+     "aktion": false,
+     "grundpreis": "1.19 €/kg",
+     "bild": null,
+     "seite": 4
     },
     {
+     "id": "edeka-17-10",
      "emoji": "🍵",
      "kategorie": "Marken-Tee",
      "produkt": "Bünting Tee Grünpack",
      "warn": false,
-     "info": "schwarzer Tee, original aus Ostfriesland, Spitzenklasse 500g Packung 1kg = 13,98",
+     "info": "schwarzer Tee, original aus Ostfriesland, Spitzenklasse 500g Packung",
      "preis": 6.99,
      "app": false,
      "normal": 9.99,
      "ersparnis": 30,
-     "grundpreis": "13.98 €/kg"
+     "aktion": false,
+     "grundpreis": "13.98 €/kg",
+     "bild": null,
+     "seite": 17
     },
     {
+     "id": "edeka-17-11",
      "emoji": "🍵",
      "kategorie": "Marken-Tee",
      "produkt": "Meßmer Tee",
@@ -472,7 +509,10 @@
      "app": false,
      "normal": 2.29,
      "ersparnis": 35,
-     "grundpreis": null
+     "aktion": false,
+     "grundpreis": null,
+     "bild": null,
+     "seite": 17
     }
    ]
   }

@@ -96,6 +96,7 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .app { font-size: 11px; font-weight: 700; color: var(--ok); background: var(--ok-soft); border-radius: 6px; padding: 1px 5px; vertical-align: 3px; }
 .was { color: var(--muted); font-size: 13px; }
 .was s { margin-right: 4px; }
+.aktion { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; }
 .save { color: var(--accent); font-weight: 700; }
 .unit { color: var(--muted); font-size: 12px; margin-top: 2px; }
 .empty { text-align: center; color: var(--muted); padding: 40px 0; }
@@ -132,7 +133,9 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <summary>Hinweise &amp; Legende</summary>
     <p><strong>⚠ Sorte prüfen</strong>: Nur die Marke ist im Angebot („versch. Sorten“). Im Markt prüfen, ob die gewünschte Variante (z. B. Zero) dabei ist.</p>
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
+    <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
+    <p id="aus"></p>
     <p id="hinweise"></p>
   </details>
   <footer id="foot"></footer>
@@ -162,6 +165,7 @@ async function init() {
   const zeitraum = DATA.von ? ` · ${fmtDate(DATA.von)}–${fmtDate(DATA.bis)}` : "";
   $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${ALL.length} Treffer · Stand ${fmtDate(DATA.stand)}`;
   $("#hinweise").textContent = DATA.hinweise ? "Diese Woche: " + DATA.hinweise : "";
+  if (DATA.ausgeblendet?.length) $("#aus").textContent = "Ausgeblendet, weil im Prospekt nicht als Angebot hervorgehoben: " + DATA.ausgeblendet.join(" · ");
   $("#foot").textContent = DATA.quellen ? "Quellen: " + DATA.quellen : "";
 
   state.sort = load("sort", "kat");
@@ -175,7 +179,7 @@ function filtered() {
   return ALL.filter(a =>
     (state.markt === "alle" || a.markt === state.markt) &&
     (!state.kat || a.kategorie === state.kat) &&
-    (!state.rabatt || a.ersparnis) &&
+    (!state.rabatt || a.ersparnis || a.aktion) &&
     (!state.q || `${a.produkt} ${a.info} ${a.kategorie}`.toLowerCase().includes(state.q)));
 }
 
@@ -191,10 +195,10 @@ function renderTabs() {
 function renderChips() {
   const pool = ALL.filter(a => state.markt === "alle" || a.markt === state.markt);
   const kats = Object.entries(DATA.legende).filter(([, k]) => pool.some(a => a.kategorie === k));
-  const reduziert = pool.filter(a => a.ersparnis).length;
+  const reduziert = pool.filter(a => a.ersparnis || a.aktion).length;
   $("#chips").innerHTML =
     `<button class="chip" data-k="" aria-pressed="${!state.kat && !state.rabatt}">Alles</button>` +
-    `<button class="chip" data-r="1" aria-pressed="${state.rabatt}">🔻 Reduziert (${reduziert})</button>` +
+    `<button class="chip" data-r="1" aria-pressed="${state.rabatt}">🔻 Mit Rabatt/Aktion (${reduziert})</button>` +
     kats.map(([e, k]) => `<button class="chip" data-k="${esc(k)}" aria-pressed="${state.kat === k}">${e} ${esc(k)}</button>`).join("");
   $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {
     if (b.dataset.r) state.rabatt = !state.rabatt;
@@ -208,7 +212,10 @@ function card(a, showMarkt) {
   const tags = [];
   if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
   if (a.warn) tags.push(`<span class="tag warn">⚠ Sorte prüfen</span>`);
-  const was = a.normal ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>` : "";
+  const was = a.normal
+    ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>`
+    : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
+    : a.aktion ? `<div class="was"><span class="aktion">Aktion</span></div>` : "";
   return `<article class="card">
     <div class="emo" title="${esc(a.kategorie)}">${a.emoji}</div>
     <div>

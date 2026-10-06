@@ -6,4 +6,4 @@ Zeigt die gefilterten Prospekt-Angebote von LIDL (Celler Str.), REWE (Wendenring
 
 - `index.html` – die Seite (statisch, kein Build)
 - `angebote.json` – Daten der aktuellen Woche, wird jeden Sonntag vom geplanten Auftrag aktualisiert
-- `tools/woche_to_json.py` – wandelt die `woche.md` des Scrapers in `angebote.json` um
+- `tools/prospekt_scraper.py` – Noahs Scraper (wird vom Sonntagsauftrag direkt aus dem Repo ausgeführt), schreibt Notion-Markdown und `angebote.json`
