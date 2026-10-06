@@ -322,6 +322,10 @@ def _kw(sel, stand):
     bis = sorted(r["bis"] for r in sel if r.get("bis"))
     return date.fromisoformat(bis[0]).isocalendar()[1] if bis else date.fromisoformat(stand).isocalendar()[1] + 1
 
+def _label(r):
+    prod = _produkt_info(r)[0]
+    return prod if prod.upper().startswith(r["markt"]) else f"{r['markt']} {prod}"
+
 def _sichtbar(sel):
     return [r for r in sel if r.get("hervorhebung") != "kein"], [r for r in sel if r.get("hervorhebung") == "kein"]
 
@@ -339,7 +343,7 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
           f'\tLegende: {legende}']
     if aus:
         md.append('\tAusgeblendet (im Prospekt nicht als Angebot hervorgehoben): '
-                  + " · ".join(_esc(f"{r['markt']} {_produkt_info(r)[0]} {r['preis']:.2f} €") for r in aus))
+                  + " · ".join(_esc(f"{_label(r)} {r['preis']:.2f} €") for r in aus))
     if hinweise:
         md.append(f'\tHinweise: {_esc(hinweise)}')
     md.append('</callout>')
@@ -395,7 +399,7 @@ def to_site_json(sel, quellen, stand, hinweise=""):
             "von": date.fromisocalendar(jahr, kw, 1).isoformat(), "bis": date.fromisocalendar(jahr, kw, 6).isoformat(),
             "quellen": " · ".join(f"{k}: {v}" for k, v in quellen.items()), "hinweise": hinweise,
             "legende": {EMOJI.get(k, "•"): k for k in used},
-            "ausgeblendet": [f"{r['markt']} {_produkt_info(r)[0]}" for r in aus],
+            "ausgeblendet": [_label(r) for r in aus],
             "maerkte": maerkte}
 
 if __name__ == "__main__":

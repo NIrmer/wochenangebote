@@ -4,7 +4,7 @@
  "von": "2026-10-05",
  "bis": "2026-10-10",
  "quellen": "LIDL: filiale · REWE: filiale · EDEKA: Görge E-Center-Prospekt (aus Bildern ausgelesen)",
- "hinweise": "Alle 3 Märkte geladen (LIDL/REWE filialgenau, EDEKA 34 Seiten). EDEKA-Seite 29 gilt nur Do.–Sa., Seite 30 nur Sa.",
+ "hinweise": "Alle 3 Märkte geladen (LIDL/REWE filialgenau, EDEKA 34 Seiten). EDEKA-Seite 29 gilt nur Do.–Sa., Seite 30 nur Sa. EDEKA ohne Streichpreis diese Woche noch nicht auf „Aktion“ geprüft (ab KW 42 automatisch).",
  "legende": {
   "🌱": "Vegane Alternativen",
   "🥤": "Softdrinks Zero",
@@ -24,7 +24,7 @@
  "ausgeblendet": [
   "LIDL Milbona Skyr Natur",
   "LIDL Milbona Skyr",
-  "REWE REWE Bio Gemüsepfanne mediterraner Art",
+  "REWE Bio Gemüsepfanne mediterraner Art",
   "LIDL Milbona High Protein Kaffeegetränk",
   "REWE Share Protein Bites",
   "LIDL Hähnchen-Hackfleisch",
