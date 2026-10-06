@@ -389,7 +389,6 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
     md = ['<callout icon="🛒" color="gray_bg">',
           f'\t**KW {kw}** · Stand {stand} · {len(sel)} Treffer ({counts})',
           '\tQuellen: ' + " · ".join(f"{k}: {_esc(v)}" for k, v in quellen.items()),
-          '\t⚠ vor dem Produkt = nur die Marke ist im Angebot („versch. Sorten“) → im Markt prüfen, ob deine Variante (z. B. Zero) dabei ist',
           '\tNormal = durchgestrichener Preis bzw. UVP aus dem Prospekt · „Aktion“ = im Prospekt als Aktion beworben, Originalpreis nicht angegeben',
           f'\tLegende: {legende}']
     if aus:
@@ -410,8 +409,6 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
             gp = f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else ""
             preis = (f"{r['preis']:.2f} €" if isinstance(r["preis"], (int, float)) and r["preis"] else "–") + (" (App)" if r["preisart"] == "APP-PREIS" else "")
             prod, info = _produkt_info(r)
-            if "prüfen" in r["status"]:
-                prod = "⚠ " + prod
             n, pz = r.get("normalpreis"), _prozent(r)
             normal = f"{n:.2f} €" if isinstance(n, (int, float)) and n else ""
             if pz:

@@ -86,7 +86,10 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
   position: relative; width: 76px; height: 76px; border-radius: 12px; background: var(--pic);
   display: grid; place-items: center; padding: 0; border: 0; cursor: zoom-in; overflow: visible;
 }
-.pic img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; padding: 4px; }
+.pic img {
+  position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box;
+  object-fit: contain; border-radius: 12px; padding: 4px;
+}
 .pic.leer { cursor: default; font-size: 32px; }
 .pic .emo {
   position: absolute; right: -6px; bottom: -6px; font-size: 15px; line-height: 1;
@@ -105,7 +108,6 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .info { color: var(--muted); font-size: 13px; margin-top: 3px; }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .tag { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 6px; }
-.tag.warn { background: var(--warn-soft); color: var(--warn); }
 .tag.m-lidl { color: var(--lidl); background: color-mix(in srgb, var(--lidl) 14%, transparent); }
 .tag.m-rewe { color: var(--rewe); background: color-mix(in srgb, var(--rewe) 14%, transparent); }
 .tag.m-edeka { color: var(--text); background: color-mix(in srgb, var(--edeka) 35%, transparent); }
@@ -149,7 +151,6 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
   <details>
     <summary>Hinweise &amp; Legende</summary>
-    <p><strong>⚠ Sorte prüfen</strong>: Nur die Marke ist im Angebot („versch. Sorten“). Im Markt prüfen, ob die gewünschte Variante (z. B. Zero) dabei ist.</p>
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
@@ -232,7 +233,6 @@ function renderChips() {
 function card(a, showMarkt) {
   const tags = [];
   if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
-  if (a.warn) tags.push(`<span class="tag warn">⚠ Sorte prüfen</span>`);
   const was = a.normal
     ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>`
     : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
