@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wochenangebote BS</title>
+<meta name="description" content="Wochenangebote von LIDL, REWE und EDEKA in Braunschweig – gefiltert nach unserer Einkaufsliste.">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161513" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Angebote">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root {
+  --bg: #f6f3ee; --surface: #fffdf9; --line: #e7e1d7; --text: #1f1d1a; --muted: #6f6a62;
+  --accent: #d6411f; --accent-soft: #fbe5dd; --ok: #2f7a4b; --ok-soft: #dff0e5;
+  --warn: #9a6400; --warn-soft: #fbefd5; --chip: #ece7de;
+  --lidl: #1d5fa8; --rewe: #c8102e; --edeka: #f0b400;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161513; --surface: #201e1b; --line: #33302b; --text: #f1ede6; --muted: #a39d93;
+    --accent: #ff7a55; --accent-soft: #3a231b; --ok: #6cc690; --ok-soft: #1c3226;
+    --warn: #f0b64a; --warn-soft: #3a2e15; --chip: #2a2824;
+    --lidl: #6aa5ea; --rewe: #ff6b7f; --edeka: #ffd24d;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+header { padding: calc(20px + env(safe-area-inset-top)) 0 8px; }
+h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+h1 span { color: var(--accent); }
+.meta { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+.controls {
+  position: sticky; top: 0; z-index: 5; background: var(--bg);
+  padding: 10px 0 8px; border-bottom: 1px solid var(--line);
+}
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tab {
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  border-radius: 10px; padding: 8px 4px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.tab small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.tab[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.tab[aria-pressed="true"] small { color: inherit; opacity: .7; }
+.row { display: flex; gap: 8px; margin-top: 8px; }
+.search {
+  flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 16px;
+}
+select {
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  border-radius: 10px; padding: 9px 8px; font: inherit; font-size: 14px;
+}
+.chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 8px; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; border: 0; background: var(--chip); color: var(--text); border-radius: 999px;
+  padding: 6px 11px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+h2 {
+  font-size: 15px; text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+h2 .dot { width: 10px; height: 10px; border-radius: 50%; }
+h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); font-size: 13px; }
+
+.list { display: grid; gap: 8px; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: start;
+}
+.emo { font-size: 24px; line-height: 1; padding-top: 2px; text-align: center; }
+.name { font-weight: 600; line-height: 1.25; }
+.info { color: var(--muted); font-size: 13px; margin-top: 3px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tag { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 6px; }
+.tag.warn { background: var(--warn-soft); color: var(--warn); }
+.tag.m-lidl { color: var(--lidl); background: color-mix(in srgb, var(--lidl) 14%, transparent); }
+.tag.m-rewe { color: var(--rewe); background: color-mix(in srgb, var(--rewe) 14%, transparent); }
+.tag.m-edeka { color: var(--text); background: color-mix(in srgb, var(--edeka) 35%, transparent); }
+.price { text-align: right; white-space: nowrap; }
+.now { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.app { font-size: 11px; font-weight: 700; color: var(--ok); background: var(--ok-soft); border-radius: 6px; padding: 1px 5px; vertical-align: 3px; }
+.was { color: var(--muted); font-size: 13px; }
+.was s { margin-right: 4px; }
+.save { color: var(--accent); font-weight: 700; }
+.unit { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+details { margin: 28px 0 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+summary { cursor: pointer; font-weight: 600; }
+details p { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 0 28px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Wochen<span>angebote</span></h1>
+    <div class="meta" id="meta">Lade Angebote …</div>
+  </header>
+
+  <div class="controls">
+    <div class="tabs" id="tabs"></div>
+    <div class="row">
+      <input class="search" id="q" type="search" placeholder="Suchen, z. B. Skyr" autocomplete="off">
+      <select id="sort" aria-label="Sortierung">
+        <option value="kat">Kategorie</option>
+        <option value="preis">Preis ↑</option>
+        <option value="rabatt">Rabatt ↓</option>
+      </select>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <main id="out"></main>
+
+  <details>
+    <summary>Hinweise &amp; Legende</summary>
+    <p><strong>⚠ Sorte prüfen</strong>: Nur die Marke ist im Angebot („versch. Sorten“). Im Markt prüfen, ob die gewünschte Variante (z. B. Zero) dabei ist.</p>
+    <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
+    <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
+    <p id="hinweise"></p>
+  </details>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
+const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const state = { markt: "alle", kat: null, q: "", sort: "kat", rabatt: false };
+let DATA, ALL = [];
+
+function load(key, fallback) { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
+function save(key, val) { try { localStorage.setItem(key, val); } catch {} }
+
+async function init() {
+  try {
+    const r = await fetch("angebote.json", { cache: "no-cache" });
+    DATA = await r.json();
+  } catch (e) {
+    $("#meta").textContent = "Angebote konnten nicht geladen werden.";
+    return;
+  }
+  ALL = DATA.maerkte.flatMap(m => m.angebote.map((a, i) => ({ ...a, markt: m.id, marktName: m.name, idx: i })));
+  const zeitraum = DATA.von ? ` · ${fmtDate(DATA.von)}–${fmtDate(DATA.bis)}` : "";
+  $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${ALL.length} Treffer · Stand ${fmtDate(DATA.stand)}`;
+  $("#hinweise").textContent = DATA.hinweise ? "Diese Woche: " + DATA.hinweise : "";
+  $("#foot").textContent = DATA.quellen ? "Quellen: " + DATA.quellen : "";
+
+  state.sort = load("sort", "kat");
+  $("#sort").value = state.sort;
+  $("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); render(); });
+  $("#sort").addEventListener("change", e => { state.sort = e.target.value; save("sort", state.sort); render(); });
+  render();
+}
+
+function filtered() {
+  return ALL.filter(a =>
+    (state.markt === "alle" || a.markt === state.markt) &&
+    (!state.kat || a.kategorie === state.kat) &&
+    (!state.rabatt || a.ersparnis) &&
+    (!state.q || `${a.produkt} ${a.info} ${a.kategorie}`.toLowerCase().includes(state.q)));
+}
+
+function renderTabs() {
+  const tabs = [{ id: "alle", name: "Alle" }, ...DATA.maerkte.map(m => ({ id: m.id, name: m.id.toUpperCase() }))];
+  $("#tabs").innerHTML = tabs.map(t => {
+    const n = ALL.filter(a => (t.id === "alle" || a.markt === t.id) && (!state.kat || a.kategorie === state.kat)).length;
+    return `<button class="tab" data-m="${t.id}" aria-pressed="${state.markt === t.id}">${t.name}<small>${n}</small></button>`;
+  }).join("");
+  $("#tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => { state.markt = b.dataset.m; render(); });
+}
+
+function renderChips() {
+  const pool = ALL.filter(a => state.markt === "alle" || a.markt === state.markt);
+  const kats = Object.entries(DATA.legende).filter(([, k]) => pool.some(a => a.kategorie === k));
+  const reduziert = pool.filter(a => a.ersparnis).length;
+  $("#chips").innerHTML =
+    `<button class="chip" data-k="" aria-pressed="${!state.kat && !state.rabatt}">Alles</button>` +
+    `<button class="chip" data-r="1" aria-pressed="${state.rabatt}">🔻 Reduziert (${reduziert})</button>` +
+    kats.map(([e, k]) => `<button class="chip" data-k="${esc(k)}" aria-pressed="${state.kat === k}">${e} ${esc(k)}</button>`).join("");
+  $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {
+    if (b.dataset.r) state.rabatt = !state.rabatt;
+    else if (!b.dataset.k) { state.kat = null; state.rabatt = false; }
+    else state.kat = state.kat === b.dataset.k ? null : b.dataset.k;
+    render();
+  });
+}
+
+function card(a, showMarkt) {
+  const tags = [];
+  if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
+  if (a.warn) tags.push(`<span class="tag warn">⚠ Sorte prüfen</span>`);
+  const was = a.normal ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>` : "";
+  return `<article class="card">
+    <div class="emo" title="${esc(a.kategorie)}">${a.emoji}</div>
+    <div>
+      <div class="name">${esc(a.produkt)}</div>
+      ${a.info ? `<div class="info">${esc(a.info)}</div>` : ""}
+      ${tags.length ? `<div class="tags">${tags.join("")}</div>` : ""}
+    </div>
+    <div class="price">
+      <div class="now">${a.app ? '<span class="app">App</span> ' : ""}${eur(a.preis)}</div>
+      ${was}
+      ${a.grundpreis ? `<div class="unit">${esc(a.grundpreis.replace(".", ","))}</div>` : ""}
+    </div>
+  </article>`;
+}
+
+function render() {
+  renderTabs();
+  renderChips();
+  let list = filtered();
+  if (!list.length) { $("#out").innerHTML = `<div class="empty">Keine Treffer.</div>`; return; }
+
+  if (state.sort === "kat") {
+    // Gruppiert nach Markt, Reihenfolge wie im Scraper (Priorität / Watchlist)
+    const html = DATA.maerkte.map(m => {
+      const items = list.filter(a => a.markt === m.id);
+      if (!items.length) return "";
+      return `<h2><span class="dot" style="background:var(--${m.id})"></span>${esc(m.name)} <span class="addr">${esc(m.adresse)}</span></h2>
+        <div class="list">${items.map(a => card(a, false)).join("")}</div>`;
+    }).join("");
+    $("#out").innerHTML = html;
+  } else {
+    const key = state.sort === "preis" ? (a => a.preis ?? 1e9) : (a => -(a.ersparnis ?? -1));
+    list = [...list].sort((x, y) => key(x) - key(y));
+    $("#out").innerHTML = `<div class="list" style="margin-top:14px">${list.map(a => card(a, true)).join("")}</div>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>
