@@ -17,7 +17,7 @@
   --bg: #f6f3ee; --surface: #fffdf9; --line: #e7e1d7; --text: #1f1d1a; --muted: #6f6a62;
   --accent: #d6411f; --accent-soft: #fbe5dd; --ok: #2f7a4b; --ok-soft: #dff0e5;
   --warn: #9a6400; --warn-soft: #fbefd5; --chip: #ece7de;
-  --lidl: #1d5fa8; --rewe: #c8102e; --edeka: #f0b400;
+  --lidl: #1d5fa8; --rewe: #c8102e; --edeka: #f0b400; --pic: #ffffff;
   --radius: 14px;
 }
 @media (prefers-color-scheme: dark) {
@@ -25,7 +25,7 @@
     --bg: #161513; --surface: #201e1b; --line: #33302b; --text: #f1ede6; --muted: #a39d93;
     --accent: #ff7a55; --accent-soft: #3a231b; --ok: #6cc690; --ok-soft: #1c3226;
     --warn: #f0b64a; --warn-soft: #3a2e15; --chip: #2a2824;
-    --lidl: #6aa5ea; --rewe: #ff6b7f; --edeka: #ffd24d;
+    --lidl: #6aa5ea; --rewe: #ff6b7f; --edeka: #ffd24d; --pic: #f4f1ec;
   }
 }
 * { box-sizing: border-box; }
@@ -80,14 +80,34 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .list { display: grid; gap: 8px; }
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 12px; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: start;
+  padding: 10px; display: grid; grid-template-columns: 76px 1fr auto; gap: 12px; align-items: start;
 }
-.emo { font-size: 24px; line-height: 1; padding-top: 2px; text-align: center; }
+.pic {
+  position: relative; width: 76px; height: 76px; border-radius: 12px; background: var(--pic);
+  display: grid; place-items: center; padding: 0; border: 0; cursor: zoom-in; overflow: visible;
+}
+.pic img {
+  position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box;
+  object-fit: contain; border-radius: 12px; padding: 4px;
+}
+.pic.leer { cursor: default; font-size: 32px; }
+.pic .emo {
+  position: absolute; right: -6px; bottom: -6px; font-size: 15px; line-height: 1;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px;
+}
+.pic.leer .emo { display: none; }
+.lightbox {
+  position: fixed; inset: 0; z-index: 20; background: rgba(10, 9, 8, .82); display: none;
+  align-items: center; justify-content: center; padding: 24px 16px; cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox figure { margin: 0; max-width: 520px; width: 100%; text-align: center; }
+.lightbox img { max-width: 100%; max-height: 75vh; border-radius: 12px; background: #fff; }
+.lightbox figcaption { color: #f1ede6; font-size: 13px; margin-top: 10px; }
 .name { font-weight: 600; line-height: 1.25; }
 .info { color: var(--muted); font-size: 13px; margin-top: 3px; }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .tag { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 6px; }
-.tag.warn { background: var(--warn-soft); color: var(--warn); }
 .tag.m-lidl { color: var(--lidl); background: color-mix(in srgb, var(--lidl) 14%, transparent); }
 .tag.m-rewe { color: var(--rewe); background: color-mix(in srgb, var(--rewe) 14%, transparent); }
 .tag.m-edeka { color: var(--text); background: color-mix(in srgb, var(--edeka) 35%, transparent); }
@@ -131,7 +151,6 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
   <details>
     <summary>Hinweise &amp; Legende</summary>
-    <p><strong>⚠ Sorte prüfen</strong>: Nur die Marke ist im Angebot („versch. Sorten“). Im Markt prüfen, ob die gewünschte Variante (z. B. Zero) dabei ist.</p>
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
@@ -139,6 +158,9 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <p id="hinweise"></p>
   </details>
   <footer id="foot"></footer>
+  <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Prospekt-Ausschnitt">
+    <figure><img id="lbimg" alt=""><figcaption id="lbcap"></figcaption></figure>
+  </div>
 </div>
 
 <script>
@@ -211,13 +233,15 @@ function renderChips() {
 function card(a, showMarkt) {
   const tags = [];
   if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
-  if (a.warn) tags.push(`<span class="tag warn">⚠ Sorte prüfen</span>`);
   const was = a.normal
     ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>`
     : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
     : a.aktion ? `<div class="was"><span class="aktion">Aktion</span></div>` : "";
   return `<article class="card">
-    <div class="emo" title="${esc(a.kategorie)}">${a.emoji}</div>
+    ${a.bild
+      ? `<button class="pic" data-p="${esc(a.prospekt || a.bild)}" data-t="${esc(a.markt.toUpperCase() + " · " + a.produkt)}" aria-label="Prospekt-Ausschnitt anzeigen">
+           <img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async"><span class="emo" title="${esc(a.kategorie)}">${a.emoji}</span></button>`
+      : `<div class="pic leer" title="${esc(a.kategorie)}">${a.emoji}</div>`}
     <div>
       <div class="name">${esc(a.produkt)}</div>
       ${a.info ? `<div class="info">${esc(a.info)}</div>` : ""}
@@ -252,6 +276,18 @@ function render() {
     $("#out").innerHTML = `<div class="list" style="margin-top:14px">${list.map(a => card(a, true)).join("")}</div>`;
   }
 }
+
+document.addEventListener("click", e => {
+  const b = e.target.closest(".pic[data-p]");
+  if (b) {
+    $("#lbimg").src = b.dataset.p;
+    $("#lbcap").textContent = b.dataset.t + " – Ausschnitt aus dem Prospekt";
+    $("#lb").classList.add("open");
+  } else if (e.target.closest("#lb")) {
+    $("#lb").classList.remove("open");
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#lb").classList.remove("open"); });
 
 init();
 </script>

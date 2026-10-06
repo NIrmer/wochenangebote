@@ -183,6 +183,7 @@ def kaufda_store(label, url, pid, city_url):
                     "grundpreis": gp, "einheit": unit, "info": desc, "kategorie": cats,
                     "von": b["validFrom"][:10], "bis": b["validUntil"][:10],
                     "seite": (page.get("number") or 0) + 1, "bild": c.get("image"),
+                    "produktbild": next((im["url"] for p in prods for im in (p.get("images") or []) if im.get("url")), None),
                 })
     return out
 
@@ -276,6 +277,56 @@ def write_crops(sel, folder):
     json.dump(liste, open(f"{folder}/liste.json", "w"), ensure_ascii=False, indent=1)
     print(f"{len(liste)} Ausschnitte nach {folder}/ geladen -> {folder}/liste.json")
 
+def write_bilder(sel, folder, prefix):
+    """Thumbnails für die Website: Produktfoto (freigestellt, kaufDA) + Prospekt-Ausschnitt.
+    EDEKA: Ausschnitte aus der Prospektseite per bbox (ganze Angebotskachel) und bbox_foto (nur Produktfoto),
+    je [x0, y0, x1, y1] als Anteile 0–1. Ordner wird jede Woche geleert."""
+    import io, shutil
+    from PIL import Image
+    shutil.rmtree(folder, ignore_errors=True)
+    os.makedirs(folder, exist_ok=True)
+
+    def save(im, name, maxsize):
+        im.thumbnail((maxsize, maxsize))
+        im.save(f"{folder}/{name}", "WEBP", quality=80)
+        return f"{prefix}/{name}"
+
+    def load(url):
+        return Image.open(io.BytesIO(requests.get(url, headers=UA, timeout=30).content))
+
+    n = 0
+    for i, r in enumerate(sel):
+        if r.get("hervorhebung") == "kein":
+            continue
+        key = re.sub(r"[^a-z0-9-]", "", str(r.get("id") or i).lower())[:24].rstrip("-")
+        try:
+            if r["markt"] == "EDEKA":
+                bb, seite = r.get("bbox"), r.get("seite")
+                pfad = f"edeka_pages/seite_{int(seite):02d}.jpg" if seite else ""
+                if bb and os.path.exists(pfad):
+                    pg = Image.open(pfad).convert("RGB")
+                    w, h = pg.size
+
+                    def cut(b, pad=0.01):
+                        x0, y0, x1, y1 = b
+                        return pg.crop((int(max(0, (x0 - pad) * w)), int(max(0, (y0 - pad) * h)),
+                                        int(min(w, (x1 + pad) * w)), int(min(h, (y1 + pad) * h))))
+                    r["img_prospekt"] = save(cut(bb), f"{key}-p.webp", 640)
+                    r["img"] = save(cut(r.get("bbox_foto") or bb, 0.005), f"{key}.webp", 320)
+            else:
+                if r.get("produktbild"):
+                    im = load(r["produktbild"])
+                    r["img"] = save(im.convert("RGBA") if im.mode in ("P", "LA", "RGBA") else im.convert("RGB"), f"{key}.webp", 320)
+                if r.get("bild"):
+                    crop = load(r["bild"]).convert("RGB")
+                    r["img_prospekt"] = save(crop, f"{key}-p.webp", 640)
+                    if not r.get("img"):
+                        r["img"] = save(crop.copy(), f"{key}.webp", 320)
+            n += bool(r.get("img"))
+        except Exception as e:
+            print(f"Bild fehlgeschlagen: {r['markt']} {r['produkt']}: {e}")
+    print(f"{n} Bilder nach {folder}/")
+
 def print_selection(sel):
     cur = None
     for r in sel:
@@ -338,7 +389,6 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
     md = ['<callout icon="🛒" color="gray_bg">',
           f'\t**KW {kw}** · Stand {stand} · {len(sel)} Treffer ({counts})',
           '\tQuellen: ' + " · ".join(f"{k}: {_esc(v)}" for k, v in quellen.items()),
-          '\t⚠ vor dem Produkt = nur die Marke ist im Angebot („versch. Sorten“) → im Markt prüfen, ob deine Variante (z. B. Zero) dabei ist',
           '\tNormal = durchgestrichener Preis bzw. UVP aus dem Prospekt · „Aktion“ = im Prospekt als Aktion beworben, Originalpreis nicht angegeben',
           f'\tLegende: {legende}']
     if aus:
@@ -359,8 +409,6 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
             gp = f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else ""
             preis = (f"{r['preis']:.2f} €" if isinstance(r["preis"], (int, float)) and r["preis"] else "–") + (" (App)" if r["preisart"] == "APP-PREIS" else "")
             prod, info = _produkt_info(r)
-            if "prüfen" in r["status"]:
-                prod = "⚠ " + prod
             n, pz = r.get("normalpreis"), _prozent(r)
             normal = f"{n:.2f} €" if isinstance(n, (int, float)) and n else ""
             if pz:
@@ -392,7 +440,7 @@ def to_site_json(sel, quellen, stand, hinweise=""):
                 "normal": r.get("normalpreis"), "ersparnis": _prozent(r),
                 "aktion": r.get("hervorhebung") == "aktion",
                 "grundpreis": f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else None,
-                "bild": r.get("bild"), "seite": r.get("seite"),
+                "bild": r.get("img"), "prospekt": r.get("img_prospekt"), "seite": r.get("seite"),
             })
         maerkte.append({"id": markt.lower(), "name": name, "adresse": adresse, "angebote": angebote})
     return {"kw": kw, "stand": stand,
@@ -413,6 +461,7 @@ if __name__ == "__main__":
     ap.add_argument("--hinweise", help="Textdatei mit Hinweisen für Callout/Website")
     ap.add_argument("--notion-md", help="Auswahl zusätzlich als Notion-Markdown in diese Datei schreiben")
     ap.add_argument("--site-json", help="Auswahl als Website-Daten (angebote.json) in diese Datei schreiben")
+    ap.add_argument("--bilder", help="Produktbilder für die Website in diesen Ordner schreiben (z. B. <repo>/img)")
     a = ap.parse_args()
     if a.edeka_pages:
         download_edeka_pages(); raise SystemExit
@@ -431,7 +480,7 @@ if __name__ == "__main__":
                          "grundpreis": it.get("grundpreis"), "einheit": it.get("einheit"),
                          "info": it.get("info") or "", "kategorie": it.get("kategorie") or "",
                          "von": meta["validity"]["from"][:10], "bis": meta["validity"]["until"][:10],
-                         "seite": it.get("seite"), "bild": None})
+                         "seite": it.get("seite"), "bild": None, "bbox": it.get("bbox"), "bbox_foto": it.get("bbox_foto")})
         quellen["EDEKA"] = "Görge E-Center-Prospekt (aus Bildern ausgelesen)"
     else:
         quellen["EDEKA"] = "nicht ausgelesen"
@@ -449,6 +498,8 @@ if __name__ == "__main__":
     if a.notion_md:
         open(a.notion_md, "w").write(to_notion_md(sel, quellen, stand, hinweise))
         print(f"Notion-Markdown -> {a.notion_md}")
+    if a.bilder:
+        write_bilder(sel, a.bilder, os.path.basename(os.path.normpath(a.bilder)))
     if a.site_json:
         json.dump(to_site_json(sel, quellen, stand, hinweise), open(a.site_json, "w"), ensure_ascii=False, indent=1)
         print(f"Website-Daten -> {a.site_json}")
