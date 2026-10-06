@@ -125,6 +125,49 @@ def _normalpreis(deals):
             return max(werte)
     return None
 
+# ======================= Gültigkeit (nur bestimmte Tage?) =======================
+WOCHENTAGE = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+def _lokal(iso):
+    """kaufDA-Zeitstempel (UTC) -> Datum in Berlin."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    iso = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", iso.replace("Z", "+00:00"))
+    return datetime.fromisoformat(iso).astimezone(ZoneInfo("Europe/Berlin")).date()
+
+def _tage_kaufda(c, b):
+    """[von, bis] als Wochentag-Kürzel, wenn das Angebot kürzer gilt als der Prospekt; sonst None."""
+    try:
+        v = (c.get("publicationProfiles") or [{}])[0].get("validity") or {}
+        if not v.get("startDate") or not v.get("endDate"):
+            return None
+        von, bis = _lokal(v["startDate"]), _lokal(v["endDate"])
+        p_von, p_bis = _lokal(b["validFrom"]), _lokal(b["validUntil"])
+        if von <= p_von and bis >= p_bis:
+            return None
+        von, bis = max(von, p_von), min(bis, p_bis)
+        # Woche = Mo–Sa: Sonntag vorher zählt als Mo, Sonntag am Ende als Sa
+        v = 0 if von.weekday() == 6 else von.weekday()
+        e = 5 if bis.weekday() == 6 or (bis - von).days >= 6 else bis.weekday()
+        if v == 0 and e == 5:
+            return None
+        return [WOCHENTAGE[v], WOCHENTAGE[e]]
+    except Exception:
+        return None
+
+def tage_text(tage):
+    """["Do", "Sa"] -> "ab Do" · ["Mo", "Mi"] -> "bis Mi" · ["Fr", "Fr"] -> "nur Fr" · sonst "Di–Do"."""
+    if not tage:
+        return ""
+    von, bis = tage[0], tage[-1]
+    if von == bis:
+        return f"nur {von}"
+    if bis == "Sa":
+        return f"ab {von}"
+    if von == "Mo":
+        return f"bis {bis}"
+    return f"{von}–{bis}"
+
 def _base_price(txt):
     m = re.search(r"1\s*(kg|l)\s*=\s*(\d+[.,]\d+|\d+)", txt or "", re.I)
     return (float(m.group(2).replace(",", ".")), m.group(1).lower()) if m else (None, None)
@@ -182,6 +225,7 @@ def kaufda_store(label, url, pid, city_url):
                     "normalpreis": normal,
                     "grundpreis": gp, "einheit": unit, "info": desc, "kategorie": cats,
                     "von": b["validFrom"][:10], "bis": b["validUntil"][:10],
+                    "tage": _tage_kaufda(c, b),
                     "seite": (page.get("number") or 0) + 1, "bild": c.get("image"),
                     "produktbild": next((im["url"] for p in prods for im in (p.get("images") or []) if im.get("url")), None),
                 })
@@ -251,6 +295,8 @@ def apply_hervorhebung(sel, aktion):
             r["normalpreis"] = a["normal"]
         if a.get("prozent"):
             r["prozent"] = int(a["prozent"])
+        if a.get("tage"):
+            r["tage"] = a["tage"]
         if _ist_reduziert(r) or r.get("prozent"):
             r["hervorhebung"] = "rabatt"
         else:
@@ -407,7 +453,8 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
                "\t<tr>\n\t\t<td></td>\n\t\t<td>Produkt</td>\n\t\t<td>Info</td>\n\t\t<td>Preis</td>\n\t\t<td>Normal</td>\n\t\t<td>Grundpreis</td>\n\t</tr>"]
         for r in rows:
             gp = f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else ""
-            preis = (f"{r['preis']:.2f} €" if isinstance(r["preis"], (int, float)) and r["preis"] else "–") + (" (App)" if r["preisart"] == "APP-PREIS" else "")
+            zusatz = [z for z in ("App" if r["preisart"] == "APP-PREIS" else "", tage_text(r.get("tage"))) if z]
+            preis = (f"{r['preis']:.2f} €" if isinstance(r["preis"], (int, float)) and r["preis"] else "–") + (f" ({', '.join(zusatz)})" if zusatz else "")
             prod, info = _produkt_info(r)
             n, pz = r.get("normalpreis"), _prozent(r)
             normal = f"{n:.2f} €" if isinstance(n, (int, float)) and n else ""
@@ -439,6 +486,7 @@ def to_site_json(sel, quellen, stand, hinweise=""):
                 "preis": r["preis"], "app": r["preisart"] == "APP-PREIS",
                 "normal": r.get("normalpreis"), "ersparnis": _prozent(r),
                 "aktion": r.get("hervorhebung") == "aktion",
+                "tage": tage_text(r.get("tage")) or None,
                 "grundpreis": f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else None,
                 "bild": r.get("img"), "prospekt": r.get("img_prospekt"), "seite": r.get("seite"),
             })
@@ -480,7 +528,8 @@ if __name__ == "__main__":
                          "grundpreis": it.get("grundpreis"), "einheit": it.get("einheit"),
                          "info": it.get("info") or "", "kategorie": it.get("kategorie") or "",
                          "von": meta["validity"]["from"][:10], "bis": meta["validity"]["until"][:10],
-                         "seite": it.get("seite"), "bild": None, "bbox": it.get("bbox"), "bbox_foto": it.get("bbox_foto")})
+                         "seite": it.get("seite"), "bild": None, "bbox": it.get("bbox"), "bbox_foto": it.get("bbox_foto"),
+                         "tage": it.get("tage")})
         quellen["EDEKA"] = "Görge E-Center-Prospekt (aus Bildern ausgelesen)"
     else:
         quellen["EDEKA"] = "nicht ausgelesen"

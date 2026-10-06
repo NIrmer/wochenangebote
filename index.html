@@ -108,6 +108,7 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .info { color: var(--muted); font-size: 13px; margin-top: 3px; }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .tag { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 6px; }
+.tag.tage { background: var(--warn-soft); color: var(--warn); }
 .tag.m-lidl { color: var(--lidl); background: color-mix(in srgb, var(--lidl) 14%, transparent); }
 .tag.m-rewe { color: var(--rewe); background: color-mix(in srgb, var(--rewe) 14%, transparent); }
 .tag.m-edeka { color: var(--text); background: color-mix(in srgb, var(--edeka) 35%, transparent); }
@@ -233,6 +234,7 @@ function renderChips() {
 function card(a, showMarkt) {
   const tags = [];
   if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
+  if (a.tage) tags.push(`<span class="tag tage">${esc(a.tage)}</span>`);
   const was = a.normal
     ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>`
     : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
