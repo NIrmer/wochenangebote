@@ -159,13 +159,60 @@ WATCHLIST = [
                  r"mixer", r"fritteuse", r"kabel", r"wischroboter", r"baumwollband", r"elektronik und technik",
                  r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon", r"mopp"]},
 ]
+# ======================= WAS WIR NICHT KAUFEN (Noah, 12.10.2026) =======================
+# Gilt für alle Lebensmittel-Kategorien
+NIE = [r"bedientheke", r"mariniert", r"marinade", r"aspik", r"sülze", r"terrine", r"paw patrol", r"\bkids\b",
+       r"kinder", r"ferdi fuchs", r"dino", r"linsenwaffel", r"tress brüder", r"auflauf", r"gefüllte"]
+SALAT_FERTIG = [r"salatbowl", r"\bbowl\b", r"bohnensalat", r"nudelsalat", r"krautsalat", r"kartoffelsalat", r"salat-?mix",
+                r"salatschale", r"fleischsalat", r"eiersalat", r"thunfischsalat", r"salat to go", r"salatteller"]
+ZUSATZ_AUSSCHLUSS = {
+    # Geflügel-Aufschnitt essen wir nur von Herta Finesse; nichts Vormariniertes, keine Keulen/Poularde
+    "Hähnchen": [r"aufschnitt", r"kochschinken", r"geflügelbrust", r"gebacken", r"kebab", r"poularde", r"keule", r"schenkel",
+                 r"pollofino", r"pfanne", r"crispy", r"schlemmerfrühstück", r"wurst", r"würstchen", r"gyros", r"curry"],
+    "Hähnchennuggets": [],
+    "Pute": [r"pelmeni", r"teigtasche", r"aufschnitt", r"truthahnbrust", r"schinken", r"wurst", r"pfanne",
+             r"schlemmerfrühstück", r"geschnetzeltes.{0,20}sauce"],
+    "Nüsse & Erdnussbutter": [r"\blose\b", r"maronen", r"esskastanie"],
+    "Softdrinks & Energy": [r"rockstar"],
+    "Fertiggerichte gekühlt": SALAT_FERTIG + [r"salat"],
+    "TK-Fertiggerichte": [r"herzstücke.{0,40}(auflauf|gratin)"],
+    "Gemüse (frisch & TK)": SALAT_FERTIG + [r"rote bete", r"rote beete", r"kohlrabi", r"süßkartoffel", r"gefüllte paprika"],
+    "Kartoffeln": [r"bratkartoffel", r"omelett", r"gratin", r"puffer", r"rösti", r"knödel", r"gnocchi", r"salat", r"auflauf"],
+    "Milch": [r"vollmilch", r"hemme", r"3[,.]5"],
+    "Proteinpudding / High Protein": SALAT_FERTIG + [r"curry"],
+    "Nudeln (LIDL)": [r"delverde", r"glocken", r"ravioli", r"tortellini"],
+    # Drogerie: nur was wir wirklich nutzen
+    "Drogerie & Haushalt": [
+        r"sagrotan.{0,60}(wäsche|hygienespüler|xxl|3 ?l)", r"wäsche-?hygienespüler", r"\baxe\b", r"zahnbürste",
+        r"colgate(?!.{0,40}max ?white)", r"sensodyne", r"swiffer", r"weißer riese", r"\bariel\b", r"\bspee\b", r"\btide\b",
+        r"\bcoral\b", r"der general", r"vernel", r"airfryer", r"\bfa\b", r"rexona", r"old spice",
+        r"deo(?!.{0,60}nivea)", r"vanish", r"kneipp", r"wc.?frisch", r"somat", r"\bfit\b", r"palmolive", r"palm-olive",
+        r"head ?& ?shoulders", r"softlan", r"jule", r"müllbeutel", r"müllsäcke", r"butterbrot", r"backpapier",
+        r"gefrierbeutel", r"frischhaltefolie", r"alufolie"],
+}
+WATCHLIST = [w for w in WATCHLIST if w["name"] != "Reis & Nudeln (LIDL)"] + [
+    {"name": "Nudeln (LIDL)", "prio": 2, "store": "LIDL",
+     "any": [r"nudel", r"spaghetti", r"penne", r"fusilli", r"farfalle", r"pasta", r"tagliatelle", r"barilla", r"combino"],
+     "exclude": [r"waffel", r"chips", r"fertig", r"suppe", r"salat", r"sauce", r"soße", r"pfanne", r"brot", r"brötchen",
+                 r"bowl", r"gericht", r"tiefgefroren", r"maschine", r"topf", r"dampfnudel", r"zahnpasta"]}]
+for w in WATCHLIST:
+    if w["name"] == "Kartoffeln":   # nur rohe Kartoffeln
+        w["any"] = [r"\bkartoffeln\b", r"speisekartoffel", r"drillinge", r"\bfrühkartoffel"]
+    if w["name"] == "Milch":        # Milch nur bei LIDL interessant (z. B. H-Milch 1,5 %)
+        w["store"] = "LIDL"
+    if w["name"] == "Gemüse (frisch & TK)":
+        w["any"] = w["any"] + [r"ingwer"]
+    w["exclude"] = list(w.get("exclude") or []) + ZUSATZ_AUSSCHLUSS.get(w["name"], []) + ([] if w.get("nonfood") else NIE)
+# Reihenfolge: Drogerie und Prio-2 bleiben hinten
+WATCHLIST.sort(key=lambda w: (w.get("nonfood", False), w["prio"]))
+
 EMOJI = {"Vegane Alternativen": "🌱", "Rinderhack": "🐄", "Hähnchennuggets": "🐔", "Hähnchen": "🍗", "Pute": "🦃",
          "Softdrinks & Energy": "🥤", "Zero Sirup": "🧃", "Skyr": "🥛", "Quark & Joghurt": "🥄", "Nimm's leicht": "🧈",
          "Herta Finesse Aufschnitt": "🥪", "Harry Anno 1688": "🍞", "Hummus": "🫘", "Eier": "🥚", "Light-Käse": "🧀",
          "TK-Fertiggerichte": "🍲", "Fertiggerichte gekühlt": "🥡", "Schlemmerfilet & Fischstäbchen": "🐟",
          "Iglo Spinat mit Blubb": "🥬", "Gustavo Gusto": "🍕", "Proteinpulver": "💪", "Philadelphia": "🥯",
          "Körniger Frischkäse": "🥣", "Haferflocken": "🌾", "Proteinpudding / High Protein": "🍮",
-         "Gemüse (frisch & TK)": "🥦", "Kartoffeln": "🥔", "Milch": "🍼", "Reis & Nudeln (LIDL)": "🍝",
+         "Gemüse (frisch & TK)": "🥦", "Kartoffeln": "🥔", "Milch": "🍼", "Nudeln (LIDL)": "🍝",
          "Nüsse & Erdnussbutter": "🥜", "Gewürze": "🧂", "Marken-Tee": "🍵", "Drogerie & Haushalt": "🧴"}
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
