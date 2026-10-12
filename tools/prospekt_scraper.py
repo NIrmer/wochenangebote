@@ -81,7 +81,7 @@ WATCHLIST = [
     {"name": "TK Gemüsemischung", "prio": 1,
      "any": [r"gemüse", r"pfannengemüse", r"buttergemüse", r"brokkoli", r"erbsen", r"bohnen", r"rosenkohl", r"blumenkohl"],
      "all": [r"tiefkühl", r"tiefgefroren", r"\btk\b", r"iglo", r"frosta", r"pfanne", r"mischung"],
-     "exclude": [r"pizza", r"nudel", r"lasagne", r"suppe", r"puffer", r"kartoffel", r"chips", r"fisch", r"konserve", r"glas", r"dose"]},
+     "exclude": [r"pizza", r"nudel", r"lasagne", r"suppe", r"puffer", r"kartoffel", r"chips", r"fisch", r"konserve", r"glas", r"dose", r"\bente\b"]},
     {"name": "Frosta Fertiggerichte", "prio": 1, "any": [r"frosta"]},
     {"name": "Iglo Schlemmerfilet", "prio": 1, "any": [r"schlemmer.?filet", r"schlemmer.?lachs"]},
     {"name": "Iglo Spinat mit Blubb", "prio": 1, "any": [r"blubb", r"rahm.?spinat", r"iglo.*spinat", r"spinat.*iglo"]},
