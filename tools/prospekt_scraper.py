@@ -45,55 +45,101 @@ EDEKA_KATALOG = "https://blaetterkatalog.edeka.de/MINDEN/4038588"
 # want    : gewünschte Variante (z. B. Zero). Fehlt sie, aber "versch. Sorten" steht da -> "Sorten prüfen"
 # store   : nur in diesem Markt
 # prio    : 1 = Kernprodukt, 2 = nice to have
+LEBER_TEE = [r"leberwurst", r"teewurst", r"pommersche", r"leberpastete"]
+TIER = [r"tierfutter", r"katze", r"hund", r"\bfutter\b", r"purina", r"whiskas", r"felix\b"]
 WATCHLIST = [
+    # ---------- Prio 1 ----------
     {"name": "Vegane Alternativen", "prio": 1,
-     "any": [r"rügenwalder", r"vegan", r"veggie", r"vegetarisch", r"pflanzlich"],
+     "any": [r"rügenwalder", r"vegan", r"veggie", r"vegetarisch", r"pflanzlich", r"planted", r"like meat", r"\blike\b"],
      "all": [r"rügenwalder", r"wurst", r"aufschnitt", r"hack", r"schnitzel", r"nugget", r"frikadell", r"burger",
-             r"salami", r"mühlen", r"filet", r"geschnetzelt", r"bratwurst", r"cordon", r"schinken"],
-     "exclude": [r"leberwurst", r"teewurst", r"pommersche"]},  # Rügenwalder-Fleischprodukte sind nicht vegan
-    {"name": "Rinderhack (fettreduziert)", "prio": 1,
+             r"salami", r"mühlen", r"filet", r"geschnetzelt", r"bratwurst", r"cordon", r"schinken", r"fleischalternative",
+             r"bällchen", r"würfel", r"steak"],
+     "exclude": LEBER_TEE + [r"joghurt", r"drink", r"\bkäse", r"milch"]},
+    {"name": "Rinderhack", "prio": 1,
      "any": [r"rinderhack", r"rinder-hack", r"hackfleisch vom rind", r"rinder.?hackfleisch", r"tatar"],
-     "want": r"fettreduziert|mager|light|\b[1-9]\s?% fett|max\.? ?\d+ ?% fett",
      "exclude": [r"gemischt", r"halb und halb", r"schwein"]},
-    {"name": "Hähnchen", "prio": 2,
-     "any": [r"hähnchen", r"hühnchen", r"chicken", r"geflügel"],
-     "all": [r"brust", r"filet", r"schnitzel", r"steak", r"geschnetzelt", r"hack", r"keule", r"innenfilet", r"minutenschnitzel"],
-     "exclude": [r"nudel", r"noodle", r"terrine", r"aspik", r"sülze", r"nugget", r"kebab", r"wurst", r"gebacken", r"paniert", r"finesse", r"\bente", r"gans"]},
-    {"name": "Softdrinks Zero", "prio": 1,  # nur Markengetränke, keine Eigenmarken
+    {"name": "Hähnchennuggets", "prio": 1,
+     "any": [r"nugget"], "all": [r"hähnchen", r"chicken", r"geflügel", r"huhn"], "exclude": TIER},
+    {"name": "Hähnchen", "prio": 1,
+     "any": [r"hähnchen", r"hühnchen", r"chicken", r"geflügel", r"pollo"],
+     "exclude": LEBER_TEE + TIER + [r"nudel", r"noodle", r"finesse", r"\bente", r"gans", r"brühe", r"fond\b", r"chips"]},
+    {"name": "Pute", "prio": 1, "any": [r"\bpute", r"puten", r"truthahn"], "exclude": LEBER_TEE + TIER},
+    {"name": "Softdrinks & Energy", "prio": 1,  # nur Markengetränke, keine Eigenmarken; Zero ist meist mit im Angebot
      "any": [r"coca.?cola", r"\bcoke\b", r"fanta", r"sprite", r"mezzo.?mix", r"pepsi", r"7.?up", r"seven.?up",
              r"schwip.?schwap", r"mirinda", r"dr\.? ?pepper", r"schweppes", r"mountain dew", r"red bull",
              r"monster", r"rockstar", r"fuze", r"lipton ice", r"\blift\b"],
-     "want": r"zero|light|ohne zucker|zuckerfrei|max\b|sugar ?free",
      "exclude": [r"\bja!", r"\briver\b", r"freeway", r"k-?classic", r"gut ?& ?günstig", r"herzstücke", r"beste wahl",
                  r"booster", r"solevita", r"\bbillig", r"bier", r"radler", r"likör", r"wein", r"kaffee", r"muffin"]},
     {"name": "Zero Sirup", "prio": 1,
      "any": [r"sirup"], "exclude": [r"goldsaft", r"zuckerrüben", r"rübenkraut", r"ahorn", r"agave", r"dattel", r"husten"],
      "want": r"zero|ohne zucker|zuckerfrei|light|kalorienarm"},
     {"name": "Skyr", "prio": 1, "any": [r"skyr"]},
+    {"name": "Quark & Joghurt", "prio": 1,
+     "any": [r"magerquark", r"speisequark", r"\bquark\b", r"griechisch", r"\bgreek\b", r"protein.{0,15}joghurt", r"joghurt.{0,15}protein"],
+     "exclude": [r"kuchen", r"torte", r"bällchen", r"brötchen", r"stollen", r"riegel", r"keks"]},
     {"name": "Nimm's leicht", "prio": 1, "any": [r"nimm'?s ?leicht"]},
     {"name": "Herta Finesse Aufschnitt", "prio": 1, "any": [r"finesse"], "exclude": [r"rasier", r"haar", r"shampoo"]},
-    {"name": "Harry Anno 1688 Dinkel Saaten", "prio": 1, "any": [r"anno ?1688", r"\banno\b"], "all": [r"dinkel", r"harry", r"brot"]},
+    {"name": "Harry Anno 1688", "prio": 1, "any": [r"anno ?1688", r"harry.{0,10}1688", r"\b1688\b"]},
     {"name": "Hummus", "prio": 1, "any": [r"hummus", r"houmous"]},
-    {"name": "Kartoffeln", "prio": 2, "any": [r"\bkartoffeln\b", r"speisekartoffel", r"drillinge", r"\bfrühkartoffel"],
-     "exclude": [r"chips", r"puffer", r"salat", r"püree", r"kroketten", r"gnocchi", r"pommes", r"rösti", r"knödel",
-                 r"wedges", r"fresh cut", r"gratin", r"suppe", r"sticks", r"glas", r"dose"]},
     {"name": "Eier", "prio": 1, "any": [r"\beier\b", r"freilandeier", r"bodenhaltung", r"\bfreiland\b.*eier"],
-     "exclude": [r"spätzle", r"nudel", r"likör", r"überraschung", r"schoko", r"oster", r"teigwaren", r"salat", r"ravioli"]},
-    {"name": "TK Gemüsemischung", "prio": 1,
-     "any": [r"gemüse", r"pfannengemüse", r"buttergemüse", r"brokkoli", r"erbsen", r"bohnen", r"rosenkohl", r"blumenkohl"],
-     "all": [r"tiefkühl", r"tiefgefroren", r"\btk\b", r"iglo", r"frosta", r"pfanne", r"mischung"],
-     "exclude": [r"pizza", r"nudel", r"lasagne", r"suppe", r"puffer", r"kartoffel", r"chips", r"fisch", r"konserve", r"glas", r"dose", r"\bente\b"]},
-    {"name": "Frosta Fertiggerichte", "prio": 1, "any": [r"frosta"]},
-    {"name": "Iglo Schlemmerfilet", "prio": 1, "any": [r"schlemmer.?filet", r"schlemmer.?lachs"]},
+     "exclude": [r"spätzle", r"nudel", r"likör", r"überraschung", r"schoko", r"oster", r"teigwaren", r"salat", r"ravioli", r"pudding"]},
+    {"name": "Light-Käse", "prio": 1,
+     "any": [r"light", r"\bleicht", r"fettreduziert", r"fettarm", r"\b(?:[5-9]|1[0-6])\s?% fett"],
+     "all": [r"käse", r"mozzarella", r"gouda", r"emmentaler", r"reibekäse", r"streukäse", r"feta", r"patros", r"hirtenkäse"],
+     "exclude": [r"frischkäse", r"philadelphia", r"kuchen"]},
+    {"name": "Schlemmerfilet & Fischstäbchen", "prio": 1,
+     "any": [r"schlemmer.?filet", r"schlemmer.?lachs", r"fischstäbchen", r"fisch-stäbchen", r"backfisch-stäbchen"]},
+    {"name": "TK-Fertiggerichte", "prio": 1,
+     "any": [r"frosta", r"fertiggericht", r"pfanne", r"gericht", r"bowl", r"curry", r"risotto", r"paella", r"lasagne", r"\bmenü"],
+     "all": [r"tiefkühl", r"tiefgefroren", r"\btk\b", r"frosta"],
+     "exclude": [r"pizza", r"flammkuchen", r"baguette", r"\beis\b", r"kuchen", r"torte", r"pommes", r"kroketten",
+                 r"brötchen", r"croissant", r"dessert", r"gemüsepfanne", r"gemüse-pfanne", r"gemüse-mix", r"gemüsemix",
+                 r"nugget", r"sticks", r"snack", r"fischstäbchen", r"schlemmer"]},
+    {"name": "Fertiggerichte gekühlt", "prio": 1,
+     "any": [r"youcook", r"fertiggericht", r"\bbowl\b", r"salatbowl", r"to go.{0,40}(bowl|salat|suppe|wrap|sandwich|gericht|curry|pasta|lasagne)",
+             r"gekühlt.{0,30}gericht", r"lasagne", r"curry"],
+     "exclude": [r"tiefkühl", r"tiefgefroren", r"\btk\b", r"burger", r"melone", r"kokos", r"obst", r"snack"] + TIER},
     {"name": "Iglo Spinat mit Blubb", "prio": 1, "any": [r"blubb", r"rahm.?spinat", r"iglo.*spinat", r"spinat.*iglo"]},
-    {"name": "Lidl Hähnchennuggets", "prio": 1, "store": "LIDL",
-     "any": [r"nugget"], "all": [r"hähnchen", r"chicken", r"geflügel"]},
     {"name": "Gustavo Gusto", "prio": 1, "any": [r"gustavo"]},
-    {"name": "Proteinpulver", "prio": 1, "any": [r"protein.?pulver", r"eiweiß.?pulver", r"whey", r"protein.?shake"]},
+    {"name": "Proteinpulver", "prio": 1, "any": [r"protein.?pulver", r"eiweiß.?pulver", r"whey", r"protein.?shake"], "exclude": TIER},
     {"name": "Philadelphia", "prio": 1, "any": [r"philadelphia"]},
     {"name": "Körniger Frischkäse", "prio": 1, "any": [r"körnig", r"hüttenkäse", r"cottage"], "exclude": [r"brot\b", r"brötchen"]},
     {"name": "Haferflocken", "prio": 1, "any": [r"haferflocken", r"\bhafer\b.*flocken", r"porridge", r"oats"],
      "exclude": [r"riegel", r"keks", r"cookie", r"drink", r"milch", r"krusti", r"brötchen", r"brot\b"]},
+    {"name": "Proteinpudding / High Protein", "prio": 1,
+     "any": [r"protein", r"eiweiß", r"\bkoro\b", r"more nutrition", r"\besn\b"],
+     "exclude": [r"pulver", r"whey"] + TIER},
+    # ---------- Prio 2 ----------
+    {"name": "Nüsse & Erdnussbutter", "prio": 2,
+     "any": [r"nüsse", r"\bnuss\b", r"mandeln", r"cashew", r"walnuss", r"haselnusskern", r"pistazie", r"erdnüsse",
+             r"erdnussbutter", r"erdnussmus", r"nussmix", r"nuss-mix", r"studentenfutter", r"macadamia", r"pekan"],
+     "exclude": [r"schoko", r"nougat", r"nutella", r"praline", r"likör", r"\böl\b", r"drink", r"milch", r"waffel", r"keks",
+                 r"cookie", r"kuchen", r"\beis\b", r"joghurt", r"ritter", r"milka", r"creme", r"knacker", r"brot\b", r"kakao"]},
+    {"name": "Gemüse (frisch & TK)", "prio": 2,
+     "any": [r"gemüse", r"brokkoli", r"broccoli", r"blumenkohl", r"paprika", r"zucchini", r"möhre", r"karotte",
+             r"spinat", r"champignon", r"\bpilze", r"zwiebel", r"lauch", r"porree", r"rosenkohl", r"weißkohl", r"rotkohl",
+             r"spitzkohl", r"wirsing", r"erbsen", r"bohnen", r"edamame", r"kürbis", r"aubergine", r"spargel", r"radieschen",
+             r"rucola", r"feldsalat", r"blattsalat", r"eisbergsalat", r"kopfsalat", r"salatherz", r"gurke", r"tomate",
+             r"süßkartoffel", r"mais\b", r"sellerie", r"fenchel", r"kohlrabi"],
+     "exclude": [r"chips", r"ketchup", r"pesto", r"sauce", r"soße", r"saft", r"suppe", r"brühe", r"konserve", r"\bglas\b",
+                 r"\bdose\b", r"gewürzgurke", r"pizza", r"\bkuchen", r"nudelsalat", r"kartoffelsalat", r"fleischsalat",
+                 r"wurstsalat", r"eiersalat", r"popcorn", r"\böl\b", r"aufstrich", r"kaffee", r"caff", r"café", r"crema",
+                 r"espresso", r"chorizo", r"tapas", r"halloween", r"schnitz", r"nüsse", r"bonus"] + TIER},
+    {"name": "Kartoffeln", "prio": 2,
+     "any": [r"kartoffel", r"drillinge", r"\bfrühkartoffel", r"gnocchi", r"rösti", r"knödel", r"\bpuffer"],
+     "exclude": [r"chips", r"pommes", r"kroketten", r"püree", r"wedges", r"fresh cut", r"sticks", r"süßkartoffel",
+                 r"gitter", r"gespenst", r"halloween", r"smiles"]},
+    {"name": "Milch", "prio": 2,
+     "any": [r"h-?milch", r"\bmilch\b", r"fettarme milch", r"vollmilch"],
+     "exclude": [r"schoko", r"milchschnitte", r"milchreis", r"kaffee", r"drink", r"hafer", r"mandel", r"soja", r"kondens",
+                 r"\beis\b", r"brötchen", r"schnitte", r"mädchen", r"latte", r"mix", r"getränk", r"pudding", r"kakao",
+                 r"shake", r"butter", r"käse", r"joghurt", r"quark", r"kefir", r"buttermilch", r"dickmilch", r"waffel"]},
+    {"name": "Reis & Nudeln (LIDL)", "prio": 2, "store": "LIDL",
+     "any": [r"\breis\b", r"basmati", r"jasmin", r"nudel", r"spaghetti", r"penne", r"fusilli", r"farfalle", r"pasta",
+             r"vollkornnudel", r"tagliatelle"],
+     "exclude": [r"milchreis", r"waffel", r"chips", r"fertig", r"suppe", r"salat", r"sauce", r"soße", r"pfanne", r"brot",
+                 r"brötchen", r"toast", r"bowl", r"gericht", r"tiefgefroren", r"maschine", r"topf", r"kocher", r"dampfnudel",
+                 r"zahnpasta"]},
     {"name": "Gewürze", "prio": 2,
      "any": [r"gewürzmischung", r"gewürzmühle", r"\bgewürze\b", r"gewürzsalz", r"ostmann", r"fuchs gewürz",
              r"kotan[yý]i", r"just spices", r"würzmischung"],
@@ -102,17 +148,24 @@ WATCHLIST = [
                                               r"onno behrends", r"westminster", r"milford", r"goldmännchen", r"bünting", r"lipton"],
      "all": [r"teekanne", r"meßmer", r"messmer", r"yogi", r"pukka", r"twinings", r"onno", r"westminster", r"milford",
              r"goldmännchen", r"bünting", r"lipton", r"ostfriesen", r"tee"],
-     "exclude": [r"eistee", r"ice tea", r"tee-?licht", r"teelicht", r"volvic", r"tee-extrakt"]},
-    {"name": "Proteinpudding / High Protein", "prio": 1,
-     "any": [r"protein", r"eiweiß"], "exclude": [r"pulver", r"whey", r"tierfutter", r"katze", r"hund", r"brot", r"brötchen"]},
+     "exclude": [r"eistee", r"ice tea", r"tee-?licht", r"teelicht", r"volvic", r"tee-extrakt", r"fuze"]},
+    {"name": "Drogerie & Haushalt", "prio": 2, "nonfood": True,
+     "any": [r"drogerie und haushalt", r"duschgel", r"dusche\b", r"shampoo", r"deo", r"zahnpasta", r"zahncreme",
+             r"zahnbürste", r"waschmittel", r"weichspüler", r"spülmittel", r"geschirrreiniger", r"spülmaschinen",
+             r"toilettenpapier", r"küchentücher", r"küchenrolle", r"taschentücher", r"reiniger", r"rasier"],
+     "exclude": [r"silvercrest", r"nähen", r"lichtblick", r"rollo", r"adblue", r"enteiser", r"scheibenfrost", r"cockpit",
+                 r"besteck", r"backform", r"servierplatte", r"frischhaltedosen", r"\btier", r"\bfell", r"staubsauger",
+                 r"mixer", r"fritteuse", r"kabel", r"wischroboter", r"baumwollband", r"elektronik und technik",
+                 r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon"]},
 ]
-EMOJI = {"Vegane Alternativen": "🌱", "Rinderhack (fettreduziert)": "🐄", "Hähnchen": "🍗", "Softdrinks Zero": "🥤",
-         "Zero Sirup": "🧃", "Skyr": "🥛", "Nimm's leicht": "🧈", "Herta Finesse Aufschnitt": "🥪",
-         "Harry Anno 1688 Dinkel Saaten": "🍞", "Hummus": "🫘", "Kartoffeln": "🥔", "Eier": "🥚",
-         "TK Gemüsemischung": "🥦", "Frosta Fertiggerichte": "🍲", "Iglo Schlemmerfilet": "🐟",
-         "Iglo Spinat mit Blubb": "🥬", "Lidl Hähnchennuggets": "🐔", "Gustavo Gusto": "🍕", "Proteinpulver": "💪",
-         "Philadelphia": "🧀", "Körniger Frischkäse": "🥣", "Haferflocken": "🌾", "Gewürze": "🧂",
-         "Marken-Tee": "🍵", "Proteinpudding / High Protein": "🍮"}
+EMOJI = {"Vegane Alternativen": "🌱", "Rinderhack": "🐄", "Hähnchennuggets": "🐔", "Hähnchen": "🍗", "Pute": "🦃",
+         "Softdrinks & Energy": "🥤", "Zero Sirup": "🧃", "Skyr": "🥛", "Quark & Joghurt": "🥄", "Nimm's leicht": "🧈",
+         "Herta Finesse Aufschnitt": "🥪", "Harry Anno 1688": "🍞", "Hummus": "🫘", "Eier": "🥚", "Light-Käse": "🧀",
+         "TK-Fertiggerichte": "🍲", "Fertiggerichte gekühlt": "🥡", "Schlemmerfilet & Fischstäbchen": "🐟",
+         "Iglo Spinat mit Blubb": "🥬", "Gustavo Gusto": "🍕", "Proteinpulver": "💪", "Philadelphia": "🥯",
+         "Körniger Frischkäse": "🥣", "Haferflocken": "🌾", "Proteinpudding / High Protein": "🍮",
+         "Gemüse (frisch & TK)": "🥦", "Kartoffeln": "🥔", "Milch": "🍼", "Reis & Nudeln (LIDL)": "🍝",
+         "Nüsse & Erdnussbutter": "🥜", "Gewürze": "🧂", "Marken-Tee": "🍵", "Drogerie & Haushalt": "🧴"}
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
 
@@ -255,11 +308,19 @@ def goerge_pages(title_prefix="ECenter"):
 def _rx(patterns, text):
     return any(re.search(p, text, re.I) for p in patterns)
 
+NONFOOD_RX = re.compile(r"^(drogerie und haushalt|heimwerken|möbel|elektronik|tierbedarf|mode|baby|spielzeug|"
+                        r"dekoration|dienstleistung|sport und freizeit|medien|auto|saison)", re.I)
+
 def match(o):
     text = " | ".join(str(o.get(k) or "") for k in ("produkt", "marke", "info", "kategorie"))
+    nonfood = bool(NONFOOD_RX.search((o.get("kategorie") or "").strip()))
     hits = []
     for w in WATCHLIST:
         if w.get("store") and w["store"] != o["markt"]:
+            continue
+        if (nonfood and not w.get("nonfood")) or (w.get("nonfood") and not nonfood
+                                                    and not re.search(r"drogerie|haushalt", o.get("kategorie") or "", re.I)
+                                                    and o["markt"] != "EDEKA"):
             continue
         if not _rx(w["any"], text) or (w.get("all") and not _rx(w["all"], text)) or _rx(w.get("exclude", []), text):
             continue
@@ -454,7 +515,7 @@ def _esc(t):
     return re.sub(r"([\\*~`$\[\]<>{}|^])", r"\\\1", str(t or "")).replace("\n", " ")
 
 # Fleisch: Marke egal -> nur als Info. Sonst: "Marke Produkt" (z. B. "Milbona Skyr", "Gustavo Gusto Steinofenpizza")
-FLEISCH = {"Rinderhack (fettreduziert)", "Hähnchen", "Lidl Hähnchennuggets"}
+FLEISCH = {"Rinderhack", "Hähnchen", "Hähnchennuggets", "Pute"}
 
 def _brand(b):
     parts = [p.strip() for p in re.split(r",| / ", b or "") if p.strip()]
