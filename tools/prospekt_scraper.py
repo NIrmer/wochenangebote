@@ -49,7 +49,8 @@ WATCHLIST = [
     {"name": "Vegane Alternativen", "prio": 1,
      "any": [r"rügenwalder", r"vegan", r"veggie", r"vegetarisch", r"pflanzlich"],
      "all": [r"rügenwalder", r"wurst", r"aufschnitt", r"hack", r"schnitzel", r"nugget", r"frikadell", r"burger",
-             r"salami", r"mühlen", r"filet", r"geschnetzelt", r"bratwurst", r"cordon", r"schinken"]},
+             r"salami", r"mühlen", r"filet", r"geschnetzelt", r"bratwurst", r"cordon", r"schinken"],
+     "exclude": [r"leberwurst", r"teewurst", r"pommersche"]},  # Rügenwalder-Fleischprodukte sind nicht vegan
     {"name": "Rinderhack (fettreduziert)", "prio": 1,
      "any": [r"rinderhack", r"rinder-hack", r"hackfleisch vom rind", r"rinder.?hackfleisch", r"tatar"],
      "want": r"fettreduziert|mager|light|\b[1-9]\s?% fett|max\.? ?\d+ ?% fett",
