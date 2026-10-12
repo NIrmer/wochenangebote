@@ -1,4 +1,5 @@
 {
- "letzter_push_test": "2026-10-12 13:27:28",
+ "letzter_push_test": "2026-10-12 13:40:25",
+ "quelle": "geplante Aufgabe",
  "zweck": "Push-Test: wird bei jedem Lauf aktualisiert, damit sichtbar ist, ob der Push auf die Website klappt"
 }
