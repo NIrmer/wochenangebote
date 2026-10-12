@@ -176,7 +176,7 @@ ZUSATZ_AUSSCHLUSS = {
     "Softdrinks & Energy": [r"rockstar"],
     "Fertiggerichte gekühlt": SALAT_FERTIG + [r"salat"],
     "TK-Fertiggerichte": [r"herzstücke.{0,40}(auflauf|gratin)"],
-    "Gemüse (frisch & TK)": SALAT_FERTIG + [r"rote bete", r"rote beete", r"kohlrabi", r"süßkartoffel", r"gefüllte paprika"],
+    "Gemüse (frisch & TK)": SALAT_FERTIG + [r"hot-?dog", r"börek", r"rote bete", r"rote beete", r"kohlrabi", r"süßkartoffel", r"gefüllte paprika"],
     "Kartoffeln": [r"bratkartoffel", r"omelett", r"gratin", r"puffer", r"rösti", r"knödel", r"gnocchi", r"salat", r"auflauf"],
     "Milch": [r"vollmilch", r"hemme", r"3[,.]5"],
     "Proteinpudding / High Protein": SALAT_FERTIG + [r"curry"],
