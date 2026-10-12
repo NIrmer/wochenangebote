@@ -32,8 +32,10 @@ STORES = {
 QUELLEN = {}
 CACHE_FILE = "prospekt_cache.json"  # merkt sich den filialgenauen Prospekt, falls kaufDA ihn mal nicht anzeigt
 GOERGE_ANGEBOTE = "https://goerge-markt.de/angebote"
-# EDEKA-Blätterkatalog des E-Center Görge (Quelle: edeka.de/maerkte/403858/prospekte/). Aus der Cloud erreichbar,
-# Yumpu (goerge-markt.de) blockt seit KW 42. Ändert sich die Katalognummer, per --edeka-katalog überschreiben.
+# EDEKA-Blätterkatalog des E-Center Görge. Der aktuelle Link steht jede Woche auf EDEKA_PROSPEKTSEITE
+# (edeka.de blockt Skripte aus der Cloud -> der Lauf liest ihn per WebFetch aus und übergibt ihn mit --edeka-katalog).
+# EDEKA_KATALOG = zuletzt bekannter Link, nur Notlösung. Yumpu (goerge-markt.de) blockt die Cloud seit KW 42.
+EDEKA_PROSPEKTSEITE = "https://www.edeka.de/maerkte/403858/prospekte/"
 EDEKA_KATALOG = "https://blaetterkatalog.edeka.de/MINDEN/4038588"
 
 # ======================= WATCHLIST =======================
@@ -398,6 +400,7 @@ def _woche_validity():
 
 def blaetterkatalog_pages(base=EDEKA_KATALOG, groesse="large"):
     """Seiten-URLs des EDEKA-Blätterkatalogs (bk_1.jpg, bk_2.jpg, … bis zur ersten fehlenden Seite)."""
+    base = re.sub(r"/(index\.html)?(#.*)?$", "", base.strip())
     urls = []
     for n in range(1, 120):
         u = f"{base.rstrip('/')}/blaetterkatalog/{groesse}/bk_{n}.jpg"
@@ -416,11 +419,19 @@ def download_edeka_pages(folder="edeka_pages", katalog=None):
     """Lädt die Seitenbilder des Görge-E-Center-Prospekts (zum Auslesen durch Claude).
     1. EDEKA-Blätterkatalog, 2. Fallback Yumpu über goerge-markt.de."""
     os.makedirs(folder, exist_ok=True)
-    try:
-        title, validity, urls = blaetterkatalog_pages(katalog or EDEKA_KATALOG)
-    except Exception as e:
-        print(f"Blätterkatalog fehlgeschlagen ({e}) – versuche Yumpu")
-        title, validity, urls = goerge_pages()
+    if not katalog:
+        print(f"WARNUNG: kein aktueller Link übergeben (--edeka-katalog, von {EDEKA_PROSPEKTSEITE}) – "
+              f"versuche zuletzt bekannten Katalog {EDEKA_KATALOG}")
+    quellen = [lambda: blaetterkatalog_pages(katalog)] if katalog else []
+    quellen += [lambda: blaetterkatalog_pages(EDEKA_KATALOG), goerge_pages]
+    for i, quelle in enumerate(quellen):
+        try:
+            title, validity, urls = quelle()
+            break
+        except Exception as e:
+            print(f"Quelle {i + 1} fehlgeschlagen: {e}")
+    else:
+        raise RuntimeError("EDEKA-Prospekt nicht abrufbar")
     import time
     for i, u in enumerate(urls, 1):
         for versuch in range(4):
@@ -546,7 +557,8 @@ if __name__ == "__main__":
     from datetime import date
     ap = argparse.ArgumentParser()
     ap.add_argument("--edeka-pages", action="store_true", help="nur EDEKA-Seitenbilder laden und beenden")
-    ap.add_argument("--edeka-katalog", help="anderer EDEKA-Blätterkatalog (z. B. https://blaetterkatalog.edeka.de/MINDEN/4038588)")
+    ap.add_argument("--edeka-katalog", help="aktueller Blätterkatalog-Link von https://www.edeka.de/maerkte/403858/prospekte/ "
+                                            "(z. B. https://blaetterkatalog.edeka.de/MINDEN/4038588/index.html)")
     ap.add_argument("--edeka-json", help="bereits extrahierte EDEKA-Angebote einlesen")
     ap.add_argument("--crops", help="Prospekt-Ausschnitte der LIDL/REWE-Treffer ohne Normalpreis in diesen Ordner laden")
     ap.add_argument("--aktion", help="Einstufung der Ausschnitte (JSON: id -> {status, normal, prozent})")
