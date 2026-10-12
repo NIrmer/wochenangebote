@@ -187,7 +187,7 @@ ZUSATZ_AUSSCHLUSS = {
         r"colgate(?!.{0,40}max ?white)", r"sensodyne", r"swiffer", r"weißer riese", r"\bariel\b", r"\bspee\b", r"\btide\b",
         r"\bcoral\b", r"der general", r"vernel", r"airfryer", r"\bfa\b", r"rexona", r"old spice",
         r"deo(?!.{0,60}nivea)", r"vanish", r"kneipp", r"wc.?frisch", r"somat", r"\bfit\b", r"palmolive", r"palm-olive",
-        r"head ?& ?shoulders", r"softlan", r"jule", r"müllbeutel", r"müllsäcke", r"butterbrot", r"backpapier",
+        r"head ?& ?shoulders", r"softlan", r"jule", r"jolea", r"müllbeutel", r"müllsäcke", r"butterbrot", r"backpapier",
         r"gefrierbeutel", r"frischhaltefolie", r"alufolie"],
 }
 WATCHLIST = [w for w in WATCHLIST if w["name"] != "Reis & Nudeln (LIDL)"] + [
