@@ -32,6 +32,9 @@ STORES = {
 QUELLEN = {}
 CACHE_FILE = "prospekt_cache.json"  # merkt sich den filialgenauen Prospekt, falls kaufDA ihn mal nicht anzeigt
 GOERGE_ANGEBOTE = "https://goerge-markt.de/angebote"
+# EDEKA-Blätterkatalog des E-Center Görge (Quelle: edeka.de/maerkte/403858/prospekte/). Aus der Cloud erreichbar,
+# Yumpu (goerge-markt.de) blockt seit KW 42. Ändert sich die Katalognummer, per --edeka-katalog überschreiben.
+EDEKA_KATALOG = "https://blaetterkatalog.edeka.de/MINDEN/4038588"
 
 # ======================= WATCHLIST =======================
 # any     : mind. ein Muster muss passen (Name + Marke + Beschreibung + Kategorie)
@@ -386,14 +389,54 @@ def print_selection(sel):
         info = (r["info"] or "")[:70]
         print(f"  {r['markt']:5} {r['preis']!s:>6} €{app}  {r['produkt']} ({r['marke'] or '-'}){gp}{flag}{hv}\n        {info}")
 
-def download_edeka_pages(folder="edeka_pages"):
-    """Lädt die Seitenbilder des Görge-E-Center-Prospekts (für Auslesen ohne API-Key, z. B. durch Claude selbst)."""
+def _woche_validity():
+    """Gültigkeit Mo–Sa der Prospektwoche: sonntags die kommende Woche, sonst die laufende."""
+    from datetime import date, timedelta
+    heute = date.today()
+    mo = heute + timedelta(days=1) if heute.weekday() == 6 else heute - timedelta(days=heute.weekday())
+    return {"from": mo.isoformat(), "until": (mo + timedelta(days=5)).isoformat()}
+
+def blaetterkatalog_pages(base=EDEKA_KATALOG, groesse="large"):
+    """Seiten-URLs des EDEKA-Blätterkatalogs (bk_1.jpg, bk_2.jpg, … bis zur ersten fehlenden Seite)."""
+    urls = []
+    for n in range(1, 120):
+        u = f"{base.rstrip('/')}/blaetterkatalog/{groesse}/bk_{n}.jpg"
+        try:
+            r = requests.head(u, headers=UA, timeout=20)
+        except Exception:
+            r = requests.head(u, headers=UA, timeout=30)
+        if r.status_code != 200 or "image" not in r.headers.get("content-type", ""):
+            break
+        urls.append(u)
+    if not urls:
+        raise RuntimeError(f"Blätterkatalog leer/nicht erreichbar: {base}")
+    return f"EDEKA Blätterkatalog {base.rstrip('/').rsplit('/', 1)[-1]}", _woche_validity(), urls
+
+def download_edeka_pages(folder="edeka_pages", katalog=None):
+    """Lädt die Seitenbilder des Görge-E-Center-Prospekts (zum Auslesen durch Claude).
+    1. EDEKA-Blätterkatalog, 2. Fallback Yumpu über goerge-markt.de."""
     os.makedirs(folder, exist_ok=True)
-    title, validity, urls = goerge_pages()
+    try:
+        title, validity, urls = blaetterkatalog_pages(katalog or EDEKA_KATALOG)
+    except Exception as e:
+        print(f"Blätterkatalog fehlgeschlagen ({e}) – versuche Yumpu")
+        title, validity, urls = goerge_pages()
+    import time
     for i, u in enumerate(urls, 1):
-        open(f"{folder}/seite_{i:02d}.jpg", "wb").write(requests.get(u, timeout=30).content)
+        for versuch in range(4):
+            try:
+                r = requests.get(u, headers=UA, timeout=60)
+                r.raise_for_status()
+                open(f"{folder}/seite_{i:02d}.jpg", "wb").write(r.content)
+                break
+            except Exception as e:
+                if versuch == 3:
+                    raise
+                print(f"Seite {i}: {e} – neuer Versuch")
+                time.sleep(3 * (versuch + 1))
     json.dump({"title": title, "validity": validity, "pages": len(urls)}, open(f"{folder}/meta.json", "w"))
     print(f"{len(urls)} Seiten nach {folder}/ geladen ({title}, {validity['from'][:10]} bis {validity['until'][:10]})")
+    print("Bitte prüfen: Seite 1 muss 'Görge … Hamburger Str. 280' und die richtige KW zeigen.")
 
 def _esc(t):
     return re.sub(r"([\\*~`$\[\]<>{}|^])", r"\\\1", str(t or "")).replace("\n", " ")
@@ -503,6 +546,7 @@ if __name__ == "__main__":
     from datetime import date
     ap = argparse.ArgumentParser()
     ap.add_argument("--edeka-pages", action="store_true", help="nur EDEKA-Seitenbilder laden und beenden")
+    ap.add_argument("--edeka-katalog", help="anderer EDEKA-Blätterkatalog (z. B. https://blaetterkatalog.edeka.de/MINDEN/4038588)")
     ap.add_argument("--edeka-json", help="bereits extrahierte EDEKA-Angebote einlesen")
     ap.add_argument("--crops", help="Prospekt-Ausschnitte der LIDL/REWE-Treffer ohne Normalpreis in diesen Ordner laden")
     ap.add_argument("--aktion", help="Einstufung der Ausschnitte (JSON: id -> {status, normal, prozent})")
@@ -512,7 +556,7 @@ if __name__ == "__main__":
     ap.add_argument("--bilder", help="Produktbilder für die Website in diesen Ordner schreiben (z. B. <repo>/img)")
     a = ap.parse_args()
     if a.edeka_pages:
-        download_edeka_pages(); raise SystemExit
+        download_edeka_pages(katalog=a.edeka_katalog); raise SystemExit
     quellen, alle = QUELLEN, []
     for label, cfg in STORES.items():
         alle += kaufda_store(label, *cfg)
