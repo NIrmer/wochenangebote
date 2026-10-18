@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bierpreise Langlingen</title>
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BA%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #f6f3ee; --surface: #fffdf9; --line: #e7e1d7; --text: #1f1d1a; --muted: #6f6a62;
+  --accent: #c9790a; --accent-soft: #fbefd5; --ok: #2f7a4b; --ok-soft: #dff0e5;
+  --warn: #9a6400; --warn-soft: #fbefd5; --chip: #ece7de; --best: #2f7a4b;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161513; --surface: #201e1b; --line: #33302b; --text: #f1ede6; --muted: #a39d93;
+    --accent: #f0b64a; --accent-soft: #3a2e15; --ok: #6cc690; --ok-soft: #1c3226;
+    --warn: #f0b64a; --warn-soft: #3a2e15; --chip: #2a2824; --best: #6cc690;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+body {
+  margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
+  font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+header { padding: calc(20px + env(safe-area-inset-top)) 0 8px; }
+h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+h1 span { color: var(--accent); }
+.meta { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+.top {
+  margin: 14px 0 4px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center;
+}
+.top .lbl { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.top .what { font-size: 20px; font-weight: 700; line-height: 1.2; margin-top: 2px; overflow-wrap: anywhere; }
+.top .sub { color: var(--muted); font-size: 13px; margin-top: 3px; }
+.top .big { text-align: right; }
+.top .big b { font-size: 28px; letter-spacing: -0.02em; display: block; line-height: 1; }
+.top .big span { color: var(--muted); font-size: 13px; }
+
+.controls {
+  position: sticky; top: 0; z-index: 5; background: var(--bg);
+  padding: 10px 0 8px; border-bottom: 1px solid var(--line);
+}
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tab {
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  border-radius: 10px; padding: 8px 4px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.tab small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.tab[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.tab[aria-pressed="true"] small { color: inherit; opacity: .7; }
+.row { display: flex; gap: 8px; margin-top: 8px; }
+.search {
+  flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 16px;
+}
+select {
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); min-width: 0;
+  border-radius: 10px; padding: 9px 8px; font: inherit; font-size: 14px;
+}
+.chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 8px; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; border: 0; background: var(--chip); color: var(--text); border-radius: 999px;
+  padding: 6px 11px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { .chip[aria-pressed="true"] { color: #1f1d1a; } }
+
+.count { color: var(--muted); font-size: 13px; margin: 12px 0 8px; }
+.list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start;
+  border-left: 4px solid var(--mc, var(--line));
+}
+.card > div { min-width: 0; }
+.mk { font-size: 12px; font-weight: 700; color: var(--mc); }
+.mk small { font-weight: 400; color: var(--muted); }
+@media (prefers-color-scheme: dark) { .mk { filter: brightness(1.8) saturate(.8); } }
+.name { font-weight: 600; line-height: 1.25; margin-top: 1px; overflow-wrap: anywhere; }
+.name span { font-weight: 400; color: var(--muted); }
+.info { color: var(--muted); font-size: 13px; margin-top: 3px; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tag { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 6px; background: var(--chip); color: var(--muted); }
+.tag.app { background: var(--ok-soft); color: var(--ok); }
+.tag.deal { background: var(--accent-soft); color: var(--warn); }
+.tag.best { background: var(--ok-soft); color: var(--best); }
+.tag.tage { background: var(--warn-soft); color: var(--warn); }
+.price { text-align: right; white-space: nowrap; }
+.now { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.was { color: var(--muted); font-size: 12px; }
+.lit { font-size: 14px; font-weight: 700; margin-top: 2px; }
+.lit.g { color: var(--best); }
+.pf { color: var(--muted); font-size: 12px; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+details { margin: 18px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+summary { cursor: pointer; font-weight: 600; }
+details p, details li { color: var(--muted); font-size: 14px; }
+details p { margin: 8px 0 0; }
+details ul { margin: 8px 0 0; padding-left: 18px; }
+details li b { color: var(--text); }
+footer { color: var(--muted); font-size: 12px; text-align: center; padding: 18px 0 28px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Bier<span>preise</span></h1>
+    <div class="meta" id="meta">Lade …</div>
+  </header>
+
+  <div id="top"></div>
+
+  <div class="controls">
+    <div class="tabs" id="tabs"></div>
+    <div class="chips" id="arten"></div>
+    <div class="row">
+      <input class="search" id="q" type="search" placeholder="Suchen" autocomplete="off">
+      <select id="markt" aria-label="Markt"></select>
+      <select id="sort" aria-label="Sortierung">
+        <option value="l">€ / Liter</option>
+        <option value="p">Preis</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="list" id="list"></div>
+
+  <details id="hinweise" hidden><summary>Hinweise dieser Woche</summary><p id="hinweistext"></p></details>
+  <details>
+    <summary>Märkte &amp; Quellen</summary>
+    <ul id="maerkte"></ul>
+    <p>Preise laut Wochenprospekt (kaufDA) bzw. EDEKA-Marktseite, ohne Gewähr. Liter-Preis ohne Pfand, selbst aus Gebinde und Preis berechnet.
+      METRO-Preise sind brutto (inkl. MwSt.); Einkauf dort nur mit METRO-Kundenkarte. App- und Mengenpreise gelten nur mit App bzw. ab der genannten Menge.</p>
+  </details>
+  <footer id="stand"></footer>
+</div>
+
+<script>
+const TABS = [["Kasten", "Kästen"], ["Pack", "Packs"], ["Einzeln", "Einzeln"], ["Alle", "Alle"]];
+const ARTEN = ["Bier", "Alkoholfrei", "Radler & Mix", "Malz"];
+const WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+let D = null;
+const st = { tab: "Kasten", arten: new Set(["Bier"]), q: "", markt: "", sort: "l" };
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
+const num = n => n.toFixed(2).replace(".", ",");
+const dm = iso => { const d = new Date(iso + "T12:00:00"); return `${d.getDate()}.${d.getMonth() + 1}.`; };
+const tag = iso => WT[new Date(iso + "T12:00:00").getDay()];
+const farbe = m => (D.maerkte.find(x => x.name === m) || {}).farbe || "var(--line)";
+
+function gueltig(a) {
+  const ganz = a.von <= D.woche.von && a.bis >= D.woche.bis;
+  if (ganz) return "";
+  if (a.von === a.bis) return `nur ${tag(a.von)} ${dm(a.von)}`;
+  if (a.bis >= D.woche.bis) return `ab ${tag(a.von)} ${dm(a.von)}`;
+  return `${tag(a.von)}–${tag(a.bis)}`;
+}
+
+function bester(a) {           // günstigster erreichbarer Preis (App / Staffel)
+  return Math.min(a.preis, a.app_preis ?? Infinity, ...a.staffel.map(s => s.preis));
+}
+
+function gefiltert(tab = st.tab) {
+  const q = st.q.trim().toLowerCase();
+  return D.angebote.filter(a =>
+    (tab === "Alle" ? true : tab === "Pack" ? (a.typ === "Pack" || a.typ === "Fass" || a.typ === "Sonstiges") : a.typ === tab) &&
+    st.arten.has(a.art) &&
+    (!st.markt || a.markt === st.markt) &&
+    (!q || `${a.marke} ${a.produkt} ${a.info} ${a.markt}`.toLowerCase().includes(q))
+  );
+}
+
+function renderTabs() {
+  $("tabs").innerHTML = TABS.map(([k, l]) =>
+    `<button class="tab" aria-pressed="${st.tab === k}" data-k="${k}">${l}<small>${gefiltert(k).length}</small></button>`).join("");
+  $("arten").innerHTML = ARTEN.filter(a => D.angebote.some(x => x.art === a)).map(a =>
+    `<button class="chip" aria-pressed="${st.arten.has(a)}" data-a="${esc(a)}">${esc(a)}</button>`).join("");
+}
+
+function karte(a, min) {
+  const tags = [];
+  const g = gueltig(a);
+  if (g) tags.push(`<span class="tag tage">${esc(g)}</span>`);
+  if (a.app_preis) tags.push(`<span class="tag app">App ${eur(a.app_preis)}</span>`);
+  a.staffel.forEach(s => tags.push(`<span class="tag app">${esc(s.bedingung)}: ${eur(s.preis)}</span>`));
+  if (a.tiefst30 && a.tiefst30 > a.preis) tags.push(`<span class="tag deal">30-Tage-Tief vorher ${eur(a.tiefst30)}</span>`);
+  if (a.bisher_bester) {
+    const b = a.bisher_bester;
+    tags.push(b.eur_l > a.eur_l
+      ? `<span class="tag best">günstiger als je zuvor (bisher ${num(b.eur_l)} €/l)</span>`
+      : `<span class="tag">schon mal ${num(b.eur_l)} €/l (${esc(b.markt)})</span>`);
+  }
+  if (a.weitere_gebinde.length) tags.push(`<span class="tag">auch ${esc(a.weitere_gebinde.join(", "))}</span>`);
+  const pf = a.pfand === 0 ? "pfandfrei" : a.pfand ? `+ ${eur(a.pfand)} Pfand` : "zzgl. Pfand";
+  const name = a.produkt && a.produkt.toLowerCase() !== (a.marke || "").toLowerCase()
+    ? `${esc(a.marke)} <span>${esc(a.produkt)}</span>` : esc(a.marke || a.produkt);
+  return `<div class="card" style="--mc:${farbe(a.markt)}">
+    <div>
+      <div class="mk">${esc(a.markt)}</div>
+      <div class="name">${name}</div>
+      <div class="info">${esc(a.gebinde_text)}${a.info_kurz ? " · " + esc(a.info_kurz) : ""}</div>
+      ${tags.length ? `<div class="tags">${tags.join("")}</div>` : ""}
+    </div>
+    <div class="price">
+      <div class="now">${eur(a.preis)}</div>
+      ${a.normal && a.normal > a.preis ? `<div class="was"><s>${eur(a.normal)}</s></div>` : ""}
+      <div class="lit${a.eur_l <= min + 0.001 ? " g" : ""}">${num(a.eur_l)} €/l</div>
+      <div class="pf">${pf}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  renderTabs();
+  const list = gefiltert().sort((a, b) => st.sort === "p" ? a.preis - b.preis || a.eur_l - b.eur_l : a.eur_l - b.eur_l || a.preis - b.preis);
+  const min = list.length ? Math.min(...list.map(a => a.eur_l)) : 0;
+  $("count").textContent = list.length ? `${list.length} Angebot${list.length === 1 ? "" : "e"} · sortiert nach ${st.sort === "p" ? "Preis" : "Literpreis"}` : "";
+  $("list").innerHTML = list.length ? list.map(a => karte(a, min)).join("") : `<div class="empty">Keine passenden Angebote diese Woche.</div>`;
+}
+
+function renderTop() {
+  const k = D.angebote.filter(a => a.typ === "Kasten" && a.art === "Bier").sort((a, b) => a.eur_l - b.eur_l)[0];
+  if (!k) return;
+  const ab = k.app_preis && k.app_preis <= bester(k) ? ` · mit App ${eur(k.app_preis)}` : bester(k) < k.preis ? ` · ab Menge ${eur(bester(k))}` : "";
+  $("top").innerHTML = `<div class="top">
+    <div><div class="lbl">Günstigster Kasten diese Woche</div>
+      <div class="what">${esc(k.marke)} ${esc(k.produkt)}</div>
+      <div class="sub">${esc(k.markt)} · ${esc(k.gebinde_text)} · ${eur(k.preis)}${ab}${gueltig(k) ? " · " + esc(gueltig(k)) : ""}</div></div>
+    <div class="big"><b>${num(k.eur_l)}</b><span>€ / Liter</span></div>
+  </div>`;
+}
+
+function init() {
+  $("meta").textContent = `${D.ort} · KW ${D.woche.kw} · ${dm(D.woche.von)}–${dm(D.woche.bis)}`;
+  $("stand").textContent = `Stand ${D.stand.replace(/^(\d{4})-(\d\d)-(\d\d)/, "$3.$2.$1")} · nicht öffentlich verlinkt`;
+  const maerkte = [...new Set(D.angebote.map(a => a.markt))].sort();
+  $("markt").innerHTML = `<option value="">Alle Märkte</option>` + maerkte.map(m => `<option>${esc(m)}</option>`).join("");
+  $("maerkte").innerHTML = D.maerkte.map(m => `<li><b>${esc(m.name)}</b> – ${esc(m.filiale)}: ${m.angebote} Bier-Angebot${m.angebote === 1 ? "" : "e"}${m.im_prospekt === 0 ? " (Prospekt nur als Bild, nicht auslesbar)" : ""}</li>`).join("");
+  if (D.hinweise) { $("hinweise").hidden = false; $("hinweistext").textContent = D.hinweise; }
+  renderTop();
+  render();
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-k]");
+  if (t) { st.tab = t.dataset.k; render(); return; }
+  const c = e.target.closest("[data-a]");
+  if (c) {
+    const a = c.dataset.a;
+    st.arten.has(a) ? st.arten.delete(a) : st.arten.add(a);
+    if (!st.arten.size) st.arten.add(a);
+    render();
+  }
+});
+$("q").addEventListener("input", e => { st.q = e.target.value; render(); });
+$("markt").addEventListener("change", e => { st.markt = e.target.value; render(); });
+$("sort").addEventListener("change", e => { st.sort = e.target.value; render(); });
+
+fetch("bier.json", { cache: "no-cache" }).then(r => r.json()).then(d => { D = d; init(); })
+  .catch(() => { $("meta").textContent = "Daten konnten nicht geladen werden."; });
+</script>
+</body>
+</html>

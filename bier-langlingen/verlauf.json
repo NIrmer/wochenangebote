@@ -1,0 +1,198 @@
+{
+ "wochen": {
+  "2026-W43": [
+   {
+    "markt": "Netto",
+    "marke": "Hasseröder",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.49,
+    "eur_l": 0.85
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Radeberger",
+    "produkt": "Pilsner / Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.99,
+    "eur_l": 1.0
+   },
+   {
+    "markt": "Netto",
+    "marke": "Krombacher",
+    "produkt": "Bier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Beck's",
+    "produkt": "Pils / Gold",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "König-Brauerei",
+    "produkt": "König Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "EDEKA",
+    "marke": "Haake Beck",
+    "produkt": "",
+    "gebinde": "25 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.33
+   },
+   {
+    "markt": "EDEKA",
+    "marke": "Gilde",
+    "produkt": "Pilsener",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "Netto",
+    "marke": "Tyskie",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Franziskaner",
+    "produkt": "Premium-Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Spaten",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "EDEKA",
+    "marke": "Astra",
+    "produkt": "Urtyp",
+    "gebinde": "27 × 0,33 l",
+    "preis": 12.99,
+    "eur_l": 1.46
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Paulaner",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "METRO",
+    "marke": "Paulaner",
+    "produkt": "Hefe-Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.46,
+    "eur_l": 1.55
+   },
+   {
+    "markt": "METRO",
+    "marke": "Jever",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.46,
+    "eur_l": 1.55
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Veltins",
+    "produkt": "Helles Pülleken",
+    "gebinde": "24 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 1.77
+   },
+   {
+    "markt": "METRO",
+    "marke": "Budweiser",
+    "produkt": "Budvar",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.84,
+    "eur_l": 1.78
+   },
+   {
+    "markt": "Netto",
+    "marke": "Heineken",
+    "produkt": "Premium Beer",
+    "gebinde": "20 × 0,4 l",
+    "preis": 14.99,
+    "eur_l": 1.87
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Heineken",
+    "produkt": "Original Lager",
+    "gebinde": "20 × 0,4 l",
+    "preis": 14.99,
+    "eur_l": 1.87
+   },
+   {
+    "markt": "Netto",
+    "marke": "Flensburger",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,33 l",
+    "preis": 12.99,
+    "eur_l": 1.97
+   },
+   {
+    "markt": "METRO",
+    "marke": "Benediktiner",
+    "produkt": "Hell oder Weissbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 20.22,
+    "eur_l": 2.02
+   },
+   {
+    "markt": "METRO",
+    "marke": "Anheuser Busch",
+    "produkt": "Bud",
+    "gebinde": "24 × 0,3 l",
+    "preis": 16.05,
+    "eur_l": 2.23
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Corona",
+    "produkt": "Extra",
+    "gebinde": "12 × 0,355 l",
+    "preis": 9.99,
+    "eur_l": 2.35
+   },
+   {
+    "markt": "METRO",
+    "marke": "Birra Moretti",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 20.58,
+    "eur_l": 2.6
+   },
+   {
+    "markt": "METRO",
+    "marke": "Heineken",
+    "produkt": "",
+    "gebinde": "20 × 0,4 l",
+    "preis": 20.93,
+    "eur_l": 2.62
+   }
+  ]
+ }
+}
