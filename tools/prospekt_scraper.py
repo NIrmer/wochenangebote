@@ -215,6 +215,62 @@ EMOJI = {"Vegane Alternativen": "🌱", "Rinderhack": "🐄", "Hähnchennuggets"
          "Körniger Frischkäse": "🥣", "Haferflocken": "🌾", "Proteinpudding / High Protein": "🍮",
          "Gemüse (frisch & TK)": "🥦", "Kartoffeln": "🥔", "Milch": "🍼", "Nudeln (LIDL)": "🍝",
          "Nüsse & Erdnussbutter": "🥜", "Gewürze": "🧂", "Marken-Tee": "🍵", "Drogerie & Haushalt": "🧴"}
+# ======================= Grobkategorien (für "Alle Angebote") =======================
+# Gleiche Namen wie die EDEKA-Kategorien aus dem Prospekt. Reihenfolge = Priorität beim Matching.
+GRUPPEN = [
+    ("Obst", "🍎", r"\bobst\b|birne|äpfel|apfel\b|banane|trauben|mandarine|clementine|orange|kiwi|beeren|ananas|zitrone|mango|melone"),
+    ("Gemüse", "🥕", r"gemüse|kartoffel|salat|pilze|champignon|zwiebel|möhre|karotte|tomate|paprika|gurke|kohl\b|kohl,|brokkoli|zucchini|lauch|kürbis|chicorée|sprossen|hülsenfrüchte"),
+    ("Fisch", "🐟", r"fisch|lachs|garnele|thunfisch|hering|forelle|scampi|seelachs|matjes"),
+    ("Tiefkühlkost", "🧊", r"tiefkühl|tiefgefroren|> eis\b|pizza|ice cream|eiscreme"),
+    ("Fleisch und Wurst", "🥩", r"fleisch|wurst|würst|pastrami|burger|metzger|schinken|salami|geflügel|hähnchen|schwein|\brind|gulasch|braten|steak|hack|mett\b|pute|frikadelle|aufschnitt"),
+    ("Molkerei", "🧀", r"käse|milch|joghurt|molkerei|milbona|butter|quark|philadelphia|sahne|mozzarella|gouda|skyr|frischkäse|pudding|\beier\b|"
+     r"fruchtzwerge|activia|almighurt|leerdammer|grosse bauer|violife|rama\b"),
+    ("Brot und Backwaren", "🥐", r"backwaren|brot(?!aufstrich)|gebäck|kuchen|donut|panettone|toast|brötchen|croissant|stollen|baguette|laugen|bagel|"
+     r"sandwich|pancake|muffin|wrap\b"),
+    ("Getränke", "🥤", r"> getränke|getränke >|saft|wein\b|weine|bier|kaffee|\btee\b|sekt|spirituose|wasser|rum\b|likör|whisk|\bgin\b|vodka|wodka|limonade|prosecco|glühwein|cola|schorle|energy|coffee|tchibo|espresso"),
+    ("Süßigkeiten und Snacks", "🍫", r"süßigkeit|schoko|fruchtgummi|knabber|chips|kekse|gummi|praline|nüsse|riegel|snack|bonbon|lakritz|adventskalender|"
+     r"ritter sport|milka|kinder|duplo|trolli|haribo|nougat|marzipan|torrone|krokant|cantuccini|cookie|popcorn|flips|"
+     r"kipferl|lebkuchen|weihnachtsmann|wafer|mr\. tom|nesquik|cini minis|müsli|cerealien"),
+    ("Drogerie und Haushalt", "🧴", r"drogerie|haushalt|reinig|wasch|pflege|shampoo|dusch|zahn|toilett|küchen(rolle|tücher)|spül|deo"),
+]
+GRUPPE_EMOJI = {n: e for n, e, _ in GRUPPEN} | {"Lebensmittel": "🛒"}
+
+def gruppe(o):
+    """Grobkategorie eines Angebots. EDEKA bringt sie aus dem Prospekt mit, kaufDA über den Kategoriepfad."""
+    kat = (o.get("kategorie") or "").strip()
+    if kat in GRUPPE_EMOJI:
+        return kat
+    teile = kat.split(" > ")
+    pfad = " > " + " > ".join(teile[1:]) if len(teile) > 1 else ""
+    if teile and re.match(r"drogerie und haushalt", teile[0], re.I):
+        return "Drogerie und Haushalt"
+    text = " | ".join([pfad] + [str(o.get(k) or "") for k in ("produkt", "marke", "info")])
+    for name, _, rx in GRUPPEN:
+        if re.search(rx, text, re.I):
+            return name
+    return "Lebensmittel"
+
+def weitere_angebote(alle, sel):
+    """Alle übrigen Lebensmittel-/Drogerie-Angebote (keine Watchlist-Treffer) + ausgeblendete ('kein') Treffer."""
+    sel_ids = {r.get("id") for r in sel if r.get("hervorhebung") != "kein"}
+    res, seen = [], set()
+    kandidaten = [r for r in sel if r.get("hervorhebung") == "kein"] + [o for o in alle if o.get("id") not in sel_ids]
+    for o in kandidaten:
+        if not isinstance(o.get("preis"), (int, float)) or not o["preis"]:
+            continue
+        kat = (o.get("kategorie") or "").strip()
+        if o["markt"] != "EDEKA" and NONFOOD_RX.search(kat) and not re.match(r"drogerie und haushalt", kat, re.I):
+            continue
+        if re.search(r"chrysanthem|pflanze|blume|wärmer|kerze|grablicht|gesteck", f"{o.get('produkt')} {kat}", re.I):
+            continue
+        key = (o["markt"], tuple(sorted((o.get("produkt") or "").split(" / "))), o["preis"])
+        if key in seen:
+            continue
+        seen.add(key)
+        res.append({**o, "kategorie_watch": None, "status": "", "hervorhebung": o.get("hervorhebung")})
+    reihen = {n: i for i, (n, _, _) in enumerate(GRUPPEN)}
+    return sorted(res, key=lambda r: (reihen.get(gruppe(r), 99), r["preis"]))
+
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
 
@@ -439,18 +495,19 @@ def write_crops(sel, folder):
     json.dump(liste, open(f"{folder}/liste.json", "w"), ensure_ascii=False, indent=1)
     print(f"{len(liste)} Ausschnitte nach {folder}/ geladen -> {folder}/liste.json")
 
-def write_bilder(sel, folder, prefix):
+def write_bilder(sel, folder, prefix, weitere=(), leeren=True):
     """Thumbnails für die Website: Produktfoto (freigestellt, kaufDA) + Prospekt-Ausschnitt.
     EDEKA: Ausschnitte aus der Prospektseite per bbox (ganze Angebotskachel) und bbox_foto (nur Produktfoto),
     je [x0, y0, x1, y1] als Anteile 0–1. Ordner wird jede Woche geleert."""
     import io, shutil
     from PIL import Image
-    shutil.rmtree(folder, ignore_errors=True)
+    if leeren:
+        shutil.rmtree(folder, ignore_errors=True)
     os.makedirs(folder, exist_ok=True)
 
-    def save(im, name, maxsize):
+    def save(im, name, maxsize, quality=80):
         im.thumbnail((maxsize, maxsize))
-        im.save(f"{folder}/{name}", "WEBP", quality=80)
+        im.save(f"{folder}/{name}", "WEBP", quality=quality)
         return f"{prefix}/{name}"
 
     def load(url):
@@ -488,6 +545,33 @@ def write_bilder(sel, folder, prefix):
         except Exception as e:
             print(f"Bild fehlgeschlagen: {r['markt']} {r['produkt']}: {e}")
     print(f"{n} Bilder nach {folder}/")
+    # Weitere Angebote: LIDL/REWE direkt von kaufDA verlinken (spart Platz im Repo), EDEKA klein ausschneiden
+    m = 0
+    for i, r in enumerate(weitere):
+        if r["markt"] != "EDEKA":
+            r["img"] = r.get("produktbild") or r.get("bild")
+            r["img_prospekt"] = r.get("bild") or r.get("produktbild")
+            continue
+        bb, seite = r.get("bbox"), r.get("seite")
+        pfad = f"edeka_pages/seite_{int(seite):02d}.jpg" if seite else ""
+        if not (bb and os.path.exists(pfad)):
+            continue
+        try:
+            pg = Image.open(pfad).convert("RGB")
+            w, h = pg.size
+
+            def cut(b, pad=0.01):
+                x0, y0, x1, y1 = b
+                return pg.crop((int(max(0, (x0 - pad) * w)), int(max(0, (y0 - pad) * h)),
+                                int(min(w, (x1 + pad) * w)), int(min(h, (y1 + pad) * h))))
+            key = re.sub(r"[^a-z0-9-]", "", str(r.get("id") or f"w{i}").lower())[:24].rstrip("-")
+            r["img_prospekt"] = save(cut(bb), f"w-{key}-p.webp", 480, 65)
+            r["img"] = save(cut(r.get("bbox_foto") or bb, 0.005), f"w-{key}.webp", 180, 72)
+            m += 1
+        except Exception as e:
+            print(f"Bild fehlgeschlagen (weitere): {r['produkt']}: {e}")
+    if weitere:
+        print(f"{m} EDEKA-Bilder für weitere Angebote")
 
 def print_selection(sel):
     cur = None
@@ -632,8 +716,25 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
         md.append("</table>")
     return "\n".join(md)
 
-def to_site_json(sel, quellen, stand, hinweise=""):
-    """Daten für die Website (index.html). Ausgeblendete ('kein') Treffer fehlen."""
+def _site_item(r):
+    prod, info = _produkt_info(r)
+    watch = r.get("kategorie_watch")
+    g = gruppe(r)
+    return {
+        "id": r.get("id"), "emoji": EMOJI.get(watch, "•") if watch else GRUPPE_EMOJI.get(g, "🛒"),
+        "kategorie": watch or g, "gruppe": g,
+        "produkt": prod, "warn": "prüfen" in (r.get("status") or ""), "info": info[:140],
+        "preis": r["preis"], "app": r.get("preisart") == "APP-PREIS",
+        "normal": r.get("normalpreis"), "ersparnis": _prozent(r),
+        "aktion": r.get("hervorhebung") == "aktion",
+        "tage": tage_text(r.get("tage")) or None,
+        "grundpreis": f"{r['grundpreis']:.2f} €/{r['einheit']}" if r.get("grundpreis") and r.get("einheit") else None,
+        "bild": r.get("img"), "prospekt": r.get("img_prospekt"), "seite": r.get("seite"),
+    }
+
+def to_site_json(sel, quellen, stand, hinweise="", weitere=()):
+    """Daten für die Website (index.html): angebote = Highlights (Watchlist), weitere = alle übrigen Angebote.
+    Ausgeblendete ('kein') Treffer landen bei den weiteren Angeboten."""
     from datetime import date
     kw = _kw(sel, stand)
     sel, aus = _sichtbar(sel)
@@ -642,24 +743,14 @@ def to_site_json(sel, quellen, stand, hinweise=""):
     maerkte = []
     for markt, titel in MARKT_TITEL.items():
         name, _, adresse = titel.partition(" – ")
-        angebote = []
-        for r in (r for r in sel if r["markt"] == markt):
-            prod, info = _produkt_info(r)
-            angebote.append({
-                "id": r.get("id"), "emoji": EMOJI.get(r["kategorie_watch"], "•"), "kategorie": r["kategorie_watch"],
-                "produkt": prod, "warn": "prüfen" in r["status"], "info": info[:140],
-                "preis": r["preis"], "app": r["preisart"] == "APP-PREIS",
-                "normal": r.get("normalpreis"), "ersparnis": _prozent(r),
-                "aktion": r.get("hervorhebung") == "aktion",
-                "tage": tage_text(r.get("tage")) or None,
-                "grundpreis": f"{r['grundpreis']:.2f} €/{r['einheit']}" if r["grundpreis"] else None,
-                "bild": r.get("img"), "prospekt": r.get("img_prospekt"), "seite": r.get("seite"),
-            })
-        maerkte.append({"id": markt.lower(), "name": name, "adresse": adresse, "angebote": angebote})
+        angebote = [_site_item(r) for r in sel if r["markt"] == markt]
+        mehr = [_site_item(r) for r in weitere if r["markt"] == markt]
+        maerkte.append({"id": markt.lower(), "name": name, "adresse": adresse, "angebote": angebote, "weitere": mehr})
     return {"kw": kw, "stand": stand,
             "von": date.fromisocalendar(jahr, kw, 1).isoformat(), "bis": date.fromisocalendar(jahr, kw, 6).isoformat(),
             "quellen": " · ".join(f"{k}: {v}" for k, v in quellen.items()), "hinweise": hinweise,
             "legende": {EMOJI.get(k, "•"): k for k in used},
+            "gruppen": {GRUPPE_EMOJI[n]: n for n in [g for g, _, _ in GRUPPEN] + ["Lebensmittel"]},
             "ausgeblendet": [_label(r) for r in aus],
             "maerkte": maerkte}
 
@@ -714,8 +805,9 @@ if __name__ == "__main__":
     if a.notion_md:
         open(a.notion_md, "w").write(to_notion_md(sel, quellen, stand, hinweise))
         print(f"Notion-Markdown -> {a.notion_md}")
+    weitere = weitere_angebote(alle, sel) if a.site_json else []
     if a.bilder:
-        write_bilder(sel, a.bilder, os.path.basename(os.path.normpath(a.bilder)))
+        write_bilder(sel, a.bilder, os.path.basename(os.path.normpath(a.bilder)), weitere)
     if a.site_json:
-        json.dump(to_site_json(sel, quellen, stand, hinweise), open(a.site_json, "w"), ensure_ascii=False, indent=1)
-        print(f"Website-Daten -> {a.site_json}")
+        json.dump(to_site_json(sel, quellen, stand, hinweise, weitere), open(a.site_json, "w"), ensure_ascii=False, indent=1)
+        print(f"Website-Daten -> {a.site_json} ({len(_sichtbar(sel)[0])} Highlights, {len(weitere)} weitere)")

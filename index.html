@@ -124,6 +124,20 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .aktion { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; }
 .save { color: var(--accent); font-weight: 700; }
 .unit { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.seg { display: inline-grid; grid-template-columns: 1fr 1fr; flex: none; background: var(--chip); border-radius: 999px; padding: 2px; }
+.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 600; padding: 4px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+.card.normal { grid-template-columns: 52px minmax(0, 1fr) auto; padding: 8px 10px; gap: 10px; border-color: transparent; background: color-mix(in srgb, var(--surface) 70%, var(--bg)); }
+.card.normal .pic { width: 52px; height: 52px; border-radius: 10px; }
+.card.normal .pic img { border-radius: 10px; padding: 3px; }
+.card.normal .pic.leer { font-size: 24px; }
+.card.normal .name { font-weight: 500; font-size: 15px; }
+.card.normal .info { font-size: 12px; }
+.card.normal .now { font-size: 16px; font-weight: 600; }
+.card.normal .emo { display: none; }
+.star { display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; margin-right: 4px; vertical-align: 2px; }
+.subhead { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 6px; }
+.hint { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
 .empty { text-align: center; color: var(--muted); padding: 40px 0; }
 
 details { margin: 28px 0 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
@@ -159,6 +173,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
+    <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. „Alle“ zeigt zusätzlich alle übrigen Lebensmittel- und Drogerie-Angebote; die Suche durchsucht immer alles.</p>
     <p id="aus"></p>
     <p id="hinweise"></p>
   </details>
@@ -170,14 +185,14 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "18.10.2026 17:05";
+const VERSION = "18.10.2026 19:10";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-const state = { markt: "alle", kat: null, q: "", sort: "kat", rabatt: false };
-let DATA, ALL = [];
+const state = { markt: "alle", kat: null, q: "", sort: "kat", rabatt: false, modus: "hl" };
+let DATA, ALL = [], HL = [], NORM = [];
 
 function load(key, fallback) { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function save(key, val) { try { localStorage.setItem(key, val); } catch {} }
@@ -190,11 +205,13 @@ async function init() {
     $("#meta").textContent = "Angebote konnten nicht geladen werden.";
     return;
   }
-  ALL = DATA.maerkte.flatMap(m => m.angebote.map((a, i) => ({ ...a, markt: m.id, marktName: m.name, idx: i })));
+  HL = DATA.maerkte.flatMap(m => m.angebote.map(a => ({ ...a, markt: m.id, hl: true })));
+  NORM = DATA.maerkte.flatMap(m => (m.weitere || []).map(a => ({ ...a, markt: m.id, hl: false })));
+  ALL = [...HL, ...NORM];
   const zeitraum = DATA.von ? ` · ${fmtDate(DATA.von)}–${fmtDate(DATA.bis)}` : "";
-  $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${ALL.length} Treffer · Stand ${fmtDate(DATA.stand)}`;
+  $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${HL.length} Highlights` + (NORM.length ? ` · ${ALL.length} Angebote` : "") + ` · Stand ${fmtDate(DATA.stand)}`;
   $("#hinweise").textContent = DATA.hinweise ? "Diese Woche: " + DATA.hinweise : "";
-  if (DATA.ausgeblendet?.length) $("#aus").textContent = "Ausgeblendet, weil im Prospekt nicht als Angebot hervorgehoben: " + DATA.ausgeblendet.join(" · ");
+  if (DATA.ausgeblendet?.length) $("#aus").textContent = "Nicht als Highlight gezeigt, weil im Prospekt nicht als Angebot hervorgehoben (stehen unter „Alle“): " + DATA.ausgeblendet.join(" · ");
   $("#foot").innerHTML = (DATA.quellen ? esc("Quellen: " + DATA.quellen) + "<br>" : "") + esc("Version " + VERSION + " · Daten Stand " + fmtDate(DATA.stand));
 
   state.sort = load("sort", "kat");
@@ -204,31 +221,42 @@ async function init() {
   render();
 }
 
-function filtered() {
-  return ALL.filter(a =>
-    (state.markt === "alle" || a.markt === state.markt) &&
-    (!state.kat || a.kategorie === state.kat) &&
+// Highlights-Modus zeigt nur Watchlist-Treffer; "Alle" und jede Suche umfassen alle Angebote.
+const alleModus = () => state.modus === "alle" || !!state.q || !NORM.length;
+const katFeld = () => alleModus() ? "gruppe" : "kategorie";
+
+function filtered(markt = state.markt, ignoreKat = false) {
+  const base = (state.modus === "alle" || state.q) ? ALL : HL;
+  return base.filter(a =>
+    (markt === "alle" || a.markt === markt) &&
+    (ignoreKat || !state.kat || a[katFeld()] === state.kat) &&
     (!state.rabatt || a.ersparnis || a.aktion) &&
-    (!state.q || `${a.produkt} ${a.info} ${a.kategorie}`.toLowerCase().includes(state.q)));
+    (!state.q || `${a.produkt} ${a.info} ${a.kategorie} ${a.gruppe || ""}`.toLowerCase().includes(state.q)));
 }
 
 function renderTabs() {
-  const tabs = [{ id: "alle", name: "Alle" }, ...DATA.maerkte.map(m => ({ id: m.id, name: m.id.toUpperCase() }))];
-  $("#tabs").innerHTML = tabs.map(t => {
-    const n = ALL.filter(a => (t.id === "alle" || a.markt === t.id) && (!state.kat || a.kategorie === state.kat)).length;
-    return `<button class="tab" data-m="${t.id}" aria-pressed="${state.markt === t.id}">${t.name}<small>${n}</small></button>`;
-  }).join("");
+  const tabs = [{ id: "alle", name: state.modus === "alle" ? "Alle" : "Highlights" }, ...DATA.maerkte.map(m => ({ id: m.id, name: m.id.toUpperCase() }))];
+  $("#tabs").innerHTML = tabs.map(t =>
+    `<button class="tab" data-m="${t.id}" aria-pressed="${state.markt === t.id}">${t.name}<small>${filtered(t.id).length}</small></button>`).join("");
   $("#tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => { state.markt = b.dataset.m; render(); });
 }
 
 function renderChips() {
-  const pool = ALL.filter(a => state.markt === "alle" || a.markt === state.markt);
-  const kats = Object.entries(DATA.legende).filter(([, k]) => pool.some(a => a.kategorie === k));
+  const pool = filtered(state.markt, true);
+  const quelle = alleModus() ? (DATA.gruppen || {}) : DATA.legende;
+  const kats = Object.entries(quelle).filter(([, k]) => pool.some(a => a[katFeld()] === k));
   const reduziert = pool.filter(a => a.ersparnis || a.aktion).length;
-  $("#chips").innerHTML =
+  const seg = NORM.length ? `<div class="seg">
+      <button data-mode="hl" aria-pressed="${state.modus === "hl"}">⭐ Highlights</button>
+      <button data-mode="alle" aria-pressed="${state.modus === "alle"}">Alle</button></div>` : "";
+  $("#chips").innerHTML = seg +
     `<button class="chip" data-k="" aria-pressed="${!state.kat && !state.rabatt}">Alles</button>` +
     `<button class="chip" data-r="1" aria-pressed="${state.rabatt}">🔻 Mit Rabatt/Aktion (${reduziert})</button>` +
     kats.map(([e, k]) => `<button class="chip" data-k="${esc(k)}" aria-pressed="${state.kat === k}">${e} ${esc(k)}</button>`).join("");
+  $("#chips").querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    if (state.modus === b.dataset.mode) return;
+    state.modus = b.dataset.mode; state.kat = null; render();
+  });
   $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {
     if (b.dataset.r) state.rabatt = !state.rabatt;
     else if (!b.dataset.k) { state.kat = null; state.rabatt = false; }
@@ -237,7 +265,7 @@ function renderChips() {
   });
 }
 
-function card(a, showMarkt) {
+function card(a, showMarkt, stern) {
   const tags = [];
   if (showMarkt) tags.push(`<span class="tag m-${a.markt}">${a.markt.toUpperCase()}</span>`);
   if (a.tage) tags.push(`<span class="tag tage">${esc(a.tage)}</span>`);
@@ -245,13 +273,14 @@ function card(a, showMarkt) {
     ? `<div class="was"><s>${eur(a.normal)}</s>${a.ersparnis ? `<span class="save">−${a.ersparnis}%</span>` : ""}</div>`
     : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
     : a.aktion ? `<div class="was"><span class="aktion">Aktion</span></div>` : "";
-  return `<article class="card">
+  const star = stern && a.hl ? `<span class="star">⭐ Highlight</span>` : "";
+  return `<article class="card${a.hl ? "" : " normal"}">
     ${a.bild
       ? `<button class="pic" data-p="${esc(a.prospekt || a.bild)}" data-t="${esc(a.markt.toUpperCase() + " · " + a.produkt)}" aria-label="Prospekt-Ausschnitt anzeigen">
-           <img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async"><span class="emo" title="${esc(a.kategorie)}">${a.emoji}</span></button>`
+           <img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="emo" title="${esc(a.kategorie)}">${a.emoji}</span></button>`
       : `<div class="pic leer" title="${esc(a.kategorie)}">${a.emoji}</div>`}
     <div>
-      <div class="name">${esc(a.produkt).replace(/\//g, "/<wbr>")}</div>
+      <div class="name">${star}${esc(a.produkt).replace(/\//g, "/<wbr>")}</div>
       ${a.info ? `<div class="info">${esc(a.info).replace(/\//g, "/<wbr>")}</div>` : ""}
       ${tags.length ? `<div class="tags">${tags.join("")}</div>` : ""}
     </div>
@@ -268,20 +297,25 @@ function render() {
   renderChips();
   let list = filtered();
   if (!list.length) { $("#out").innerHTML = `<div class="empty">Keine Treffer.</div>`; return; }
+  const gemischt = list.some(a => a.hl) && list.some(a => !a.hl);
+  const hinweis = state.modus === "hl" && state.q && list.some(a => !a.hl)
+    ? `<p class="hint">Die Suche zeigt auch Angebote außerhalb der Highlights.</p>` : "";
 
   if (state.sort === "kat") {
-    // Gruppiert nach Markt, Reihenfolge wie im Scraper (Priorität / Watchlist)
+    // Gruppiert nach Markt: erst Highlights (Reihenfolge wie im Scraper), dann weitere Angebote
     const html = DATA.maerkte.map(m => {
       const items = list.filter(a => a.markt === m.id);
       if (!items.length) return "";
-      return `<h2><span class="dot" style="background:var(--${m.id})"></span>${esc(m.name)} <span class="addr">${esc(m.adresse)}</span></h2>
-        <div class="list">${items.map(a => card(a, false)).join("")}</div>`;
+      const h = items.filter(a => a.hl), n = items.filter(a => !a.hl);
+      return `<h2><span class="dot" style="background:var(--${m.id})"></span>${esc(m.name)} <span class="addr">${esc(m.adresse)}</span></h2>`
+        + (h.length ? `<div class="list">${h.map(a => card(a, false, gemischt)).join("")}</div>` : "")
+        + (n.length ? (h.length ? `<div class="subhead">Weitere Angebote</div>` : "") + `<div class="list">${n.map(a => card(a, false, false)).join("")}</div>` : "");
     }).join("");
-    $("#out").innerHTML = html;
+    $("#out").innerHTML = hinweis + html;
   } else {
     const key = state.sort === "preis" ? (a => a.preis ?? 1e9) : (a => -(a.ersparnis ?? -1));
     list = [...list].sort((x, y) => key(x) - key(y));
-    $("#out").innerHTML = `<div class="list" style="margin-top:14px">${list.map(a => card(a, true)).join("")}</div>`;
+    $("#out").innerHTML = hinweis + `<div class="list" style="margin-top:14px">${list.map(a => card(a, true, gemischt)).join("")}</div>`;
   }
 }
 
