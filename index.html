@@ -124,9 +124,13 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .aktion { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; }
 .save { color: var(--accent); font-weight: 700; }
 .unit { color: var(--muted); font-size: 12px; margin-top: 2px; }
-.seg { display: inline-grid; grid-template-columns: 1fr 1fr; flex: none; background: var(--chip); border-radius: 999px; padding: 2px; }
-.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 600; padding: 4px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
-.seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+.toggle { display: inline-flex; align-items: center; gap: 8px; flex: none; border: 0; background: var(--chip); color: var(--text);
+  border-radius: 999px; padding: 3px 4px 3px 12px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.toggle .sw { position: relative; width: 42px; height: 26px; border-radius: 999px; background: color-mix(in srgb, var(--muted) 45%, transparent); transition: background .2s; }
+.toggle .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .2s; }
+.toggle[aria-checked="true"] .sw { background: #34c759; }
+.toggle[aria-checked="true"] .sw::after { transform: translateX(16px); }
 .card.normal { grid-template-columns: 52px minmax(0, 1fr) auto; padding: 8px 10px; gap: 10px; border-color: transparent; background: color-mix(in srgb, var(--surface) 70%, var(--bg)); }
 .card.normal .pic { width: 52px; height: 52px; border-radius: 10px; }
 .card.normal .pic img { border-radius: 10px; padding: 3px; }
@@ -173,7 +177,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
-    <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. „Alle“ zeigt zusätzlich alle übrigen Lebensmittel- und Drogerie-Angebote; die Suche durchsucht immer alles.</p>
+    <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. Der Schalter „Alle Angebote“ zeigt zusätzlich alle übrigen Lebensmittel- und Drogerie-Angebote; die Suche durchsucht immer alles.</p>
     <p id="aus"></p>
     <p id="hinweise"></p>
   </details>
@@ -185,7 +189,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "18.10.2026 19:10";
+const VERSION = "18.10.2026 19:25";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -246,16 +250,13 @@ function renderChips() {
   const quelle = alleModus() ? (DATA.gruppen || {}) : DATA.legende;
   const kats = Object.entries(quelle).filter(([, k]) => pool.some(a => a[katFeld()] === k));
   const reduziert = pool.filter(a => a.ersparnis || a.aktion).length;
-  const seg = NORM.length ? `<div class="seg">
-      <button data-mode="hl" aria-pressed="${state.modus === "hl"}">⭐ Highlights</button>
-      <button data-mode="alle" aria-pressed="${state.modus === "alle"}">Alle</button></div>` : "";
+  const seg = NORM.length ? `<button class="toggle" role="switch" aria-checked="${state.modus === "alle"}">Alle Angebote<span class="sw"></span></button>` : "";
   $("#chips").innerHTML = seg +
     `<button class="chip" data-k="" aria-pressed="${!state.kat && !state.rabatt}">Alles</button>` +
     `<button class="chip" data-r="1" aria-pressed="${state.rabatt}">🔻 Mit Rabatt/Aktion (${reduziert})</button>` +
     kats.map(([e, k]) => `<button class="chip" data-k="${esc(k)}" aria-pressed="${state.kat === k}">${e} ${esc(k)}</button>`).join("");
-  $("#chips").querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
-    if (state.modus === b.dataset.mode) return;
-    state.modus = b.dataset.mode; state.kat = null; render();
+  $("#chips").querySelectorAll(".toggle").forEach(b => b.onclick = () => {
+    state.modus = state.modus === "alle" ? "hl" : "alle"; state.kat = null; render();
   });
   $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {
     if (b.dataset.r) state.rabatt = !state.rabatt;
