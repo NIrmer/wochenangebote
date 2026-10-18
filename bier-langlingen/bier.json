@@ -1,5 +1,5 @@
 {
- "stand": "2026-10-18 20:44",
+ "stand": "2026-10-19 00:02",
  "woche": {
   "kw": 43,
   "von": "2026-10-19",
@@ -9,66 +9,469 @@
  "maerkte": [
   {
    "name": "ALDI Nord",
-   "filiale": "Wathlingen / Lachendorf",
    "farbe": "#00559f",
+   "hinweis": null,
    "angebote": 1,
-   "im_prospekt": 285
+   "im_prospekt": 285,
+   "filialen": [
+    {
+     "name": "ALDI Nord",
+     "adresse": "Oppershäuserstraße 6",
+     "ort": "29331 Lachendorf",
+     "km": 8.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Oppersh%C3%A4userstra%C3%9Fe%206%2029331%20Lachendorf"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Nienhagener Straße 3",
+     "ort": "29339 Wathlingen",
+     "km": 9.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Nienhagener%20Stra%C3%9Fe%203%2029339%20Wathlingen"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Gifhorner Straße 10",
+     "ort": "38536 Meinersen",
+     "km": 10.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Gifhorner%20Stra%C3%9Fe%2010%2038536%20Meinersen"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Burgdorfer Straße 23",
+     "ort": "31311 Uetze",
+     "km": 11.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Burgdorfer%20Stra%C3%9Fe%2023%2031311%20Uetze"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Bremer Weg 199",
+     "ort": "29223 Celle",
+     "km": 17.0,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Bremer%20Weg%20199%2029223%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "An der Hasenbahn 3",
+     "ort": "29225 Celle",
+     "km": 17.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20An%20der%20Hasenbahn%203%2029225%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Lärchenweg 1",
+     "ort": "29227 Celle",
+     "km": 17.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20L%C3%A4rchenweg%201%2029227%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Wittinger Straße 44",
+     "ort": "29392 Wesendorf",
+     "km": 17.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Wittinger%20Stra%C3%9Fe%2044%2029392%20Wesendorf"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Hamburger Straße 71",
+     "ort": "38518 Gifhorn",
+     "km": 20.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hamburger%20Stra%C3%9Fe%2071%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Braunschweiger Straße 106",
+     "ort": "38518 Gifhorn",
+     "km": 20.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Braunschweiger%20Stra%C3%9Fe%20106%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Adam-Riese-Straße 2",
+     "ort": "38518 Gifhorn",
+     "km": 20.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Adam-Riese-Stra%C3%9Fe%202%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Hehlenbruchweg 4",
+     "ort": "29313 Hambühren",
+     "km": 23.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hehlenbruchweg%204%2029313%20Hamb%C3%BChren"
+    }
+   ]
   },
   {
    "name": "Lidl",
-   "filiale": "Wathlingen, Nienhagener Str. 1",
    "farbe": "#0050aa",
+   "hinweis": null,
    "angebote": 1,
-   "im_prospekt": 770
+   "im_prospekt": 770,
+   "filialen": [
+    {
+     "name": "Lidl",
+     "adresse": "Ackerstraße 3 - 5",
+     "ort": "29331 Lachendorf",
+     "km": 8.0,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Ackerstra%C3%9Fe%203%20-%205%2029331%20Lachendorf"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Nienhagener Straße 1",
+     "ort": "29339 Wathlingen",
+     "km": 9.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Nienhagener%20Stra%C3%9Fe%201%2029339%20Wathlingen"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Schapers Kamp 3",
+     "ort": "31311 Uetze",
+     "km": 11.9,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Schapers%20Kamp%203%2031311%20Uetze"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Hannoversche Straße 32",
+     "ort": "29221 Celle",
+     "km": 16.2,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Hannoversche%20Stra%C3%9Fe%2032%2029221%20Celle"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Fuhrberger Straße 139",
+     "ort": "29225 Celle",
+     "km": 17.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Fuhrberger%20Stra%C3%9Fe%20139%2029225%20Celle"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Baumschulenweg 5",
+     "ort": "29227 Celle",
+     "km": 17.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Baumschulenweg%205%2029227%20Celle"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Goethestraße 19",
+     "ort": "29392 Wesendorf",
+     "km": 17.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Goethestra%C3%9Fe%2019%2029392%20Wesendorf"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Braunschweiger Straße 112",
+     "ort": "38518 Gifhorn",
+     "km": 20.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Braunschweiger%20Stra%C3%9Fe%20112%2038518%20Gifhorn"
+    },
+    {
+     "name": "Lidl",
+     "adresse": "Ostlandstraße 2a",
+     "ort": "29313 Hambühren",
+     "km": 23.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Ostlandstra%C3%9Fe%202a%2029313%20Hamb%C3%BChren"
+    }
+   ]
   },
   {
    "name": "Netto",
-   "filiale": "Umgebung Langlingen",
    "farbe": "#e2001a",
+   "hinweis": null,
    "angebote": 13,
-   "im_prospekt": 382
+   "im_prospekt": 382,
+   "filialen": [
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Hauptstraße 29",
+     "ort": "38539 Müden (Aller)",
+     "km": 6.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hauptstra%C3%9Fe%2029%2038539%20M%C3%BCden%20%28Aller%29"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Braunschweiger Straße 10",
+     "ort": "29358 Eicklingen",
+     "km": 7.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Braunschweiger%20Stra%C3%9Fe%2010%2029358%20Eicklingen"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Hauptstraße 30",
+     "ort": "38536 Meinersen",
+     "km": 10.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hauptstra%C3%9Fe%2030%2038536%20Meinersen"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Rälinger Straße 7",
+     "ort": "31311 Uetze",
+     "km": 11.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20R%C3%A4linger%20Stra%C3%9Fe%207%2031311%20Uetze"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Sprengerstraße 40",
+     "ort": "29223 Celle",
+     "km": 16.9,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Sprengerstra%C3%9Fe%2040%2029223%20Celle"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Braunschw. Heerstraße 59",
+     "ort": "29221 Celle",
+     "km": 16.9,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Braunschw.%20Heerstra%C3%9Fe%2059%2029221%20Celle"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Angerhoop 2",
+     "ort": "29392 Wesendorf",
+     "km": 17.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Angerhoop%202%2029392%20Wesendorf"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Schier-Rähmen-Weg 2",
+     "ort": "38543 Hillerse",
+     "km": 18.0,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Schier-R%C3%A4hmen-Weg%202%2038543%20Hillerse"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Hamburger Straße 73",
+     "ort": "38518 Gifhorn",
+     "km": 20.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hamburger%20Stra%C3%9Fe%2073%2038518%20Gifhorn"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Celler Straße 106a",
+     "ort": "38518 Gifhorn",
+     "km": 20.2,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Celler%20Stra%C3%9Fe%20106a%2038518%20Gifhorn"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Ii. Koppelweg 34",
+     "ort": "38518 Gifhorn",
+     "km": 20.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Ii.%20Koppelweg%2034%2038518%20Gifhorn"
+    },
+    {
+     "name": "Netto Marken-Discount",
+     "adresse": "Sudermannstraße 1",
+     "ort": "29313 Hambühren",
+     "km": 23.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Sudermannstra%C3%9Fe%201%2029313%20Hamb%C3%BChren"
+    }
+   ]
   },
   {
    "name": "Penny",
-   "filiale": "Umgebung Langlingen",
    "farbe": "#cd1719",
+   "hinweis": null,
    "angebote": 3,
-   "im_prospekt": 564
+   "im_prospekt": 564,
+   "filialen": [
+    {
+     "name": "Penny",
+     "adresse": "Gifhorner Straße 6",
+     "ort": "38539 Müden (Aller)",
+     "km": 6.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Gifhorner%20Stra%C3%9Fe%206%2038539%20M%C3%BCden%20%28Aller%29"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Storchenweg 2",
+     "ort": "29342 Wienhausen",
+     "km": 7.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Storchenweg%202%2029342%20Wienhausen"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Villeparisisplatz 1",
+     "ort": "29339 Wathlingen",
+     "km": 9.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Villeparisisplatz%201%2029339%20Wathlingen"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Weissdornallee 1",
+     "ort": "31311 Uetze",
+     "km": 11.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Weissdornallee%201%2031311%20Uetze"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Bergstraße 26",
+     "ort": "29221 Celle",
+     "km": 16.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Bergstra%C3%9Fe%2026%2029221%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Hannoversche Heerstraße 30",
+     "ort": "29221 Celle",
+     "km": 16.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Hannoversche%20Heerstra%C3%9Fe%2030%2029221%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Harburgerstraße 77",
+     "ort": "29223 Celle",
+     "km": 16.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Harburgerstra%C3%9Fe%2077%2029223%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Heese 2",
+     "ort": "29225 Celle",
+     "km": 16.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Heese%202%2029225%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Hohe Wende 3",
+     "ort": "29223 Celle",
+     "km": 16.8,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Hohe%20Wende%203%2029223%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Gilder Weg 39",
+     "ort": "38542 Leiferde",
+     "km": 17.2,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Gilder%20Weg%2039%2038542%20Leiferde"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Zur Hasselklink 1A",
+     "ort": "29229 Celle",
+     "km": 17.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Zur%20Hasselklink%201A%2029229%20Celle"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Braunschweiger Straße 33",
+     "ort": "38518 Gifhorn",
+     "km": 19.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Braunschweiger%20Stra%C3%9Fe%2033%2038518%20Gifhorn"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Lehmweg 51",
+     "ort": "38518 Gifhorn",
+     "km": 20.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Lehmweg%2051%2038518%20Gifhorn"
+    },
+    {
+     "name": "Penny",
+     "adresse": "Wilscher Weg 55",
+     "ort": "38518 Gifhorn",
+     "km": 20.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Wilscher%20Weg%2055%2038518%20Gifhorn"
+    }
+   ]
   },
   {
    "name": "Kaufland",
-   "filiale": "Celle",
    "farbe": "#e10915",
+   "hinweis": null,
    "angebote": 13,
-   "im_prospekt": 484
+   "im_prospekt": 484,
+   "filialen": [
+    {
+     "name": "Kaufland",
+     "adresse": "An Der Hasenbahn 3",
+     "ort": "29225 Celle",
+     "km": 17.0,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Kaufland%20An%20Der%20Hasenbahn%203%2029225%20Celle"
+    },
+    {
+     "name": "Kaufland",
+     "adresse": "Eyßelheideweg 5",
+     "ort": "38518 Gifhorn",
+     "km": 20.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Kaufland%20Ey%C3%9Felheideweg%205%2038518%20Gifhorn"
+    }
+   ]
   },
   {
    "name": "Norma",
-   "filiale": "Celle",
    "farbe": "#c4161c",
+   "hinweis": null,
    "angebote": 0,
-   "im_prospekt": 0
+   "im_prospekt": 0,
+   "filialen": [
+    {
+     "name": "Norma",
+     "adresse": "Alvernsche Straße 1",
+     "ort": "29229 Celle",
+     "km": 15.8,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Norma%20Alvernsche%20Stra%C3%9Fe%201%2029229%20Celle"
+    }
+   ]
   },
   {
    "name": "Trinkgut",
-   "filiale": "Celle, Neuenhäuser Str.",
    "farbe": "#7a1f2b",
+   "hinweis": null,
    "angebote": 0,
-   "im_prospekt": 0
+   "im_prospekt": 0,
+   "filialen": [
+    {
+     "name": "Trinkgut",
+     "adresse": "Neuenhäuserstraße 3",
+     "ort": "29221 Celle",
+     "km": 16.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Neuenh%C3%A4userstra%C3%9Fe%203%2029221%20Celle"
+    },
+    {
+     "name": "Trinkgut",
+     "adresse": "Isenbütteler Weg 43",
+     "ort": "38518 Gifhorn",
+     "km": 20.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Isenb%C3%BCtteler%20Weg%2043%2038518%20Gifhorn"
+    },
+    {
+     "name": "Trinkgut",
+     "adresse": "Hehlenbruchweg 6",
+     "ort": "29313 Hambühren",
+     "km": 23.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Hehlenbruchweg%206%2029313%20Hamb%C3%BChren"
+    }
+   ]
   },
   {
    "name": "METRO",
-   "filiale": "METRO GASTRO Celle, Bremer Weg 203 (Kundenkarte nötig)",
    "farbe": "#002d72",
+   "hinweis": "nur mit METRO-Kundenkarte",
    "angebote": 9,
-   "im_prospekt": 199
+   "im_prospekt": 199,
+   "filialen": [
+    {
+     "name": "METRO",
+     "adresse": "Bremer Weg 203",
+     "ort": "29223 Celle",
+     "km": 17.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=METRO%20Bremer%20Weg%20203%2029223%20Celle"
+    }
+   ]
   },
   {
    "name": "EDEKA",
-   "filiale": "EDEKA Müller, Langlingen, Hauptstr. 30",
    "farbe": "#f0b400",
+   "hinweis": null,
    "angebote": 7,
-   "im_prospekt": 7
+   "im_prospekt": 7,
+   "filialen": [
+    {
+     "name": "EDEKA Müller",
+     "adresse": "Hauptstraße 30",
+     "ort": "29364 Langlingen",
+     "km": 0.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=EDEKA%20M%C3%BCller%20Hauptstra%C3%9Fe%2030%2029364%20Langlingen"
+    }
+   ]
   }
  ],
  "hinweise": "Erste Woche: noch kein Preisverlauf. Norma und Trinkgut liefern ihre Prospekte nur als Bild und fehlen deshalb. REWE hat in der Umgebung keinen auslesbaren Prospekt.",
@@ -96,9 +499,9 @@
    "pfand": 1.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/0ba945cd-7def-4969-9194-b01ab899206a/46abc280-0bb3-4913-abd1-70a63a840e92.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/000-schloss.webp"
   },
   {
    "markt": "Netto",
@@ -123,9 +526,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/18f94035-d674-466a-a562-17dfdca1d661/c21457b4-ab07-40f1-9cce-484ca511d31a.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/001-hasser-der.webp"
   },
   {
    "markt": "Netto",
@@ -150,9 +553,9 @@
    "pfand": 1.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/8e40f427-4db1-4f4d-a338-d16c1a541249/abdaaf2e-de17-4491-b071-5b8ea5959f6c.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/002-schloss.webp"
   },
   {
    "markt": "Netto",
@@ -177,9 +580,9 @@
    "pfand": 1.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/5a6cb0dc-33a2-46da-9b58-d7580b6a1809/8915f0ae-f4bf-418d-bafd-44082ebba387.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/003-schloss.webp"
   },
   {
    "markt": "Netto",
@@ -204,9 +607,9 @@
    "pfand": 1.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/356fac73-ab58-4359-b1ff-44c8a6ac3f9b/main.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/004-schloss.webp"
   },
   {
    "markt": "Netto",
@@ -231,9 +634,9 @@
    "pfand": 0.25,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/a61ba2fc-9b21-485e-a297-d13fc35eb4e6/c94233f2-782a-47b1-b518-0202e16ad88c.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/005-schloss.webp"
   },
   {
    "markt": "Kaufland",
@@ -258,9 +661,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/323e10bf-7fc3-496e-91cd-3be7438d9df1/732dcbd8-7e91-4fa9-8f39-bb6b2ce4770a.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/006-radeberger.webp"
   },
   {
    "markt": "Netto",
@@ -285,9 +688,9 @@
    "pfand": 0.25,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/4eda7227-c1e2-45a6-8b1a-7de904a43567/257a6c85-7b45-4e55-9a00-be8583152a86.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/007-schloss.webp"
   },
   {
    "markt": "Netto",
@@ -314,9 +717,9 @@
    "pfand": 3.1,
    "von": "2026-10-24",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/4eec97b0-13cd-4ce9-9a06-e16bd5674f38/1670d139-a5e5-4b58-9f07-17f21b31d2f3.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/008-krombacher.webp"
   },
   {
    "markt": "Kaufland",
@@ -343,9 +746,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/0284a87c-8d0e-4357-9e47-1aaf7a8851c1/b5684a5c-c827-439f-8f8a-148a9cb75489.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/009-beck-s.webp"
   },
   {
    "markt": "Kaufland",
@@ -372,9 +775,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/6a714976-6dd5-4bc5-9f25-eb12bb74013c/cf51fd6a-ae81-4534-b7b7-4150799bead9.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/010-k-nig-brauerei.webp"
   },
   {
    "markt": "Lidl",
@@ -399,9 +802,9 @@
    "pfand": 1.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/dd4a8df1-4f42-4324-b731-da1727182c98/d633f2bc-70e7-4580-8dd1-f12f168deb17.jpg",
    "quelle": "kaufDA",
-   "prospekt": "LIDL LOHNT SICH"
+   "prospekt": "LIDL LOHNT SICH",
+   "bild": "img/011-jever.webp"
   },
   {
    "markt": "EDEKA",
@@ -426,9 +829,9 @@
    "pfand": 3.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "EDEKA",
@@ -453,9 +856,9 @@
    "pfand": 3.42,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "Netto",
@@ -480,9 +883,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/202d4098-1053-4417-bea1-133f627be36c/b8cf1ef6-535d-4cc2-a1b4-b2b91c3052df.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/014-tyskie.webp"
   },
   {
    "markt": "Kaufland",
@@ -507,9 +910,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/fff1131d-7511-4671-adf8-481baceba033/e12e4f82-2960-44af-b859-652c5cdad7f2.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/015-franziskaner.webp"
   },
   {
    "markt": "Kaufland",
@@ -534,9 +937,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/c534eddd-9b06-4050-8ff8-22bcc2bfd028/df204868-99d5-4293-b483-c32d818cc97c.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/016-spaten.webp"
   },
   {
    "markt": "EDEKA",
@@ -561,9 +964,9 @@
    "pfand": 3.66,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "Kaufland",
@@ -588,9 +991,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/35b88c54-fb88-40ac-b4f6-16f0388f9086/96f9b7c9-5870-4aac-a1a3-b32389d2a7c5.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/018-paulaner.webp"
   },
   {
    "markt": "Penny",
@@ -615,9 +1018,9 @@
    "pfand": 0.25,
    "von": "2026-10-22",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/c308656f-26c3-43b4-82ac-e39afe511697/920e9992-3e2d-41c5-86af-f8d86be070ea.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wer günstig will, muss Penny."
+   "prospekt": "Wer günstig will, muss Penny.",
+   "bild": "img/019-beck-s.webp"
   },
   {
    "markt": "METRO",
@@ -642,9 +1045,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/621230ed-5a05-461b-8ec7-49fd9ca55d83/1f7dcedf-e3e7-473e-9f14-ac3db47969f6.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/020-paulaner.webp"
   },
   {
    "markt": "METRO",
@@ -669,9 +1072,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/32d76702-e76e-41c7-b05b-c0abee5e83e7/5804df98-265b-4991-8d4c-67884e7ff95d.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/021-jever.webp"
   },
   {
    "markt": "Netto",
@@ -696,9 +1099,9 @@
    "pfand": 0.25,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/ffa1b9be-5a7c-4cc8-a265-c62b51337f55/2451833d-daa3-457b-b7b8-1cbf3b6d4dd5.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/022-astra.webp"
   },
   {
    "markt": "ALDI Nord",
@@ -723,9 +1126,9 @@
    "pfand": 0.25,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/4d0cc8da-819f-4ee7-a0d0-1b4930845dcf/b25b9f48-ad56-43b7-886f-bfca757f3950.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/023-krombacher.webp"
   },
   {
    "markt": "Kaufland",
@@ -750,9 +1153,9 @@
    "pfand": 3.42,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/57392eb1-2604-4df3-9356-c4e78c830569/f44ebdc9-8b5c-4f7d-927f-64a539a31569.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/024-veltins.webp"
   },
   {
    "markt": "METRO",
@@ -777,9 +1180,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/1f6f52a4-153a-409e-b6d0-228502af7516/1633a5f1-bec5-4ad1-bdeb-13f8872f626b.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/025-budweiser.webp"
   },
   {
    "markt": "Netto",
@@ -806,9 +1209,9 @@
    "pfand": 3.1,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/4de8cfb8-b8e9-45ed-92e7-611d4b0ced3f/bc242d82-9de7-4015-8a2a-14c232dc3ab8.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/026-heineken.webp"
   },
   {
    "markt": "Kaufland",
@@ -833,9 +1236,9 @@
    "pfand": 3.1,
    "von": "2026-10-22",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/34241ca5-88a0-4b5c-9e26-4552dd20cffe/53c228cb-c55c-4d49-a638-5c1ea0277959.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/027-heineken.webp"
   },
   {
    "markt": "Netto",
@@ -860,9 +1263,9 @@
    "pfand": 4.5,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/bd1965f1-8e48-4b50-b234-1434142bef06/e29ab025-9ee6-4083-a1f4-b1a397c1d06b.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/028-flensburger.webp"
   },
   {
    "markt": "Netto",
@@ -887,9 +1290,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/16474349-348a-4924-8551-c609171c99e1/a3b67fbc-759e-4739-8fdd-98090839f261.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Aktuelle Angebote"
+   "prospekt": "Aktuelle Angebote",
+   "bild": "img/029-veltins.webp"
   },
   {
    "markt": "EDEKA",
@@ -914,9 +1317,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "EDEKA",
@@ -941,9 +1344,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "EDEKA",
@@ -970,9 +1373,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "METRO",
@@ -1006,9 +1409,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/31873161-4fbe-400b-b40f-85bb6b7c900c/a7ecca97-20bd-4b74-8696-00f1f216da69.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/033-benediktiner.webp"
   },
   {
    "markt": "Kaufland",
@@ -1033,9 +1436,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/e477b4f8-dba2-407c-b224-f9eed24ace3d/8d2f75f5-bb49-433d-9999-9e2c1e5b8907.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/034-grevensteiner.webp"
   },
   {
    "markt": "EDEKA",
@@ -1060,9 +1463,9 @@
    "pfand": 0.0,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": null,
    "quelle": "edeka.de",
-   "prospekt": "Marktangebote"
+   "prospekt": "Marktangebote",
+   "bild": null
   },
   {
    "markt": "METRO",
@@ -1087,9 +1490,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/c162db39-d786-485d-8d8f-cf4261e70e22/68b846d7-6a18-4e1b-b0f2-8c020508e353.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/036-anheuser-busch.webp"
   },
   {
    "markt": "Kaufland",
@@ -1114,9 +1517,9 @@
    "pfand": 0.96,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/ca1cbfce-e149-4096-b590-6581f0c93fb2/92b1df2c-1dff-45b1-a9d4-e8b9fc623410.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/037-corona.webp"
   },
   {
    "markt": "METRO",
@@ -1141,9 +1544,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/d011f750-87b3-4c72-88b0-451063e351f7/main.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/038-birra-moretti.webp"
   },
   {
    "markt": "METRO",
@@ -1177,9 +1580,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/07b1aa67-08f2-4ad2-ad5e-1cdbede0d6d5/main.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/039-heineken.webp"
   },
   {
    "markt": "Penny",
@@ -1204,9 +1607,9 @@
    "pfand": 0.32,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/4acdf49c-06fa-4f09-b580-82c0f7faa3c5/e7975fd7-9955-47e9-832e-3ddf747ec125.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wer günstig will, muss Penny."
+   "prospekt": "Wer günstig will, muss Penny.",
+   "bild": "img/040-corona-extra.webp"
   },
   {
    "markt": "METRO",
@@ -1240,9 +1643,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/9818cf10-220e-4f0b-a3f3-8f27c8240a81/a9b2fbfb-070e-4c6c-9ab4-be7d9f532f7d.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/041-beck-s.webp"
   },
   {
    "markt": "Kaufland",
@@ -1267,9 +1670,9 @@
    "pfand": 0.48,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/71501209-0657-4acf-901d-8c32c1192cf8/53ecbff3-0ad5-40bf-8d06-4214f20e1dc4.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/042-anheuser-busch.webp"
   },
   {
    "markt": "Penny",
@@ -1294,9 +1697,9 @@
    "pfand": 1.92,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/f17af803-9e5a-4b8a-af94-e060feaa52ce/4b998e71-d8f7-40d3-870e-82ca65c89b9b.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wer günstig will, muss Penny."
+   "prospekt": "Wer günstig will, muss Penny.",
+   "bild": "img/043-penny.webp"
   },
   {
    "markt": "Kaufland",
@@ -1321,9 +1724,9 @@
    "pfand": 2.14,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/070666db-0e3e-4537-81b1-791cf26d2263/dd13c358-8404-4a4b-a02c-99d5e04d2ccb.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/044-duckstein.webp"
   },
   {
    "markt": "METRO",
@@ -1357,9 +1760,9 @@
    "pfand": null,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/5de26ed4-a847-4747-90d5-e9abaab82304/9efe547b-5647-40b1-8492-7ccc79e2bc98.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Wochenangebote"
+   "prospekt": "Wochenangebote",
+   "bild": "img/045-corona-extra.webp"
   },
   {
    "markt": "Kaufland",
@@ -1389,9 +1792,9 @@
    "pfand": 0.32,
    "von": "2026-10-19",
    "bis": "2026-10-24",
-   "bild": "https://content-media.bonial.biz/cb4e992c-8489-4d2b-8e4c-cdca087c963f/d479ba5a-a90c-4483-8007-121454630bd5.jpg",
    "quelle": "kaufDA",
-   "prospekt": "Hier bin ich richtig"
+   "prospekt": "Hier bin ich richtig",
+   "bild": "img/046-desperados-original.webp"
   }
  ]
 }

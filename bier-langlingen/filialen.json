@@ -1,0 +1,409 @@
+{
+ "stand": "2026-10-19T00:02+02:00",
+ "radius_km": 25,
+ "filialen": {
+  "ALDI Nord": [
+   {
+    "name": "ALDI Nord",
+    "adresse": "Oppershäuserstraße 6",
+    "ort": "29331 Lachendorf",
+    "km": 8.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Oppersh%C3%A4userstra%C3%9Fe%206%2029331%20Lachendorf"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Nienhagener Straße 3",
+    "ort": "29339 Wathlingen",
+    "km": 9.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Nienhagener%20Stra%C3%9Fe%203%2029339%20Wathlingen"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Gifhorner Straße 10",
+    "ort": "38536 Meinersen",
+    "km": 10.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Gifhorner%20Stra%C3%9Fe%2010%2038536%20Meinersen"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Burgdorfer Straße 23",
+    "ort": "31311 Uetze",
+    "km": 11.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Burgdorfer%20Stra%C3%9Fe%2023%2031311%20Uetze"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Bremer Weg 199",
+    "ort": "29223 Celle",
+    "km": 17.0,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Bremer%20Weg%20199%2029223%20Celle"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "An der Hasenbahn 3",
+    "ort": "29225 Celle",
+    "km": 17.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20An%20der%20Hasenbahn%203%2029225%20Celle"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Lärchenweg 1",
+    "ort": "29227 Celle",
+    "km": 17.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20L%C3%A4rchenweg%201%2029227%20Celle"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Wittinger Straße 44",
+    "ort": "29392 Wesendorf",
+    "km": 17.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Wittinger%20Stra%C3%9Fe%2044%2029392%20Wesendorf"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Hamburger Straße 71",
+    "ort": "38518 Gifhorn",
+    "km": 20.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hamburger%20Stra%C3%9Fe%2071%2038518%20Gifhorn"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Braunschweiger Straße 106",
+    "ort": "38518 Gifhorn",
+    "km": 20.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Braunschweiger%20Stra%C3%9Fe%20106%2038518%20Gifhorn"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Adam-Riese-Straße 2",
+    "ort": "38518 Gifhorn",
+    "km": 20.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Adam-Riese-Stra%C3%9Fe%202%2038518%20Gifhorn"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Hehlenbruchweg 4",
+    "ort": "29313 Hambühren",
+    "km": 23.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hehlenbruchweg%204%2029313%20Hamb%C3%BChren"
+   }
+  ],
+  "Lidl": [
+   {
+    "name": "Lidl",
+    "adresse": "Ackerstraße 3 - 5",
+    "ort": "29331 Lachendorf",
+    "km": 8.0,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Ackerstra%C3%9Fe%203%20-%205%2029331%20Lachendorf"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Nienhagener Straße 1",
+    "ort": "29339 Wathlingen",
+    "km": 9.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Nienhagener%20Stra%C3%9Fe%201%2029339%20Wathlingen"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Schapers Kamp 3",
+    "ort": "31311 Uetze",
+    "km": 11.9,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Schapers%20Kamp%203%2031311%20Uetze"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Hannoversche Straße 32",
+    "ort": "29221 Celle",
+    "km": 16.2,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Hannoversche%20Stra%C3%9Fe%2032%2029221%20Celle"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Fuhrberger Straße 139",
+    "ort": "29225 Celle",
+    "km": 17.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Fuhrberger%20Stra%C3%9Fe%20139%2029225%20Celle"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Baumschulenweg 5",
+    "ort": "29227 Celle",
+    "km": 17.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Baumschulenweg%205%2029227%20Celle"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Goethestraße 19",
+    "ort": "29392 Wesendorf",
+    "km": 17.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Goethestra%C3%9Fe%2019%2029392%20Wesendorf"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Braunschweiger Straße 112",
+    "ort": "38518 Gifhorn",
+    "km": 20.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Braunschweiger%20Stra%C3%9Fe%20112%2038518%20Gifhorn"
+   },
+   {
+    "name": "Lidl",
+    "adresse": "Ostlandstraße 2a",
+    "ort": "29313 Hambühren",
+    "km": 23.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Lidl%20Ostlandstra%C3%9Fe%202a%2029313%20Hamb%C3%BChren"
+   }
+  ],
+  "Netto": [
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Hauptstraße 29",
+    "ort": "38539 Müden (Aller)",
+    "km": 6.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hauptstra%C3%9Fe%2029%2038539%20M%C3%BCden%20%28Aller%29"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Braunschweiger Straße 10",
+    "ort": "29358 Eicklingen",
+    "km": 7.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Braunschweiger%20Stra%C3%9Fe%2010%2029358%20Eicklingen"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Hauptstraße 30",
+    "ort": "38536 Meinersen",
+    "km": 10.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hauptstra%C3%9Fe%2030%2038536%20Meinersen"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Rälinger Straße 7",
+    "ort": "31311 Uetze",
+    "km": 11.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20R%C3%A4linger%20Stra%C3%9Fe%207%2031311%20Uetze"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Sprengerstraße 40",
+    "ort": "29223 Celle",
+    "km": 16.9,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Sprengerstra%C3%9Fe%2040%2029223%20Celle"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Braunschw. Heerstraße 59",
+    "ort": "29221 Celle",
+    "km": 16.9,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Braunschw.%20Heerstra%C3%9Fe%2059%2029221%20Celle"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Angerhoop 2",
+    "ort": "29392 Wesendorf",
+    "km": 17.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Angerhoop%202%2029392%20Wesendorf"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Schier-Rähmen-Weg 2",
+    "ort": "38543 Hillerse",
+    "km": 18.0,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Schier-R%C3%A4hmen-Weg%202%2038543%20Hillerse"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Hamburger Straße 73",
+    "ort": "38518 Gifhorn",
+    "km": 20.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Hamburger%20Stra%C3%9Fe%2073%2038518%20Gifhorn"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Celler Straße 106a",
+    "ort": "38518 Gifhorn",
+    "km": 20.2,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Celler%20Stra%C3%9Fe%20106a%2038518%20Gifhorn"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Ii. Koppelweg 34",
+    "ort": "38518 Gifhorn",
+    "km": 20.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Ii.%20Koppelweg%2034%2038518%20Gifhorn"
+   },
+   {
+    "name": "Netto Marken-Discount",
+    "adresse": "Sudermannstraße 1",
+    "ort": "29313 Hambühren",
+    "km": 23.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Netto%20Sudermannstra%C3%9Fe%201%2029313%20Hamb%C3%BChren"
+   }
+  ],
+  "Penny": [
+   {
+    "name": "Penny",
+    "adresse": "Gifhorner Straße 6",
+    "ort": "38539 Müden (Aller)",
+    "km": 6.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Gifhorner%20Stra%C3%9Fe%206%2038539%20M%C3%BCden%20%28Aller%29"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Storchenweg 2",
+    "ort": "29342 Wienhausen",
+    "km": 7.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Storchenweg%202%2029342%20Wienhausen"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Villeparisisplatz 1",
+    "ort": "29339 Wathlingen",
+    "km": 9.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Villeparisisplatz%201%2029339%20Wathlingen"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Weissdornallee 1",
+    "ort": "31311 Uetze",
+    "km": 11.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Weissdornallee%201%2031311%20Uetze"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Bergstraße 26",
+    "ort": "29221 Celle",
+    "km": 16.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Bergstra%C3%9Fe%2026%2029221%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Hannoversche Heerstraße 30",
+    "ort": "29221 Celle",
+    "km": 16.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Hannoversche%20Heerstra%C3%9Fe%2030%2029221%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Harburgerstraße 77",
+    "ort": "29223 Celle",
+    "km": 16.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Harburgerstra%C3%9Fe%2077%2029223%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Heese 2",
+    "ort": "29225 Celle",
+    "km": 16.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Heese%202%2029225%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Hohe Wende 3",
+    "ort": "29223 Celle",
+    "km": 16.8,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Hohe%20Wende%203%2029223%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Gilder Weg 39",
+    "ort": "38542 Leiferde",
+    "km": 17.2,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Gilder%20Weg%2039%2038542%20Leiferde"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Zur Hasselklink 1A",
+    "ort": "29229 Celle",
+    "km": 17.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Zur%20Hasselklink%201A%2029229%20Celle"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Braunschweiger Straße 33",
+    "ort": "38518 Gifhorn",
+    "km": 19.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Braunschweiger%20Stra%C3%9Fe%2033%2038518%20Gifhorn"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Lehmweg 51",
+    "ort": "38518 Gifhorn",
+    "km": 20.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Lehmweg%2051%2038518%20Gifhorn"
+   },
+   {
+    "name": "Penny",
+    "adresse": "Wilscher Weg 55",
+    "ort": "38518 Gifhorn",
+    "km": 20.3,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Penny%20Wilscher%20Weg%2055%2038518%20Gifhorn"
+   }
+  ],
+  "Kaufland": [
+   {
+    "name": "Kaufland",
+    "adresse": "An Der Hasenbahn 3",
+    "ort": "29225 Celle",
+    "km": 17.0,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Kaufland%20An%20Der%20Hasenbahn%203%2029225%20Celle"
+   },
+   {
+    "name": "Kaufland",
+    "adresse": "Eyßelheideweg 5",
+    "ort": "38518 Gifhorn",
+    "km": 20.6,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Kaufland%20Ey%C3%9Felheideweg%205%2038518%20Gifhorn"
+   }
+  ],
+  "combi": [
+   {
+    "name": "combi",
+    "adresse": "Trüllerstraße 1",
+    "ort": "29221 Celle",
+    "km": 16.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=combi%20Tr%C3%BCllerstra%C3%9Fe%201%2029221%20Celle"
+   }
+  ],
+  "Norma": [
+   {
+    "name": "Norma",
+    "adresse": "Alvernsche Straße 1",
+    "ort": "29229 Celle",
+    "km": 15.8,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Norma%20Alvernsche%20Stra%C3%9Fe%201%2029229%20Celle"
+   }
+  ],
+  "Trinkgut": [
+   {
+    "name": "Trinkgut",
+    "adresse": "Neuenhäuserstraße 3",
+    "ort": "29221 Celle",
+    "km": 16.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Neuenh%C3%A4userstra%C3%9Fe%203%2029221%20Celle"
+   },
+   {
+    "name": "Trinkgut",
+    "adresse": "Isenbütteler Weg 43",
+    "ort": "38518 Gifhorn",
+    "km": 20.5,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Isenb%C3%BCtteler%20Weg%2043%2038518%20Gifhorn"
+   },
+   {
+    "name": "Trinkgut",
+    "adresse": "Hehlenbruchweg 6",
+    "ort": "29313 Hambühren",
+    "km": 23.7,
+    "maps": "https://www.google.com/maps/search/?api=1&query=Trinkgut%20Hehlenbruchweg%206%2029313%20Hamb%C3%BChren"
+   }
+  ],
+  "METRO": [
+   {
+    "name": "METRO",
+    "adresse": "Bremer Weg 203",
+    "ort": "29223 Celle",
+    "km": 17.1,
+    "maps": "https://www.google.com/maps/search/?api=1&query=METRO%20Bremer%20Weg%20203%2029223%20Celle"
+   }
+  ]
+ }
+}

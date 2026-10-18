@@ -80,9 +80,30 @@ select {
 .list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 10px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start;
+  padding: 10px; display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; align-items: start;
   border-left: 4px solid var(--mc, var(--line));
 }
+.pic { width: 64px; height: 64px; border-radius: 10px; background: #fff; display: grid; place-items: center; overflow: hidden; }
+.pic img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.pic.leer { background: var(--chip); font-size: 28px; }
+.laden { display: block; margin: 0; padding: 0; border: 0; background: none; font: inherit; line-height: 1.5;
+  font-size: 12px; color: var(--muted); cursor: pointer; text-align: left; }
+.laden b { color: var(--mc); font-weight: 700; }
+.laden u { text-decoration: none; color: var(--text); background: var(--chip); border-radius: 6px; padding: 0 5px; font-weight: 600; white-space: nowrap; }
+dialog { border: 0; border-radius: 18px; padding: 0; width: min(440px, calc(100vw - 32px)); max-height: 80vh;
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+dialog::backdrop { background: rgba(10, 9, 8, .55); }
+.dlg-head { position: sticky; top: 0; background: var(--surface); padding: 14px 16px 10px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.dlg-head h3 { margin: 0; font-size: 17px; }
+.dlg-head p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+.dlg-x { border: 0; background: var(--chip); color: var(--text); border-radius: 999px; width: 30px; height: 30px; font-size: 16px; cursor: pointer; flex: none; }
+.fil { list-style: none; margin: 0; padding: 6px 16px 14px; }
+.fil li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.fil li:last-child { border-bottom: 0; }
+.fil .ad { font-weight: 600; font-size: 15px; }
+.fil .ort { color: var(--muted); font-size: 13px; }
+.fil a { font-size: 13px; font-weight: 600; color: var(--text); background: var(--chip); border-radius: 999px; padding: 6px 11px; text-decoration: none; white-space: nowrap; }
 .card > div { min-width: 0; }
 .mk { font-size: 12px; font-weight: 700; color: var(--mc); }
 .mk small { font-weight: 400; color: var(--muted); }
@@ -147,6 +168,10 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 18px
   </details>
   <footer id="stand"></footer>
 </div>
+<dialog id="dlg" aria-labelledby="dlg-t">
+  <div class="dlg-head"><div><h3 id="dlg-t"></h3><p id="dlg-s"></p></div><button class="dlg-x" id="dlg-x" aria-label="Schließen">✕</button></div>
+  <ul class="fil" id="dlg-l"></ul>
+</dialog>
 
 <script>
 const TABS = [["Kasten", "Kästen"], ["Pack", "Packs"], ["Einzeln", "Einzeln"], ["Alle", "Alle"]];
@@ -161,7 +186,29 @@ const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const num = n => n.toFixed(2).replace(".", ",");
 const dm = iso => { const d = new Date(iso + "T12:00:00"); return `${d.getDate()}.${d.getMonth() + 1}.`; };
 const tag = iso => WT[new Date(iso + "T12:00:00").getDay()];
-const farbe = m => (D.maerkte.find(x => x.name === m) || {}).farbe || "var(--line)";
+const markt = m => D.maerkte.find(x => x.name === m) || { filialen: [] };
+const farbe = m => markt(m).farbe || "var(--line)";
+const kmTxt = k => k < 1 ? "vor Ort" : `${Math.round(k)} km`;
+const ortKurz = o => (o || "").replace(/^\d{5}\s*/, "");
+
+function ladenZeile(a) {
+  const m = markt(a.markt), f = m.filialen || [];
+  if (!f.length) return `<span class="laden"><b>${esc(a.markt)}</b></span>`;
+  const n = f[0], mehr = f.length - 1;
+  return `<button class="laden" data-m="${esc(a.markt)}" aria-label="Filialen von ${esc(a.markt)} anzeigen">
+    <b>${esc(a.markt)}</b>&nbsp;· ${esc(ortKurz(n.ort))}&nbsp;${kmTxt(n.km).replace(" ", "&nbsp;")}${mehr ? ` <u>+${mehr}&nbsp;Filialen</u>` : " ›"}</button>`;
+}
+
+function dialogAuf(name) {
+  const m = markt(name);
+  $("dlg-t").textContent = m.filialen.length === 1 ? `${name}-Filiale` : `${m.filialen.length} ${name}-Filialen`;
+  $("dlg-s").textContent = (name === "EDEKA" ? "Angebot gilt nur in diesem Markt." : "Prospektangebot gilt in allen Filialen im Umkreis.")
+    + (m.hinweis ? " " + m.hinweis.charAt(0).toUpperCase() + m.hinweis.slice(1) + "." : "");
+  $("dlg-l").innerHTML = m.filialen.map(f => `<li>
+      <div><div class="ad">${esc(f.adresse)}</div><div class="ort">${esc(ortKurz(f.ort))} · ${kmTxt(f.km)}</div></div>
+      <a href="${esc(f.maps)}" target="_blank" rel="noopener">Route</a></li>`).join("");
+  $("dlg").showModal();
+}
 
 function gueltig(a) {
   const ganz = a.von <= D.woche.von && a.bis >= D.woche.bis;
@@ -209,9 +256,13 @@ function karte(a, min) {
   const pf = a.pfand === 0 ? "pfandfrei" : a.pfand ? `+ ${eur(a.pfand)} Pfand` : "zzgl. Pfand";
   const name = a.produkt && a.produkt.toLowerCase() !== (a.marke || "").toLowerCase()
     ? `${esc(a.marke)} <span>${esc(a.produkt)}</span>` : esc(a.marke || a.produkt);
+  const pic = a.bild
+    ? `<div class="pic"><img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async"></div>`
+    : `<div class="pic leer" aria-hidden="true">🍺</div>`;
   return `<div class="card" style="--mc:${farbe(a.markt)}">
+    ${pic}
     <div>
-      <div class="mk">${esc(a.markt)}</div>
+      ${ladenZeile(a)}
       <div class="name">${name}</div>
       <div class="info">${esc(a.gebinde_text)}${a.info_kurz ? " · " + esc(a.info_kurz) : ""}</div>
       ${tags.length ? `<div class="tags">${tags.join("")}</div>` : ""}
@@ -240,7 +291,7 @@ function renderTop() {
   $("top").innerHTML = `<div class="top">
     <div><div class="lbl">Günstigster Kasten diese Woche</div>
       <div class="what">${esc(k.marke)} ${esc(k.produkt)}</div>
-      <div class="sub">${esc(k.markt)} · ${esc(k.gebinde_text)} · ${eur(k.preis)}${ab}${gueltig(k) ? " · " + esc(gueltig(k)) : ""}</div></div>
+      <div class="sub">${esc(k.markt)}${markt(k.markt).filialen.length ? " " + esc(ortKurz(markt(k.markt).filialen[0].ort)) : ""} · ${esc(k.gebinde_text)} · ${eur(k.preis)}${ab}${gueltig(k) ? " · " + esc(gueltig(k)) : ""}</div></div>
     <div class="big"><b>${num(k.eur_l)}</b><span>€ / Liter</span></div>
   </div>`;
 }
@@ -250,13 +301,15 @@ function init() {
   $("stand").textContent = `Stand ${D.stand.replace(/^(\d{4})-(\d\d)-(\d\d)/, "$3.$2.$1")} · nicht öffentlich verlinkt`;
   const maerkte = [...new Set(D.angebote.map(a => a.markt))].sort();
   $("markt").innerHTML = `<option value="">Alle Märkte</option>` + maerkte.map(m => `<option>${esc(m)}</option>`).join("");
-  $("maerkte").innerHTML = D.maerkte.map(m => `<li><b>${esc(m.name)}</b> – ${esc(m.filiale)}: ${m.angebote} Bier-Angebot${m.angebote === 1 ? "" : "e"}${m.im_prospekt === 0 ? " (Prospekt nur als Bild, nicht auslesbar)" : ""}</li>`).join("");
+  $("maerkte").innerHTML = D.maerkte.map(m => `<li><b>${esc(m.name)}</b> – ${m.filialen.length} Filiale${m.filialen.length === 1 ? "" : "n"} im Umkreis${m.filialen.length ? ` (nächste: ${esc(ortKurz(m.filialen[0].ort))}, ${kmTxt(m.filialen[0].km)})` : ""}: ${m.angebote} Bier-Angebot${m.angebote === 1 ? "" : "e"}${m.im_prospekt === 0 ? " (Prospekt nur als Bild, nicht auslesbar)" : ""}</li>`).join("");
   if (D.hinweise) { $("hinweise").hidden = false; $("hinweistext").textContent = D.hinweise; }
   renderTop();
   render();
 }
 
 document.addEventListener("click", e => {
+  const l = e.target.closest("[data-m]");
+  if (l) { dialogAuf(l.dataset.m); return; }
   const t = e.target.closest("[data-k]");
   if (t) { st.tab = t.dataset.k; render(); return; }
   const c = e.target.closest("[data-a]");
@@ -267,6 +320,8 @@ document.addEventListener("click", e => {
     render();
   }
 });
+$("dlg-x").addEventListener("click", () => $("dlg").close());
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
 $("q").addEventListener("input", e => { st.q = e.target.value; render(); });
 $("markt").addEventListener("change", e => { st.markt = e.target.value; render(); });
 $("sort").addEventListener("change", e => { st.sort = e.target.value; render(); });

@@ -14,6 +14,9 @@ Quellen
 Aufruf
   python3 tools/bier_scraper.py [--edeka-json edeka_bier.json] [--hinweise text] [--out bier-langlingen]
 
+Filialen: kaufDA-Filialverzeichnis je Ort/Händler (ORTE, RADIUS_KM), Cache bier-langlingen/filialen.json,
+          wird alle 4 Wochen neu geladen. Bilder: Produktfoto aus dem Prospekt -> bier-langlingen/img/.
+
 Was ist "Bier"? kaufDA-Kategorie "Bier" (oder "Bier" im Produktnamen bei Lebensmitteln/Getränken).
 Gebinde, Pfand und Preis pro Liter werden aus dem Kleintext berechnet (eigene Rechnung, damit alle
 Märkte vergleichbar sind). Pfand ist NICHT im Literpreis enthalten.
@@ -43,20 +46,32 @@ KAUFDA_SEITEN = [
     "https://www.kaufda.de/Filialen/Celle/REWE/v-r101",
 ]
 
-# kaufDA-Publisher-ID -> Markt. "filiale" = nächster Markt zu Langlingen (Anzeige auf der Seite)
+# kaufDA-Publisher-ID (Prospekte) -> Markt. "laden" = kaufDA-Filialverzeichnis (Slug, Händler-ID) für die Filialsuche.
+# Die Prospekte gelten regional, also in allen Filialen des Händlers im Umkreis.
 MAERKTE = {
-    "75":        {"name": "ALDI Nord", "filiale": "Wathlingen / Lachendorf", "farbe": "#00559f"},
-    "1013":      {"name": "Lidl",      "filiale": "Wathlingen, Nienhagener Str. 1", "farbe": "#0050aa"},
-    "1034":      {"name": "Netto",     "filiale": "Umgebung Langlingen", "farbe": "#e2001a"},
-    "1050":      {"name": "Penny",     "filiale": "Umgebung Langlingen", "farbe": "#cd1719"},
-    "424316869": {"name": "Kaufland",  "filiale": "Celle", "farbe": "#e10915"},
-    "42265682":  {"name": "combi",     "filiale": "Celle", "farbe": "#f39200"},
-    "1040":      {"name": "Norma",     "filiale": "Celle", "farbe": "#c4161c"},
-    "1074":      {"name": "Trinkgut",  "filiale": "Celle, Neuenhäuser Str.", "farbe": "#7a1f2b"},
-    "86285183":  {"name": "METRO",     "filiale": "METRO GASTRO Celle, Bremer Weg 203 (Kundenkarte nötig)", "farbe": "#002d72"},
+    "75":        {"name": "ALDI Nord", "farbe": "#00559f", "laden": ("ALDI-Nord", 43)},
+    "1013":      {"name": "Lidl",      "farbe": "#0050aa", "laden": ("Lidl", 74)},
+    "1034":      {"name": "Netto",     "farbe": "#e2001a", "laden": ("Netto-Marken-Discount", 9)},
+    "1050":      {"name": "Penny",     "farbe": "#cd1719", "laden": ("Penny-Markt", 75)},
+    "424316869": {"name": "Kaufland",  "farbe": "#e10915", "laden": ("Kaufland", 2801)},
+    "42265682":  {"name": "combi",     "farbe": "#f39200", "laden": ("combi", 173)},
+    "1040":      {"name": "Norma",     "farbe": "#c4161c", "laden": ("Norma", 78)},
+    "1074":      {"name": "Trinkgut",  "farbe": "#7a1f2b", "laden": ("Trinkgut", 4)},
+    "86285183":  {"name": "METRO",     "farbe": "#002d72", "laden": ("Metro", 287), "hinweis": "nur mit METRO-Kundenkarte"},
 }
-EDEKA_MARKT = {"name": "EDEKA", "filiale": "EDEKA Müller, Langlingen, Hauptstr. 30", "farbe": "#f0b400"}
+EDEKA_MARKT = {"name": "EDEKA", "farbe": "#f0b400"}
 EDEKA_SEITE = "https://www.edeka.de/maerkte/400899/angebote/"
+# EDEKA-Preise gelten nur in diesem einen Markt (Kaufmann-Preise)
+EDEKA_FILIALE = {"name": "EDEKA Müller", "adresse": "Hauptstraße 30", "ort": "29364 Langlingen", "km": 0.3}
+
+# Orte im Umkreis (kaufDA-Slug), deren Filialen angezeigt werden. Radius in km (Luftlinie Ortsmitte).
+# kaufDA hat für manche Orte falsche Koordinaten (Mueden-Aller zeigt auf Müden/Örtze) -> hier überschreiben
+ORT_KOORD = {"Mueden-Aller": (52.527, 10.367)}
+ORTE = ["Langlingen", "Wienhausen", "Eicklingen", "Wathlingen", "Lachendorf", "Mueden-Aller",
+        "Meinersen", "Hohne", "Beedenbostel", "Ahnsbeck", "Adelheidsdorf", "Celle", "Gifhorn", "Uetze",
+        "Wesendorf", "Hambuehren", "Leiferde", "Hillerse"]
+RADIUS_KM = 25
+FILIALEN_MAX_ALTER = timedelta(days=28)       # Filialliste nur alle 4 Wochen neu laden
 
 # Prospekte, die keine Wochenangebote sind (Online-Shop, Monatskataloge)
 PROSPEKT_AUSSCHLUSS = re.compile(r"netto-online|monatsmen|rezepte", re.I)
@@ -274,6 +289,127 @@ def edeka_angebote(pfad, montag, samstag):
     return roh
 
 
+# ======================= Filialen (kaufDA-Filialverzeichnis) =======================
+def _km(lat1, lng1, lat2, lng2):
+    from math import asin, cos, radians, sin, sqrt
+    dlat, dlng = radians(lat2 - lat1), radians(lng2 - lng1)
+    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlng / 2) ** 2
+    return 6371 * 2 * asin(sqrt(a))
+
+
+def _seite(url):
+    r = requests.get(url, headers=UA, timeout=25)
+    if r.status_code == 404:
+        return None
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', r.text, re.S)
+    return json.loads(m.group(1))["props"]["pageProps"].get("pageInformation") if m else None
+
+
+def filialen_laden():
+    """{Marktname: [{name, adresse, ort, km, maps}]} für alle Händler in MAERKTE, Orte aus ORTE im RADIUS_KM."""
+    from concurrent.futures import ThreadPoolExecutor
+    from urllib.parse import quote
+
+    def ort_info(ort):
+        if ort in ORT_KOORD:
+            return ort, *ORT_KOORD[ort]
+        try:
+            pi = _seite(f"https://www.kaufda.de/{ort}")
+            loc = (pi or {}).get("location") or {}
+            return ort, loc.get("lat"), loc.get("lng")
+        except Exception:
+            return ort, None, None
+
+    with ThreadPoolExecutor(8) as ex:
+        orte = [o for o in ex.map(ort_info, ORTE) if o[1]]
+    orte = [(o, _km(LAT, LNG, la, ln)) for o, la, ln in orte if _km(LAT, LNG, la, ln) <= RADIUS_KM]
+
+    def abfrage(args):
+        markt, slug, rid, ort, km = args
+        try:
+            pi = _seite(f"https://www.kaufda.de/Filialen/{ort}/{slug}/v-r{rid}")
+        except Exception:
+            return markt, []
+        box = ((pi or {}).get("template") or {}).get("content", {}).get("StoreLogoLinkbox") or {}
+        res = []
+        for l in box.get("links", []):
+            t = l.get("link_text") or {}
+            if not t.get("address"):
+                continue
+            res.append({"name": t.get("name"), "adresse": t["address"], "ort": t.get("city", ""),
+                        "km": round(km + min(l.get("distance") or 0, 5) * 0.5 if (l.get("distance") or 0) < 5 else km, 1)})
+        return markt, res
+
+    jobs = [(m["name"], *m["laden"], ort, km) for m in MAERKTE.values() for ort, km in orte]
+    alle = {}
+    with ThreadPoolExecutor(8) as ex:
+        for markt, liste in ex.map(abfrage, jobs):
+            for f in liste:
+                key = (f["adresse"].lower(), f["ort"][:5])
+                vorh = {(x["adresse"].lower(), x["ort"][:5]): x for x in alle.setdefault(markt, [])}
+                if key in vorh:
+                    vorh[key]["km"] = min(vorh[key]["km"], f["km"])
+                else:
+                    alle[markt].append(f)
+    for markt, liste in alle.items():
+        for f in liste:
+            f["ort"] = re.sub(r",\s*(Kr|Niedersachs).*$", "", f["ort"]).strip()
+            f["maps"] = "https://www.google.com/maps/search/?api=1&query=" + quote(f"{markt} {f['adresse']} {f['ort']}")
+        liste.sort(key=lambda f: f["km"])
+    return alle
+
+
+def filialen(pfad):
+    """Filialliste aus Cache (bis 4 Wochen alt), sonst neu von kaufDA; bei Fehlern alter Cache."""
+    try:
+        cache = json.load(open(pfad, encoding="utf-8"))
+        alter = datetime.now(BERLIN) - datetime.fromisoformat(cache["stand"])
+    except Exception:
+        cache, alter = None, None
+    if cache and alter is not None and alter < FILIALEN_MAX_ALTER:
+        return cache["filialen"]
+    try:
+        neu = filialen_laden()
+        if sum(len(v) for v in neu.values()) >= 5:
+            json.dump({"stand": datetime.now(BERLIN).isoformat(timespec="minutes"), "radius_km": RADIUS_KM,
+                       "filialen": neu}, open(pfad, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            print(f"Filialen neu geladen: {', '.join(f'{k} {len(v)}' for k, v in neu.items())}", file=sys.stderr)
+            return neu
+    except Exception as e:
+        print(f"Filialen: {e}", file=sys.stderr)
+    return cache["filialen"] if cache else {}
+
+
+# ======================= Bilder =======================
+def bilder_speichern(angebote, ordner):
+    """Produktfoto je Angebot als kleines WebP nach ordner/ (alte Bilder werden entfernt)."""
+    import io
+    from PIL import Image
+    os.makedirs(ordner, exist_ok=True)
+    for f in os.listdir(ordner):
+        if f.endswith(".webp"):
+            os.remove(os.path.join(ordner, f))
+    ok = 0
+    for i, a in enumerate(angebote):
+        url = a.pop("bild", None)
+        a["bild"] = None
+        if not url:
+            continue
+        name = f"{i:03d}-{re.sub(r'[^a-z0-9]+', '-', (a['marke'] or a['produkt'] or 'bier').lower())[:30]}.webp"
+        try:
+            im = Image.open(io.BytesIO(requests.get(url, headers=UA, timeout=30).content))
+            im = im.convert("RGBA")
+            hg = Image.new("RGBA", im.size, (255, 255, 255, 255))
+            im = Image.alpha_composite(hg, im).convert("RGB")
+            im.thumbnail((240, 240))
+            im.save(os.path.join(ordner, name), "WEBP", quality=78)
+            a["bild"] = f"img/{name}"
+            ok += 1
+        except Exception as e:
+            print(f"  ! Bild {a['marke']}: {e}", file=sys.stderr)
+    return ok
+
+
 # ======================= Aufbereitung =======================
 def info_kurz(info):
     """Kleintext ohne Gebinde/Pfand/Grundpreis (die zeigt die Seite separat): 'versch. Sorten, auch alkoholfrei'."""
@@ -409,11 +545,18 @@ def main():
         if b and x["typ"] == "Kasten":
             x["bisher_bester"] = b
 
+    fil = filialen(os.path.join(a.out, "filialen.json"))
+    fil["EDEKA"] = [{**EDEKA_FILIALE, "maps": "https://www.google.com/maps/search/?api=1&query="
+                     + requests.utils.quote(f"EDEKA Müller {EDEKA_FILIALE['adresse']} {EDEKA_FILIALE['ort']}")}]
+    n_bilder = bilder_speichern(angebote, os.path.join(a.out, "img"))
+
     maerkte = []
     for pid, m in list(MAERKTE.items()) + [("edeka", EDEKA_MARKT)]:
         anz = sum(1 for x in angebote if x["markt"] == m["name"])
         if m["name"] in zaehler or anz:
-            maerkte.append({**m, "angebote": anz, "im_prospekt": zaehler.get(m["name"])})
+            maerkte.append({"name": m["name"], "farbe": m["farbe"], "hinweis": m.get("hinweis"),
+                            "angebote": anz, "im_prospekt": zaehler.get(m["name"]),
+                            "filialen": fil.get(m["name"], [])})
 
     out = {
         "stand": datetime.now(BERLIN).strftime("%Y-%m-%d %H:%M"),
@@ -427,7 +570,9 @@ def main():
 
     print(f"\nKW {montag.isocalendar().week} ({montag:%d.%m.}–{samstag:%d.%m.}): {len(angebote)} Bier-Angebote")
     for m in maerkte:
-        print(f"  {m['name']:10} {m['angebote']:3} Bier  (Prospekt: {m['im_prospekt']} Angebote)")
+        print(f"  {m['name']:10} {m['angebote']:3} Bier  (Prospekt: {m['im_prospekt']} Angebote, "
+              f"{len(m['filialen'])} Filialen im Umkreis)")
+    print(f"Bilder: {n_bilder}/{len(angebote)}")
     kaesten = [x for x in angebote if x["typ"] == "Kasten" and x["art"] == "Bier"][:5]
     print("Günstigste Kästen:")
     for x in kaesten:
