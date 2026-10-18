@@ -169,6 +169,8 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 </div>
 
 <script>
+// Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
+const VERSION = "18.10.2026 17:05";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -193,7 +195,7 @@ async function init() {
   $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${ALL.length} Treffer · Stand ${fmtDate(DATA.stand)}`;
   $("#hinweise").textContent = DATA.hinweise ? "Diese Woche: " + DATA.hinweise : "";
   if (DATA.ausgeblendet?.length) $("#aus").textContent = "Ausgeblendet, weil im Prospekt nicht als Angebot hervorgehoben: " + DATA.ausgeblendet.join(" · ");
-  $("#foot").textContent = DATA.quellen ? "Quellen: " + DATA.quellen : "";
+  $("#foot").innerHTML = (DATA.quellen ? esc("Quellen: " + DATA.quellen) + "<br>" : "") + esc("Version " + VERSION + " · Daten Stand " + fmtDate(DATA.stand));
 
   state.sort = load("sort", "kat");
   $("#sort").value = state.sort;
