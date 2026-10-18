@@ -251,7 +251,7 @@ def gruppe(o):
     return "Lebensmittel"
 
 def weitere_angebote(alle, sel):
-    """Alle übrigen Lebensmittel-/Drogerie-Angebote (keine Watchlist-Treffer) + ausgeblendete ('kein') Treffer."""
+    """Alle übrigen Lebensmittel-Angebote (keine Watchlist-Treffer) + ausgeblendete ('kein') Treffer."""
     sel_ids = {r.get("id") for r in sel if r.get("hervorhebung") != "kein"}
     res, seen = [], set()
     kandidaten = [r for r in sel if r.get("hervorhebung") == "kein"] + [o for o in alle if o.get("id") not in sel_ids]
@@ -259,7 +259,8 @@ def weitere_angebote(alle, sel):
         if not isinstance(o.get("preis"), (int, float)) or not o["preis"]:
             continue
         kat = (o.get("kategorie") or "").strip()
-        if o["markt"] != "EDEKA" and NONFOOD_RX.search(kat) and not re.match(r"drogerie und haushalt", kat, re.I):
+        # nur Lebensmittel & Getränke (Drogerie/Haushalt gibt es nur als Highlight über die Watchlist)
+        if (o["markt"] != "EDEKA" and NONFOOD_RX.search(kat)) or gruppe(o) == "Drogerie und Haushalt":
             continue
         if re.search(r"chrysanthem|pflanze|blume|wärmer|kerze|grablicht|gesteck", f"{o.get('produkt')} {kat}", re.I):
             continue

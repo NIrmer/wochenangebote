@@ -177,7 +177,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
-    <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. Der Schalter „Alle Angebote“ zeigt zusätzlich alle übrigen Lebensmittel- und Drogerie-Angebote; die Suche durchsucht immer alles.</p>
+    <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. Der Schalter „Alle Angebote“ zeigt zusätzlich alle übrigen Lebensmittel-Angebote; die Suche durchsucht immer alles.</p>
     <p id="aus"></p>
     <p id="hinweise"></p>
   </details>
@@ -189,7 +189,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "18.10.2026 19:25";
+const VERSION = "18.10.2026 19:40";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
