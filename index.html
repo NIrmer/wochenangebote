@@ -142,6 +142,25 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .star { display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; margin-right: 4px; vertical-align: 2px; }
 .subhead { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 6px; }
 .hint { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+/* ===== Markieren & Teilen ===== */
+.card { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mark { position: absolute; top: 4px; left: 4px; z-index: 2; width: 26px; height: 26px; border-radius: 50%; padding: 0; cursor: pointer;
+  border: 2px solid color-mix(in srgb, var(--muted) 70%, transparent); background: color-mix(in srgb, var(--surface) 85%, transparent);
+  display: grid; place-items: center; color: transparent; font-size: 15px; font-weight: 800; line-height: 1; }
+.card.normal .mark { width: 22px; height: 22px; font-size: 13px; top: 3px; left: 3px; }
+.card.sel { border-color: #34c759; box-shadow: 0 0 0 1.5px #34c759 inset; }
+.card.sel .mark { background: #34c759; border-color: #34c759; color: #fff; }
+.sharebar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 15;
+  display: flex; gap: 8px; align-items: center; background: var(--text); color: var(--bg); border-radius: 999px; padding: 6px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.3); }
+.sharebar[hidden] { display: none; }
+.sharebar button { border: 0; font: inherit; cursor: pointer; border-radius: 999px; white-space: nowrap; }
+.sharebar .go { background: #34c759; color: #fff; font-weight: 700; font-size: 15px; padding: 10px 18px; }
+.sharebar .clear { background: transparent; color: inherit; font-size: 13px; padding: 10px 12px; opacity: .8; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 16;
+  background: var(--ok-soft); color: var(--ok); font-weight: 600; font-size: 14px; border-radius: 10px; padding: 8px 14px; }
+.toast[hidden] { display: none; }
+body.hasSel footer { padding-bottom: 90px; }
 .raster { display: none; }
 .empty { text-align: center; color: var(--muted); padding: 40px 0; }
 
@@ -220,11 +239,17 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
     <p><strong>Durchgestrichen</strong>: Normalpreis bzw. UVP laut Prospekt. Fehlt er, hat der Prospekt keinen angegeben.</p>
     <p><strong>Aktion</strong>: Im Prospekt als Aktion beworben, Originalpreis nicht angegeben.</p>
     <p><strong>App</strong>: Preis gilt nur mit der Händler-App.</p>
+    <p><strong>Markieren</strong>: Angebot antippen (Bild öffnet den Prospekt-Ausschnitt). „Liste teilen“ gibt die markierten Produkte als Textliste aus.</p>
     <p><strong>⭐ Highlights</strong>: Treffer unserer Einkaufsliste. Der Schalter „Alle Angebote“ zeigt zusätzlich alle übrigen Lebensmittel-Angebote; die Suche durchsucht immer alles.</p>
     <p id="aus"></p>
     <p id="hinweise"></p>
   </details>
   <footer id="foot"></footer>
+  <div class="sharebar" id="sharebar" hidden>
+    <button class="clear" id="selclear" aria-label="Markierungen aufheben">✕ Leeren</button>
+    <button class="go" id="selshare">Liste teilen</button>
+  </div>
+  <div class="toast" id="toast" hidden></div>
   <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Prospekt-Ausschnitt">
     <figure><img id="lbimg" alt=""><figcaption id="lbcap"></figcaption></figure>
   </div>
@@ -232,7 +257,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 09:10";  // gleichen Wert in version.json eintragen
+const VERSION = "19.10.2026 09:40";  // gleichen Wert in version.json eintragen
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -240,6 +265,8 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 
 const state = { markt: "alle", kat: null, q: "", sort: "kat", rabatt: false, modus: "hl" };
 let DATA, ALL = [], HL = [], NORM = [];
+let SEL = new Set();  // markierte Angebote (Schlüssel = selKey)
+const selKey = a => `${a.markt}|${a.id}|${a.produkt}`;
 
 function load(key, fallback) { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function save(key, val) { try { localStorage.setItem(key, val); } catch {} }
@@ -261,6 +288,8 @@ async function init() {
   HL = DATA.maerkte.flatMap(m => m.angebote.map(a => ({ ...a, markt: m.id, hl: true })));
   NORM = DATA.maerkte.flatMap(m => (m.weitere || []).map(a => ({ ...a, markt: m.id, hl: false })));
   ALL = [...HL, ...NORM];
+  try { SEL = new Set(JSON.parse(load("auswahl-" + DATA.von, "[]"))); } catch { SEL = new Set(); }
+  const bekannt = new Set(ALL.map(selKey)); SEL = new Set([...SEL].filter(k => bekannt.has(k)));
   const zeitraum = DATA.von ? ` · ${fmtDate(DATA.von)}–${fmtDate(DATA.bis)}` : "";
   $("#meta").textContent = `KW ${DATA.kw}${zeitraum} · ${HL.length} Highlights` + (NORM.length ? ` · ${ALL.length} Angebote` : "") + ` · Stand ${fmtDate(DATA.stand)}`;
   $("#hinweise").textContent = DATA.hinweise ? "Diese Woche: " + DATA.hinweise : "";
@@ -332,7 +361,9 @@ function card(a, showMarkt, stern) {
     : a.ersparnis ? `<div class="was"><span class="save">−${a.ersparnis}%</span></div>`
     : a.aktion ? `<div class="was"><span class="aktion">Aktion</span></div>` : "";
   const star = stern && a.hl ? `<span class="star">⭐ Highlight</span>` : "";
-  return `<article class="card${a.hl ? "" : " normal"}">
+  const k = selKey(a), on = SEL.has(k);
+  return `<article class="card${a.hl ? "" : " normal"}${on ? " sel" : ""}" data-k="${esc(k)}">
+    <button class="mark" aria-label="Markieren" aria-pressed="${on}">✓</button>
     ${a.bild
       ? `<button class="pic" data-p="${esc(a.prospekt || a.bild)}" data-t="${esc(a.markt.toUpperCase() + " · " + a.produkt)}" aria-label="Prospekt-Ausschnitt anzeigen">
            <img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="emo" title="${esc(a.kategorie)}">${a.emoji}</span></button>`
@@ -350,7 +381,38 @@ function card(a, showMarkt, stern) {
   </article>`;
 }
 
+function updateShare() {
+  const n = SEL.size;
+  $("#sharebar").hidden = !n;
+  document.body.classList.toggle("hasSel", !!n);
+  $("#selshare").textContent = `Liste teilen (${n})`;
+  save("auswahl-" + DATA.von, JSON.stringify([...SEL]));
+}
+
+function shareText() {
+  // Reihenfolge wie auf der Seite: Markt, dann Highlights vor weiteren Angeboten
+  const items = ALL.filter(a => SEL.has(selKey(a)));
+  const order = Object.fromEntries(DATA.maerkte.map((m, i) => [m.id, i]));
+  items.sort((x, y) => order[x.markt] - order[y.markt] || (y.hl - x.hl));
+  return [...new Set(items.map(a => `"${(a.kurz || a.produkt).trim()}"`))].join("\n");
+}
+
+function toast(t) {
+  $("#toast").textContent = t; $("#toast").hidden = false;
+  clearTimeout(toast.t); toast.t = setTimeout(() => $("#toast").hidden = true, 2200);
+}
+
+async function teilen() {
+  const text = shareText();
+  if (navigator.share) {
+    try { await navigator.share({ text }); return; } catch (e) { if (e.name === "AbortError") return; }
+  }
+  try { await navigator.clipboard.writeText(text); toast("Liste kopiert"); }
+  catch { prompt("Liste kopieren:", text); }
+}
+
 function render() {
+  updateShare();
   renderTabs();
   renderChips();
   let list = filtered();
@@ -378,6 +440,15 @@ function render() {
 }
 
 document.addEventListener("click", e => {
+  const card = e.target.closest(".card[data-k]");
+  if (card && (e.target.closest(".mark") || !e.target.closest(".pic[data-p]"))) {
+    const k = card.dataset.k, on = !SEL.has(k);
+    on ? SEL.add(k) : SEL.delete(k);
+    card.classList.toggle("sel", on);
+    card.querySelector(".mark").setAttribute("aria-pressed", on);
+    updateShare();
+    return;
+  }
   const b = e.target.closest(".pic[data-p]");
   if (b) {
     $("#lbimg").src = b.dataset.p;
@@ -389,6 +460,11 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") $("#lb").classList.remove("open"); });
 
+$("#selshare").onclick = teilen;
+$("#selclear").onclick = () => {
+  SEL.clear(); updateShare();
+  document.querySelectorAll(".card.sel").forEach(c => { c.classList.remove("sel"); c.querySelector(".mark").setAttribute("aria-pressed", false); });
+};
 init();
 </script>
 </body>

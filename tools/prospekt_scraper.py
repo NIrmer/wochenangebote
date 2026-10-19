@@ -723,6 +723,25 @@ def to_notion_md(sel, quellen, stand, hinweise=""):
         md.append("</table>")
     return "\n".join(md)
 
+# ======================= Kurznamen (für die geteilte Einkaufsliste) =======================
+KURZ_MAX = 28
+KURZ = {}  # produkt -> Kurzname, aus --kurz (von Claude formuliert); sonst Heuristik
+
+def kurzname(name):
+    """Prägnanter Name für die Einkaufsliste – nur kürzen, wenn nötig."""
+    name = re.sub(r"\s+", " ", name or "").strip()
+    if name in KURZ:
+        return KURZ[name]
+    if len(name) <= KURZ_MAX:
+        return name
+    s = re.sub(r"\s*\(.*?\)", "", name)
+    s = re.split(r"\s*/\s*|\s+oder\s+|,\s*", s)[0]
+    s = re.sub(r"\b(Frische[rsn]?|Original|XXL|Classic|Premium|Delikatess|versch\. Sorten)\b\s*", "", s, flags=re.I).strip()
+    woerter = s.split()
+    while len(" ".join(woerter)) > KURZ_MAX and len(woerter) > 2:
+        woerter = woerter[:-1]
+    return " ".join(woerter) or name[:KURZ_MAX]
+
 def _site_item(r):
     prod, info = _produkt_info(r)
     watch = r.get("kategorie_watch")
@@ -730,7 +749,7 @@ def _site_item(r):
     return {
         "id": r.get("id"), "emoji": EMOJI.get(watch, "•") if watch else GRUPPE_EMOJI.get(g, "🛒"),
         "kategorie": watch or g, "gruppe": g,
-        "produkt": prod, "warn": "prüfen" in (r.get("status") or ""), "info": info[:140],
+        "produkt": prod, "kurz": kurzname(prod), "warn": "prüfen" in (r.get("status") or ""), "info": info[:140],
         "preis": r["preis"], "app": r.get("preisart") == "APP-PREIS",
         "normal": r.get("normalpreis"), "ersparnis": _prozent(r),
         "aktion": r.get("hervorhebung") == "aktion",
@@ -774,6 +793,7 @@ if __name__ == "__main__":
     ap.add_argument("--hinweise", help="Textdatei mit Hinweisen für Callout/Website")
     ap.add_argument("--notion-md", help="Auswahl zusätzlich als Notion-Markdown in diese Datei schreiben")
     ap.add_argument("--site-json", help="Auswahl als Website-Daten (angebote.json) in diese Datei schreiben")
+    ap.add_argument("--kurz", help="Kurznamen für lange Produktnamen (JSON: produkt -> kurz), siehe lange_namen.json")
     ap.add_argument("--bilder", help="Produktbilder für die Website in diesen Ordner schreiben (z. B. <repo>/img)")
     a = ap.parse_args()
     if a.edeka_pages:
@@ -812,7 +832,12 @@ if __name__ == "__main__":
     if a.notion_md:
         open(a.notion_md, "w").write(to_notion_md(sel, quellen, stand, hinweise))
         print(f"Notion-Markdown -> {a.notion_md}")
-    weitere = weitere_angebote(alle, sel) if a.site_json else []
+    if a.kurz and os.path.exists(a.kurz):
+        KURZ.update(json.load(open(a.kurz, encoding="utf-8")))
+    weitere = weitere_angebote(alle, sel)
+    lang = sorted({_produkt_info(r)[0] for r in _sichtbar(sel)[0] + weitere if len(_produkt_info(r)[0]) > KURZ_MAX})
+    json.dump(lang, open("lange_namen.json", "w"), ensure_ascii=False, indent=0)
+    print(f"{len(lang)} lange Produktnamen -> lange_namen.json (Kurznamen per --kurz kurz.json)")
     if a.bilder:
         write_bilder(sel, a.bilder, os.path.basename(os.path.normpath(a.bilder)), weitere)
     if a.site_json:
