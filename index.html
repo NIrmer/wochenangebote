@@ -232,7 +232,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 08:50";
+const VERSION = "19.10.2026 09:10";  // gleichen Wert in version.json eintragen
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -243,6 +243,12 @@ let DATA, ALL = [], HL = [], NORM = [];
 
 function load(key, fallback) { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function save(key, val) { try { localStorage.setItem(key, val); } catch {} }
+
+// Veraltete (zwischengespeicherte) Seite? Dann einmal die neue Version laden.
+fetch("version.json", { cache: "no-store" }).then(r => r.json()).then(v => {
+  if (v.version && v.version !== VERSION && new URLSearchParams(location.search).get("v") !== v.version)
+    location.replace(location.pathname + "?v=" + encodeURIComponent(v.version));
+}).catch(() => {});
 
 async function init() {
   try {
