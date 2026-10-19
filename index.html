@@ -148,6 +148,38 @@ details { margin: 28px 0 12px; background: var(--surface); border: 1px solid var
 summary { cursor: pointer; font-weight: 600; }
 details p { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
 footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 0 28px; }
+
+/* ===== Querformat: Kachel-Raster (z. B. Handy quer, per AirPlay auf den Fernseher) ===== */
+@media (orientation: landscape) and (min-width: 600px) {
+  .wrap { max-width: none; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  header { padding: calc(10px + env(safe-area-inset-top)) 0 4px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  h1 { font-size: 24px; }
+  .meta { margin-top: 0; }
+  .controls { position: static; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 0 8px; }
+  .tabs { display: flex; flex: none; }
+  .tab { padding: 5px 11px; white-space: nowrap; }
+  .pic .emo { font-size: 12px; padding: 3px; right: -4px; bottom: -4px; }
+  .tab small { display: inline; margin-left: 5px; }
+  .row { flex: 1 1 260px; margin-top: 0; }
+  .chips { flex-basis: 100%; margin-top: 0; }
+  h2 { margin: 14px 0 8px; }
+  .list { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; }
+  .list[style] { margin-top: 10px !important; }
+  .card, .card.normal { display: flex; flex-direction: column; gap: 5px; padding: 7px; }
+  .pic, .card.normal .pic { width: 100%; height: auto; aspect-ratio: 3 / 2; border-radius: 10px; }
+  .pic img, .card.normal .pic img { border-radius: 10px; padding: 4px; }
+  .pic.leer, .card.normal .pic.leer { font-size: 40px; }
+  .card.normal .emo { display: block; }
+  .card > div:not(.price) { flex: 1; }
+  .name, .card.normal .name { font-size: 13px; line-height: 1.2; font-weight: 600; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .info, .card.normal .info { font-size: 11px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .star { font-size: 10px; }
+  .price { text-align: left; white-space: normal; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 0; }
+  .now, .card.normal .now { font-size: 17px; font-weight: 700; }
+  .was, .unit { font-size: 11px; }
+  .unit { margin-top: 0; width: 100%; }
+  .subhead { margin-top: 18px; }
+}
 </style>
 </head>
 <body>
@@ -189,7 +221,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 08:00";
+const VERSION = "19.10.2026 08:30";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
