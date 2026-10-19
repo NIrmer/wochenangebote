@@ -257,7 +257,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 09:40";  // gleichen Wert in version.json eintragen
+const VERSION = "19.10.2026 09:55";  // gleichen Wert in version.json eintragen
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -394,7 +394,7 @@ function shareText() {
   const items = ALL.filter(a => SEL.has(selKey(a)));
   const order = Object.fromEntries(DATA.maerkte.map((m, i) => [m.id, i]));
   items.sort((x, y) => order[x.markt] - order[y.markt] || (y.hl - x.hl));
-  return [...new Set(items.map(a => `"${(a.kurz || a.produkt).trim()}"`))].join("\n");
+  return [...new Set(items.map(a => `${(a.kurz || a.produkt).trim()} (${a.markt.toUpperCase()})`))].join("\n");
 }
 
 function toast(t) {
