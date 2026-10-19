@@ -142,6 +142,7 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
 .star { display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; margin-right: 4px; vertical-align: 2px; }
 .subhead { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 6px; }
 .hint { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+.raster { display: none; }
 .empty { text-align: center; color: var(--muted); padding: 40px 0; }
 
 details { margin: 28px 0 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
@@ -160,10 +161,17 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
   .tab { padding: 5px 11px; white-space: nowrap; }
   .pic .emo { font-size: 12px; padding: 3px; right: -4px; bottom: -4px; }
   .tab small { display: inline; margin-left: 5px; }
-  .row { flex: 1 1 260px; margin-top: 0; }
+  .row { flex: 1 1 220px; min-width: 0; margin-top: 0; }
+  .search { width: 0; }
   .chips { flex-basis: 100%; margin-top: 0; }
   h2 { margin: 14px 0 8px; }
-  .list { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; }
+  .list { grid-template-columns: repeat(var(--cols, 6), minmax(0, 1fr)); gap: 8px; }
+  .raster { display: inline-grid; grid-template-columns: repeat(3, 1fr); flex: none; background: var(--chip); border-radius: 10px; padding: 3px; }
+  .raster button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; padding: 5px 11px; border-radius: 8px; cursor: pointer; }
+  .raster button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+  body.c3 .name { font-size: 17px; } body.c3 .info { font-size: 13px; } body.c3 .now { font-size: 22px; } body.c3 .was, body.c3 .unit { font-size: 13px; }
+  body.c3 .pic { aspect-ratio: 16 / 9; }
+  body.c8 .name { font-size: 12px; } body.c8 .info { -webkit-line-clamp: 1; } body.c8 .now { font-size: 15px; } body.c8 .tags { display: none; }
   .list[style] { margin-top: 10px !important; }
   .card, .card.normal { display: flex; flex-direction: column; gap: 5px; padding: 7px; }
   .pic, .card.normal .pic { width: 100%; height: auto; aspect-ratio: 3 / 2; border-radius: 10px; }
@@ -198,6 +206,9 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
         <option value="preis">Preis ↑</option>
         <option value="rabatt">Rabatt ↓</option>
       </select>
+      <div class="raster" id="raster" role="group" aria-label="Rastergröße">
+        <button data-c="3">3</button><button data-c="6">6</button><button data-c="8">8</button>
+      </div>
     </div>
     <div class="chips" id="chips"></div>
   </div>
@@ -221,7 +232,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 08:30";
+const VERSION = "19.10.2026 08:50";
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
@@ -250,6 +261,14 @@ async function init() {
   if (DATA.ausgeblendet?.length) $("#aus").textContent = "Nicht als Highlight gezeigt, weil im Prospekt nicht als Angebot hervorgehoben (stehen unter „Alle“): " + DATA.ausgeblendet.join(" · ");
   $("#foot").innerHTML = (DATA.quellen ? esc("Quellen: " + DATA.quellen) + "<br>" : "") + esc("Version " + VERSION + " · Daten Stand " + fmtDate(DATA.stand));
 
+  const setCols = c => {
+    document.body.style.setProperty("--cols", c);
+    document.body.classList.remove("c3", "c6", "c8"); document.body.classList.add("c" + c);
+    document.querySelectorAll("#raster button").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === c));
+    save("cols", c);
+  };
+  setCols(load("cols", "6"));
+  document.querySelectorAll("#raster button").forEach(b => b.onclick = () => setCols(b.dataset.c));
   state.sort = load("sort", "kat");
   $("#sort").value = state.sort;
   $("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); render(); });
