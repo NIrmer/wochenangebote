@@ -149,6 +149,7 @@ h2 .addr { text-transform: none; letter-spacing: 0; font-weight: 400; color: var
   display: grid; place-items: center; color: transparent; font-size: 15px; font-weight: 800; line-height: 1; }
 .card.normal .mark { width: 22px; height: 22px; font-size: 13px; top: 3px; left: 3px; }
 .card.sel { border-color: #34c759; box-shadow: 0 0 0 1.5px #34c759 inset; }
+.card:not(.sel) .mark { display: none; }
 .card.sel .mark { background: #34c759; border-color: #34c759; color: #fff; }
 .sharebar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 15;
   display: flex; gap: 8px; align-items: center; background: var(--text); color: var(--bg); border-radius: 999px; padding: 6px;
@@ -257,7 +258,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 
 
 <script>
 // Bei jeder Änderung an index.html hochsetzen (Datum Uhrzeit, deutsche Zeit) – wird unten auf der Seite angezeigt.
-const VERSION = "19.10.2026 09:55";  // gleichen Wert in version.json eintragen
+const VERSION = "19.10.2026 10:05";  // gleichen Wert in version.json eintragen
 const $ = s => document.querySelector(s);
 const eur = n => n == null ? "" : n.toFixed(2).replace(".", ",") + " €";
 const fmtDate = iso => { const [y, m, d] = iso.split("-"); return `${d}.${m}.`; };
