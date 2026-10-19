@@ -157,7 +157,13 @@ WATCHLIST = [
      "exclude": [r"silvercrest", r"nähen", r"lichtblick", r"rollo", r"adblue", r"enteiser", r"scheibenfrost", r"cockpit",
                  r"besteck", r"backform", r"servierplatte", r"frischhaltedosen", r"\btier", r"\bfell", r"staubsauger",
                  r"mixer", r"fritteuse", r"kabel", r"wischroboter", r"baumwollband", r"elektronik und technik",
-                 r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon", r"mopp"]},
+                 r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon", r"mopp",
+                 # langlebige Haushaltswaren (nur Verbrauchsartikel gewünscht, Noah 19.10.2026)
+                 r"kleiderbügel", r"kehrgarnitur", r"handfeger", r"wäschewanne", r"wäschekorb", r"wäscheständer",
+                 r"wäscheklammer", r"bügel", r"schutzhülle", r"aufbewahrung", r"box mit deckel", r"box", r"eimer",
+                 r"starter-?set", r"teleskop", r"wischer", r"reinigungshelfer", r"bürste(?!.{0,3}zahn)", r"besen",
+                 r"glas", r"gläser", r"kristallglas", r"aperitif", r"champus", r"tasse", r"teller", r"schüssel",
+                 r"handtuch", r"geschirrtuch", r"lappen(?!.{0,10}tücher)", r"schwammtuch", r"korb", r"regal"]},
 ]
 # ======================= WAS WIR NICHT KAUFEN (Noah, 12.10.2026) =======================
 # Gilt für alle Lebensmittel-Kategorien
