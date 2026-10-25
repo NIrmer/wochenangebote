@@ -193,6 +193,200 @@
     "preis": 20.93,
     "eur_l": 2.62
    }
+  ],
+  "2026-W44": [
+   {
+    "markt": "Trinkgut",
+    "marke": "Oscar Maxxum",
+    "produkt": "Pils / Alt / Export",
+    "gebinde": "20 × 0,5 l",
+    "preis": 7.49,
+    "eur_l": 0.75
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Bitburger",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.99,
+    "eur_l": 1.2
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Kulmbacher",
+    "produkt": "Edelherb",
+    "gebinde": "20 × 0,5 l",
+    "preis": 12.99,
+    "eur_l": 1.3
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Dithmarscher",
+    "produkt": "Urtyp",
+    "gebinde": "30 × 0,33 l",
+    "preis": 12.99,
+    "eur_l": 1.31
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Franziskaner Weissbier",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Netto",
+    "marke": "Franziskaner",
+    "produkt": "Premium Hefe Weißbier Naturtrüb",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Netto",
+    "marke": "Spaten",
+    "produkt": "Münchner Hell / Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Gambrinus",
+    "produkt": "Premium Bier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Staropramen",
+    "produkt": "Premium",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Mönchshof",
+    "produkt": "Weihnachtsbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Leikeim",
+    "produkt": "Wintertraum",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Maisel's Weisse",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Hofbräu München",
+    "produkt": "Winterzwickl",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Tucher",
+    "produkt": "Christkindlesmarkt",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Netto",
+    "marke": "Veltins",
+    "produkt": "Helles Pülleken",
+    "gebinde": "24 × 0,33 l",
+    "preis": 12.99,
+    "eur_l": 1.64
+   },
+   {
+    "markt": "Netto",
+    "marke": "Einbecker",
+    "produkt": "Brauherren Pils / Brauherren Alkoholfrei",
+    "gebinde": "20 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.67
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Astra",
+    "produkt": "Kiezmische / Rakete",
+    "gebinde": "20 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.67
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Störtebeker",
+    "produkt": "Pilsener / Pilsener 0,0% / Schwarzbier / Bernstein-Weizen 0,0%",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.99,
+    "eur_l": 1.7
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Erdinger",
+    "produkt": "Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.99,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Erdinger",
+    "produkt": "Schneeweiße",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.99,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Einbecker",
+    "produkt": "Null Bock / Ur-Bock Hell / Dunkel",
+    "gebinde": "20 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 2.12
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Bitburger",
+    "produkt": "Winterbock",
+    "gebinde": "20 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 2.12
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Hövels",
+    "produkt": "Original",
+    "gebinde": "12 × 0,5 l",
+    "preis": 12.99,
+    "eur_l": 2.17
+   },
+   {
+    "markt": "Netto",
+    "marke": "Corona",
+    "produkt": "Extra Lager / Cero",
+    "gebinde": "20 × 0,355 l",
+    "preis": 16.99,
+    "eur_l": 2.39
+   }
   ]
  }
 }

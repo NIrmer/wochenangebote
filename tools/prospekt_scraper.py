@@ -82,7 +82,7 @@ WATCHLIST = [
     {"name": "Harry Anno 1688", "prio": 1, "any": [r"anno ?1688", r"harry.{0,10}1688", r"\b1688\b"]},
     {"name": "Hummus", "prio": 1, "any": [r"hummus", r"houmous"]},
     {"name": "Eier", "prio": 1, "any": [r"\beier\b", r"freilandeier", r"bodenhaltung", r"\bfreiland\b.*eier"],
-     "exclude": [r"spätzle", r"nudel", r"likör", r"überraschung", r"schoko", r"oster", r"teigwaren", r"salat", r"ravioli", r"pudding"]},
+     "exclude": [r"spätzle", r"nudel", r"likör", r"überraschung", r"schoko", r"oster", r"teigwaren", r"salat", r"ravioli", r"pudding", r"plätzchen", r"gebäck"]},
     {"name": "Light-Käse", "prio": 1,
      "any": [r"light", r"\bleicht", r"fettreduziert", r"fettarm", r"\b(?:[5-9]|1[0-6])\s?% fett"],
      "all": [r"käse", r"mozzarella", r"gouda", r"emmentaler", r"reibekäse", r"streukäse", r"feta", r"patros", r"hirtenkäse"],
@@ -163,7 +163,10 @@ WATCHLIST = [
                  r"wäscheklammer", r"bügel", r"schutzhülle", r"aufbewahrung", r"box mit deckel", r"box", r"eimer",
                  r"starter-?set", r"teleskop", r"wischer", r"reinigungshelfer", r"bürste(?!.{0,3}zahn)", r"besen",
                  r"glas", r"gläser", r"kristallglas", r"aperitif", r"champus", r"tasse", r"teller", r"schüssel",
-                 r"handtuch", r"geschirrtuch", r"lappen(?!.{0,10}tücher)", r"schwammtuch", r"korb", r"regal"]},
+                 r"handtuch", r"geschirrtuch", r"lappen(?!.{0,10}tücher)", r"schwammtuch", r"korb", r"regal",
+                 # Geräte/Gebrauchsgüter/Reisen statt Verbrauchsartikel (KW 44)
+                 r"matratze", r"wc-?sitz", r"duschkopf", r"munddusche", r"bartschneider", r"haarschneider", r"bügler",
+                 r"akupressur", r"druck- und sog", r"\bspa\b", r"übernachtung", r"halbpension"]},
 ]
 # ======================= WAS WIR NICHT KAUFEN (Noah, 12.10.2026) =======================
 # Gilt für alle Lebensmittel-Kategorien
