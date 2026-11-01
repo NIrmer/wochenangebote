@@ -234,11 +234,11 @@ WATCHLIST += [
     {"name": "Salami & Schinken", "prio": 2,
      "any": [r"salami", r"schinken"],
      "exclude": NIE + GEFLUEGEL + [r"rohschinken", r"roher", r"parma", r"prosciutto", r"serrano", r"speck",
-                                   r"schwarzwälder", r"katenschinken", r"vegan", r"rügenwalder", r"mühlen", r"pizza", r"schinkenwürfel", r"nudel", r"käse-?schinken",
+                                   r"schwarzwälder", r"katenschinken", r"abraham", r"bierwurst", r"mortadella", r"schinkenwurst", r"vegan", r"rügenwalder", r"mühlen", r"pizza", r"schinkenwürfel", r"nudel", r"käse-?schinken",
                                    r"toast", r"baguette", r"brötchen", r"croissant", r"\bstange"]},
     {"name": "Käse", "prio": 2,
      # Hartkäse zum Reiben, Feta, Edel-/Weichkäse – KEIN Schnittkäse (Gouda nur light -> Kategorie Light-Käse)
-     "any": [r"grana padano", r"parmesan", r"parmigiano", r"\bfeta\b", r"hirtenkäse", r"appenzeller", r"camembert", r"\bbrie\b",
+     "any": [r"grana padano", r"parmesan", r"parmigiano", r"\bfeta\b", r"hirtenkäse", r"camembert", r"\bbrie\b",
              r"burrata", r"bergkäse", r"gruy[eè]re", r"géramont", r"ziegenkäse", r"manchego", r"pecorino", r"comté",
              r"peyrigoux", r"affinois", r"rosmarin hexe", r"st\.? ?albray", r"chaumes", r"weichkäse", r"edelpilz", r"gorgonzola",
              r"roquefort", r"blauschimmel", r"rotschmier"],
