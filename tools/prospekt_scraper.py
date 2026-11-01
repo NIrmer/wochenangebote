@@ -78,7 +78,8 @@ WATCHLIST = [
      "any": [r"magerquark", r"speisequark", r"\bquark\b", r"griechisch", r"\bgreek\b", r"protein.{0,15}joghurt", r"joghurt.{0,15}protein"],
      "exclude": [r"kuchen", r"torte", r"bällchen", r"brötchen", r"stollen", r"riegel", r"keks"]},
     {"name": "Nimm's leicht", "prio": 1, "any": [r"nimm'?s ?leicht"]},
-    {"name": "Herta Finesse Aufschnitt", "prio": 1, "any": [r"finesse"], "exclude": [r"rasier", r"haar", r"shampoo"]},
+    {"name": "Herta Finesse Aufschnitt", "prio": 1, "any": [r"\bfinesse\b"],
+     "all": [r"herta", r"aufschnitt", r"hähnchen", r"schinken", r"pute", r"geflügel"], "exclude": [r"rasier", r"haar", r"shampoo"]},
     {"name": "Harry Anno 1688", "prio": 1, "any": [r"anno ?1688", r"harry.{0,10}1688", r"\b1688\b"]},
     {"name": "Hummus", "prio": 1, "any": [r"hummus", r"houmous"]},
     {"name": "Eier", "prio": 1, "any": [r"\beier\b", r"freilandeier", r"bodenhaltung", r"\bfreiland\b.*eier"],
@@ -157,7 +158,8 @@ WATCHLIST = [
      "exclude": [r"silvercrest", r"nähen", r"lichtblick", r"rollo", r"adblue", r"enteiser", r"scheibenfrost", r"cockpit",
                  r"besteck", r"backform", r"servierplatte", r"frischhaltedosen", r"\btier", r"\bfell", r"staubsauger",
                  r"mixer", r"fritteuse", r"kabel", r"wischroboter", r"baumwollband", r"elektronik und technik",
-                 r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon", r"mopp",
+                 r"parkside", r"livarno", r"rowenta", r"lötspitze", r"silikon", r"mopp", r"schale", r"steingut", r"porzellan",
+                 r"teller", r"tasse", r"becher", r"tognana", r"\bdeko", r"vase", r"kerze", r"sodastream",
                  # langlebige Haushaltswaren (nur Verbrauchsartikel gewünscht, Noah 19.10.2026)
                  r"kleiderbügel", r"kehrgarnitur", r"handfeger", r"wäschewanne", r"wäschekorb", r"wäscheständer",
                  r"wäscheklammer", r"bügel", r"schutzhülle", r"aufbewahrung", r"box mit deckel", r"box", r"eimer",
@@ -171,7 +173,10 @@ WATCHLIST = [
 # ======================= WAS WIR NICHT KAUFEN (Noah, 12.10.2026) =======================
 # Gilt für alle Lebensmittel-Kategorien
 NIE = [r"bedientheke", r"mariniert", r"marinade", r"aspik", r"sülze", r"terrine", r"paw patrol", r"\bkids\b",
-       r"kinder", r"ferdi fuchs", r"dino", r"linsenwaffel", r"tress brüder", r"auflauf", r"gefüllte"]
+       r"kinder", r"ferdi fuchs", r"dino", r"linsenwaffel", r"tress brüder", r"auflauf", r"gefüllte",
+       # Alkohol nie als Highlight
+       r"\d ?% ?vol", r"schaumwein", r"champagn", r"cr[ée]mant", r"prosecco", r"\bsekt\b", r"\bcava\b", r"likör",
+       r"spirituose", r"\bbrut\b", r"rotwein", r"weißwein", r"roséwein", r"glühwein"]
 SALAT_FERTIG = [r"salatbowl", r"\bbowl\b", r"bohnensalat", r"nudelsalat", r"krautsalat", r"kartoffelsalat", r"salat-?mix",
                 r"salatschale", r"fleischsalat", r"eiersalat", r"thunfischsalat", r"salat to go", r"salatteller"]
 ZUSATZ_AUSSCHLUSS = {
@@ -196,7 +201,7 @@ ZUSATZ_AUSSCHLUSS = {
         r"sagrotan.{0,60}(wäsche|hygienespüler|xxl|3 ?l)", r"wäsche-?hygienespüler", r"\baxe\b", r"zahnbürste",
         r"colgate(?!.{0,40}max ?white)", r"sensodyne", r"swiffer", r"weißer riese", r"\bariel\b", r"\bspee\b", r"\btide\b",
         r"\bcoral\b", r"der general", r"vernel", r"airfryer", r"\bfa\b", r"rexona", r"old spice",
-        r"deo(?!.{0,60}nivea)", r"vanish", r"kneipp", r"wc.?frisch", r"somat", r"\bfit\b", r"palmolive", r"palm-olive",
+        r"^(?!.*nivea).*\bdeo", r"vanish", r"kneipp", r"wc.?frisch", r"somat", r"\bfit\b", r"palmolive", r"palm-olive",
         r"head ?& ?shoulders", r"softlan", r"jule", r"jolea", r"müllbeutel", r"müllsäcke", r"butterbrot", r"backpapier",
         r"gefrierbeutel", r"frischhaltefolie", r"alufolie"],
 }
