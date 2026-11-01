@@ -220,6 +220,68 @@ WATCHLIST += [
     {"name": "Mozzarella", "prio": 1, "any": [r"mozzarella"], "exclude": NIE + [r"sticks", r"pizza", r"salat"]},
     {"name": "Thomy Hollandaise", "prio": 2, "any": [r"thomy.{0,40}hollandaise", r"hollandaise.{0,40}thomy"]},
 ]
+# Highlights-Runde (Noah, 02.11.2026)
+NIE_OHNE_GEFUELLT = [x for x in NIE if x != r"gefüllte"]
+GEFLUEGEL = [r"geflügel", r"hähnchen", r"\bpute", r"puten", r"truthahn", r"chicken"]
+WATCHLIST += [
+    {"name": "Gustavo Gusto", "prio": 1, "any": [r"gustavo"]} if not any(w["name"] == "Gustavo Gusto" for w in WATCHLIST) else None,
+    {"name": "Kerrygold Butter", "prio": 1, "any": [r"kerrygold"], "all": [r"butter"], "exclude": NIE},
+    {"name": "Weight Watchers", "prio": 1, "any": [r"weight ?watchers"], "exclude": NIE},
+    {"name": "Protein-/Light-Eis", "prio": 1, "any": [r"\beis\b", r"eiscreme", r"ice ?cream", r"\bicecream"],
+     "all": [r"protein", r"light", r"kalorienreduziert", r"kalorienarm", r"\bzero\b", r"ohne zucker"], "exclude": NIE},
+    {"name": "Zuckerfreie Limo", "prio": 1,
+     "any": [r"\bzero\b", r"light", r"zuckerfrei", r"ohne zucker", r"kalorienarm", r"\bdeit\b", r"more fizi", r"\bfizi\b"],
+     "all": [r"limo", r"cola", r"getränk", r"erfrischung", r"drink", r"fizi", r"deit", r"brause", r"soda", r"orange", r"zitrone", r"mate"],
+     "exclude": NIE + [r"bier", r"radler", r"sirup", r"milch", r"kaffee", r"joghurt", r"pudding", r"\beis\b", r"wein"]},
+    {"name": "Salami & Schinken", "prio": 2,
+     "any": [r"salami", r"schinken", r"prosciutto", r"parma", r"serrano", r"\bspeck\b", r"markenspeck"],
+     "exclude": NIE + GEFLUEGEL + [r"vegan", r"rügenwalder", r"mühlen", r"pizza", r"schinkenwürfel", r"nudel", r"käse-?schinken",
+                                   r"toast", r"baguette", r"brötchen", r"croissant", r"\bstange"]},
+    {"name": "Käse", "prio": 2,
+     "any": [r"\bkäse\b", r"käse\b", r"gouda", r"leerdammer", r"grana padano", r"parmesan", r"parmigiano", r"\bfeta\b",
+             r"hirtenkäse", r"appenzeller", r"camembert", r"\bbrie\b", r"burrata", r"emmentaler", r"bergkäse", r"gruy[eè]re",
+             r"grünländer", r"géramont", r"fol epi", r"ziegenkäse", r"manchego", r"pecorino", r"kashkaval", r"raclette",
+             r"comté", r"tilsiter", r"maasdamer", r"bergbauern", r"peyrigoux", r"affinois", r"alte freche kuh", r"rosmarin hexe",
+             r"schweizer herz", r"jersey-gouda", r"st\.? ?albray", r"chaumes", r"beemster", r"old amsterdam"],
+     "exclude": NIE + [r"frischkäse", r"schmelzkäse", r"käsekuchen", r"kuchen", r"cracker", r"chips", r"snack", r"stange",
+                       r"brötchen", r"pizza", r"back-?camembert", r"backkäse", r"back-käse", r"babybel", r"kiri", r"milkana",
+                       r"spätzle", r"fleischkäse", r"leberkäse", r"sauce", r"soße", r"\bdip", r"fondue", r"nudel", r"tortellini"]},
+    {"name": "Obst", "prio": 2,
+     "any": [r"banane", r"beere", r"\bäpfel", r"\bapfel\b", r"birne", r"orange", r"mandarine", r"clementine", r"zitrone",
+             r"grapefruit", r"mango", r"melone", r"trauben", r"\bkiwi", r"ananas", r"granatapfel", r"granatäpfel", r"papaya",
+             r"passionsfrucht", r"avocado", r"pflaume", r"physalis", r"limette", r"nektarine", r"pfirsich", r"kirschen"],
+     "exclude": NIE + [r"saft", r"nektar", r"smoothie", r"konfitüre", r"marmelade", r"gelee", r"kuchen", r"joghurt", r"\beis\b",
+                       r"chips", r"gummi", r"schorle", r"likör", r"wein", r"punsch", r"comtess", r"sauce", r"müsli", r"riegel",
+                       r"\btee\b", r"limo", r"getränk", r"drink", r"essig", r"aroma", r"bonbon", r"schokolade", r"pudding", r"dessert",
+                       r"melonen-mix", r"to go", r"wasser\b", r"sekt", r"cider", r"waffel", r"keks", r"winterapfel", r"granini"]},
+    {"name": "Pesto & Pastasauce", "prio": 2,
+     "any": [r"pesto", r"pastasauce", r"pasta-?sauce", r"tomatensauce", r"tomatensoße", r"passata", r"polpa", r"\bsugo\b",
+             r"tomato al gusto", r"arrabbiata", r"napoletana"],
+     "exclude": NIE + [r"nudel", r"gnocchi", r"chips", r"gefüllt"]},
+    {"name": "Zero-/Light-Saucen", "prio": 2,
+     "any": [r"sauce", r"soße", r"dressing", r"ketchup", r"mayo", r"remoulade"],
+     "all": [r"\bzero\b", r"light", r"kalorienarm", r"kalorienreduziert", r"ohne zucker", r"zuckerfrei", r"\b0 ?%"],
+     "exclude": NIE},
+    {"name": "Konfitüre", "prio": 2, "any": [r"konfitüre", r"marmelade", r"fruchtaufstrich", r"\bgelee\b"],
+     "exclude": NIE + [r"nutella", r"kuchen", r"keks", r"plätzchen"]},
+    {"name": "Toast", "prio": 2, "any": [r"\btoast\b", r"toastbrot", r"sandwich", r"golden toast"],
+     "exclude": NIE + [r"toaster", r"toasty", r"käse", r"schinken", r"\bto go\b"]},
+    {"name": "Wraps, Pita & Fladenbrot", "prio": 2, "any": [r"\bwraps?\b", r"\bpita", r"fladenbrot", r"\bnaan"],
+     "exclude": NIE + [r"chips", r"to go", r"döner"]},
+    {"name": "Gnocchi", "prio": 2, "any": [r"gnocchi"], "exclude": NIE_OHNE_GEFUELLT},
+]
+WATCHLIST = [w for w in WATCHLIST if w]
+for w in WATCHLIST:
+    if w["name"] == "Nüsse & Erdnussbutter":
+        w["any"] = w["any"] + [r"nussmus", r"mandelmus", r"cashewmus", r"haselnussmus"]
+    extra = {"Hähnchen": [r"pommes", r"panini", r"gänse", r"\bfix\b", r"puten", r"\bpute"],
+             "Pute": [r"salami", r"wurst"],
+             "Salami & Schinken": [r"schnitzel", r"braten", r"steak", r"kotelett"],
+             "Zuckerfreie Limo": [r"bonbon", r"kaugummi"],
+             "Konfitüre": [r"paprika"],
+             "Nüsse & Erdnussbutter": [r"champagn", r"\bwein", r"sekt", r"wurst", r"bier"]}.get(w["name"])
+    if extra:
+        w["exclude"] = list(w.get("exclude") or []) + extra
 # Reihenfolge: Drogerie und Prio-2 bleiben hinten
 WATCHLIST.sort(key=lambda w: (w.get("nonfood", False), w["prio"]))
 
@@ -288,7 +350,10 @@ def weitere_angebote(alle, sel):
     reihen = {n: i for i, (n, _, _) in enumerate(GRUPPEN)}
     return sorted(res, key=lambda r: (reihen.get(gruppe(r), 99), r["preis"]))
 
-EMOJI.update({"Dr. Oetker Intermezzo": "🍕", "Tillman's Toasty": "🥪", "Mozzarella": "🧀", "Thomy Hollandaise": "🥫"})
+EMOJI.update({"Dr. Oetker Intermezzo": "🍕", "Tillman's Toasty": "🥪", "Mozzarella": "🤍", "Thomy Hollandaise": "🥫"})
+EMOJI.update({"Kerrygold Butter": "🟨", "Weight Watchers": "⚖️", "Protein-/Light-Eis": "🍦", "Zuckerfreie Limo": "🫧",
+              "Salami & Schinken": "🥓", "Käse": "🫕", "Obst": "🍎", "Pesto & Pastasauce": "🌿", "Zero-/Light-Saucen": "🥫",
+              "Konfitüre": "🍓", "Toast": "🥖", "Wraps, Pita & Fladenbrot": "🫓", "Gnocchi": "🥟"})
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
 
@@ -436,6 +501,8 @@ NONFOOD_RX = re.compile(r"^(drogerie und haushalt|heimwerken|möbel|elektronik|t
 
 def match(o):
     text = " | ".join(str(o.get(k) or "") for k in ("produkt", "marke", "info", "kategorie"))
+    # Ausschlüsse nicht auf die Händler-Kategorie anwenden (sonst trifft z. B. "wurst" auf "Fleisch und Wurst")
+    text_ohne_kat = " | ".join(str(o.get(k) or "") for k in ("produkt", "marke", "info"))
     nonfood = bool(NONFOOD_RX.search((o.get("kategorie") or "").strip()))
     hits = []
     for w in WATCHLIST:
@@ -445,7 +512,7 @@ def match(o):
                                                     and not re.search(r"drogerie|haushalt", o.get("kategorie") or "", re.I)
                                                     and o["markt"] != "EDEKA"):
             continue
-        if not _rx(w["any"], text) or (w.get("all") and not _rx(w["all"], text)) or _rx(w.get("exclude", []), text):
+        if not _rx(w["any"], text) or (w.get("all") and not _rx(w["all"], text)) or _rx(w.get("exclude", []), text if w.get("nonfood") else text_ohne_kat):
             continue
         status = "✓"
         if w.get("want") and not re.search(w["want"], text, re.I):
