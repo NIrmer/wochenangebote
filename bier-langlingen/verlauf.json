@@ -387,6 +387,144 @@
     "preis": 16.99,
     "eur_l": 2.39
    }
+  ],
+  "2026-W45": [
+   {
+    "markt": "Kaufland",
+    "marke": "Hasseröder",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.49,
+    "eur_l": 0.85
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Bitburger",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.99,
+    "eur_l": 1.0
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Veltins",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.99,
+    "eur_l": 1.0
+   },
+   {
+    "markt": "Netto",
+    "marke": "Nörten-Hardenberger",
+    "produkt": "Pils",
+    "gebinde": "30 × 0,33 l",
+    "preis": 9.99,
+    "eur_l": 1.01
+   },
+   {
+    "markt": "Netto",
+    "marke": "Wolters",
+    "produkt": "Premium Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 12.99,
+    "eur_l": 1.3
+   },
+   {
+    "markt": "Netto",
+    "marke": "Veltins",
+    "produkt": "Pilsener oder Alkoholfrei 0,0%",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "EDEKA",
+    "marke": "Krombacher",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "Netto",
+    "marke": "Budweiser Budvar",
+    "produkt": "Original Czech Imported Lager",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Erdinger",
+    "produkt": "Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "METRO",
+    "marke": "Warsteiner",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.27,
+    "eur_l": 1.43
+   },
+   {
+    "markt": "METRO",
+    "marke": "Spaten",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.98,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Netto",
+    "marke": "Oberbräu",
+    "produkt": "Hell oder Alkoholfrei 0,0%",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Benediktiner",
+    "produkt": "Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "METRO",
+    "marke": "Radeberger",
+    "produkt": "Pilsner",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.01,
+    "eur_l": 1.7
+   },
+   {
+    "markt": "METRO",
+    "marke": "Tyskie",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.84,
+    "eur_l": 1.78
+   },
+   {
+    "markt": "METRO",
+    "marke": "San Miguel",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 14.27,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "METRO",
+    "marke": "Flensburger",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,33 l",
+    "preis": 15.82,
+    "eur_l": 2.4
+   }
   ]
  }
 }
