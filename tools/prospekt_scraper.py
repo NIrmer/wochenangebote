@@ -281,7 +281,8 @@ for w in WATCHLIST:
              # Gemüse-Runde 02.11.: kein Kohl außer Brokkoli/Blumenkohl, keine Hülsenfrüchte aus Dose/Glas, kein Ingwer/Kräuter
              "Gemüse (frisch & TK)": [r"rotkohl", r"weißkohl", r"rosenkohl", r"wirsing", r"spitzkohl", r"grünkohl", r"kichererbsen",
                                       r"weiße bohnen", r"kidney", r"\bmais\b", r"goldmais", r"ingwer", r"kräuter", r"basilikum",
-                                      r"petersilie", r"schnittlauch", r"sol ?& ?mar"]}.get(w["name"])
+                                      r"petersilie", r"schnittlauch", r"sol ?& ?mar", r"pringles", r"pommes", r"\bfix\b", r"wurst", r"mett",
+                                      r"gurkensalat", r"eintopf", r"tomatenmark", r"knorr", r"maggi"]}.get(w["name"])
     if extra:
         w["exclude"] = list(w.get("exclude") or []) + extra
 # Reihenfolge: Drogerie und Prio-2 bleiben hinten
