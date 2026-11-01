@@ -210,8 +210,6 @@ for w in WATCHLIST:
         w["any"] = [r"\bkartoffeln\b", r"speisekartoffel", r"drillinge", r"\bfrühkartoffel"]
     if w["name"] == "Milch":        # Milch nur bei LIDL interessant (z. B. H-Milch 1,5 %)
         w["store"] = "LIDL"
-    if w["name"] == "Gemüse (frisch & TK)":
-        w["any"] = w["any"] + [r"ingwer"]
     w["exclude"] = list(w.get("exclude") or []) + ZUSATZ_AUSSCHLUSS.get(w["name"], []) + ([] if w.get("nonfood") else NIE)
 # Highlights ergänzt (Noah, 01.11.2026)
 WATCHLIST += [
@@ -279,7 +277,11 @@ for w in WATCHLIST:
              "Salami & Schinken": [r"schnitzel", r"braten", r"steak", r"kotelett"],
              "Zuckerfreie Limo": [r"bonbon", r"kaugummi"],
              "Konfitüre": [r"paprika"],
-             "Nüsse & Erdnussbutter": [r"champagn", r"\bwein", r"sekt", r"wurst", r"bier"]}.get(w["name"])
+             "Nüsse & Erdnussbutter": [r"champagn", r"\bwein", r"sekt", r"wurst", r"bier"],
+             # Gemüse-Runde 02.11.: kein Kohl außer Brokkoli/Blumenkohl, keine Hülsenfrüchte aus Dose/Glas, kein Ingwer/Kräuter
+             "Gemüse (frisch & TK)": [r"rotkohl", r"weißkohl", r"rosenkohl", r"wirsing", r"spitzkohl", r"grünkohl", r"kichererbsen",
+                                      r"weiße bohnen", r"kidney", r"\bmais\b", r"goldmais", r"ingwer", r"kräuter", r"basilikum",
+                                      r"petersilie", r"schnittlauch", r"sol ?& ?mar"]}.get(w["name"])
     if extra:
         w["exclude"] = list(w.get("exclude") or []) + extra
 # Reihenfolge: Drogerie und Prio-2 bleiben hinten
