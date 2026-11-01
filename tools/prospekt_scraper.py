@@ -213,6 +213,13 @@ for w in WATCHLIST:
     if w["name"] == "Gemüse (frisch & TK)":
         w["any"] = w["any"] + [r"ingwer"]
     w["exclude"] = list(w.get("exclude") or []) + ZUSATZ_AUSSCHLUSS.get(w["name"], []) + ([] if w.get("nonfood") else NIE)
+# Highlights ergänzt (Noah, 01.11.2026)
+WATCHLIST += [
+    {"name": "Dr. Oetker Intermezzo", "prio": 1, "any": [r"intermezzo"], "exclude": NIE},
+    {"name": "Tillman's Toasty", "prio": 1, "any": [r"toasty"], "exclude": NIE},
+    {"name": "Mozzarella", "prio": 1, "any": [r"mozzarella"], "exclude": NIE + [r"sticks", r"pizza", r"salat"]},
+    {"name": "Thomy Hollandaise", "prio": 2, "any": [r"thomy.{0,40}hollandaise", r"hollandaise.{0,40}thomy"]},
+]
 # Reihenfolge: Drogerie und Prio-2 bleiben hinten
 WATCHLIST.sort(key=lambda w: (w.get("nonfood", False), w["prio"]))
 
@@ -281,6 +288,7 @@ def weitere_angebote(alle, sel):
     reihen = {n: i for i, (n, _, _) in enumerate(GRUPPEN)}
     return sorted(res, key=lambda r: (reihen.get(gruppe(r), 99), r["preis"]))
 
+EMOJI.update({"Dr. Oetker Intermezzo": "🍕", "Tillman's Toasty": "🥪", "Mozzarella": "🧀", "Thomy Hollandaise": "🥫"})
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
 
