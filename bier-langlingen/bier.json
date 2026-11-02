@@ -1,5 +1,5 @@
 {
- "stand": "2026-11-01 14:01",
+ "stand": "2026-11-02 11:09",
  "woche": {
   "kw": 45,
   "von": "2026-11-02",
@@ -7,6 +7,99 @@
  },
  "ort": "Langlingen (29364) und Umgebung",
  "maerkte": [
+  {
+   "name": "ALDI Nord",
+   "farbe": "#00559f",
+   "hinweis": null,
+   "angebote": 0,
+   "im_prospekt": 25,
+   "filialen": [
+    {
+     "name": "ALDI Nord",
+     "adresse": "Oppershäuserstraße 6",
+     "ort": "29331 Lachendorf",
+     "km": 8.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Oppersh%C3%A4userstra%C3%9Fe%206%2029331%20Lachendorf"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Nienhagener Straße 3",
+     "ort": "29339 Wathlingen",
+     "km": 9.4,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Nienhagener%20Stra%C3%9Fe%203%2029339%20Wathlingen"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Gifhorner Straße 10",
+     "ort": "38536 Meinersen",
+     "km": 10.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Gifhorner%20Stra%C3%9Fe%2010%2038536%20Meinersen"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Burgdorfer Straße 23",
+     "ort": "31311 Uetze",
+     "km": 11.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Burgdorfer%20Stra%C3%9Fe%2023%2031311%20Uetze"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Bremer Weg 199",
+     "ort": "29223 Celle",
+     "km": 17.0,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Bremer%20Weg%20199%2029223%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "An der Hasenbahn 3",
+     "ort": "29225 Celle",
+     "km": 17.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20An%20der%20Hasenbahn%203%2029225%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Lärchenweg 1",
+     "ort": "29227 Celle",
+     "km": 17.5,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20L%C3%A4rchenweg%201%2029227%20Celle"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Wittinger Straße 44",
+     "ort": "29392 Wesendorf",
+     "km": 17.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Wittinger%20Stra%C3%9Fe%2044%2029392%20Wesendorf"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Hamburger Straße 71",
+     "ort": "38518 Gifhorn",
+     "km": 20.1,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hamburger%20Stra%C3%9Fe%2071%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Braunschweiger Straße 106",
+     "ort": "38518 Gifhorn",
+     "km": 20.3,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Braunschweiger%20Stra%C3%9Fe%20106%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Adam-Riese-Straße 2",
+     "ort": "38518 Gifhorn",
+     "km": 20.7,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Adam-Riese-Stra%C3%9Fe%202%2038518%20Gifhorn"
+    },
+    {
+     "name": "ALDI Nord",
+     "adresse": "Hehlenbruchweg 4",
+     "ort": "29313 Hambühren",
+     "km": 23.6,
+     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Hehlenbruchweg%204%2029313%20Hamb%C3%BChren"
+    }
+   ]
+  },
   {
    "name": "Lidl",
    "farbe": "#0050aa",
@@ -691,7 +784,7 @@
     "markt": "Netto",
     "kw": "2026-W43"
    },
-   "bild": null
+   "bild": "img/009-krombacher.webp"
   },
   {
    "markt": "Netto",

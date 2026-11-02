@@ -284,7 +284,7 @@ def edeka_angebote(pfad, montag, samstag):
             "preis": o["preis"], "app_preis": o.get("app_preis"), "normal": o.get("normal"), "staffel": [],
             "tiefst30": o.get("tiefst30"),
             "von": o.get("von") or montag.isoformat(), "bis": o.get("bis") or samstag.isoformat(),
-            "bild": None, "quelle": "edeka.de", "prospekt": "Marktangebote",
+            "bild": o.get("bild"), "quelle": "edeka.de", "prospekt": "Marktangebote",
         })
     return roh
 
@@ -381,32 +381,58 @@ def filialen(pfad):
 
 
 # ======================= Bilder =======================
+def _slug(s):
+    return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")[:30] or "bier"
+
+
 def bilder_speichern(angebote, ordner):
-    """Produktfoto je Angebot als kleines WebP nach ordner/ (alte Bilder werden entfernt)."""
+    """Produktfoto je Angebot als kleines WebP nach ordner/ (alte Bilder werden entfernt).
+    Quelle: URL (kaufDA) oder lokale Bilddatei (z. B. EDEKA-Ausschnitt). Jedes Foto wandert zusätzlich ins
+    Marken-Archiv ordner/marken/ (bleibt erhalten); Angebote ohne eigenes Foto bekommen von dort das Foto
+    derselben Marke (gleiches Gebinde bevorzugt) – so hat möglichst jedes Angebot ein Bild."""
     import io
+    import shutil
     from PIL import Image
-    os.makedirs(ordner, exist_ok=True)
+    archiv = os.path.join(ordner, "marken")
+    os.makedirs(archiv, exist_ok=True)
     for f in os.listdir(ordner):
         if f.endswith(".webp"):
             os.remove(os.path.join(ordner, f))
-    ok = 0
+    ok, fehlend = 0, []
     for i, a in enumerate(angebote):
-        url = a.pop("bild", None)
+        quelle = a.pop("bild", None)
         a["bild"] = None
-        if not url:
+        name = f"{i:03d}-{_slug(a['marke'] or a['produkt'])}.webp"
+        if not quelle:
+            fehlend.append((a, name))
             continue
-        name = f"{i:03d}-{re.sub(r'[^a-z0-9]+', '-', (a['marke'] or a['produkt'] or 'bier').lower())[:30]}.webp"
         try:
-            im = Image.open(io.BytesIO(requests.get(url, headers=UA, timeout=30).content))
-            im = im.convert("RGBA")
+            roh = open(quelle, "rb").read() if os.path.isfile(quelle) else \
+                requests.get(quelle, headers=UA, timeout=30).content
+            im = Image.open(io.BytesIO(roh)).convert("RGBA")
             hg = Image.new("RGBA", im.size, (255, 255, 255, 255))
             im = Image.alpha_composite(hg, im).convert("RGB")
             im.thumbnail((240, 240))
             im.save(os.path.join(ordner, name), "WEBP", quality=78)
             a["bild"] = f"img/{name}"
             ok += 1
+            marke = _slug(a["marke"] or a["produkt"])
+            for key in (f"{marke}--{_slug(a.get('typ'))}", marke):
+                shutil.copyfile(os.path.join(ordner, name), os.path.join(archiv, key + ".webp"))
         except Exception as e:
             print(f"  ! Bild {a['marke']}: {e}", file=sys.stderr)
+            fehlend.append((a, name))
+    for a, name in fehlend:
+        marke = _slug(a["marke"] or a["produkt"])
+        for key in (f"{marke}--{_slug(a.get('typ'))}", marke):
+            pfad = os.path.join(archiv, key + ".webp")
+            if os.path.isfile(pfad):
+                shutil.copyfile(pfad, os.path.join(ordner, name))
+                a["bild"] = f"img/{name}"
+                ok += 1
+                break
+        else:
+            print(f"  ! kein Bild: {a['markt']} {a['marke']} {a['produkt']}", file=sys.stderr)
     return ok
 
 

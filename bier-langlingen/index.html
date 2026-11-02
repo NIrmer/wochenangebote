@@ -49,10 +49,8 @@ h1 span { color: var(--accent); }
 .top .pic { width: 72px; height: 72px; }
 .top .big .lp { font-size: 15px; font-weight: 700; color: var(--best); margin-top: 4px; display: block; }
 .top .big .pf { display: block; margin-top: 2px; }
-.top .wo { margin-top: 8px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.top .wo b { color: var(--mc); }
-.top .wo a { font-size: 13px; font-weight: 600; color: var(--text); background: var(--chip); border-radius: 999px; padding: 4px 10px; text-decoration: none; white-space: nowrap; }
-.top .wo button { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
+.top .wo { margin-top: 6px; }
+.top .wo .laden { font-size: 13px; }
 .top .tags { margin-top: 6px; }
 
 .controls {
@@ -95,10 +93,18 @@ select {
 .pic { width: 64px; height: 64px; border-radius: 10px; background: #fff; display: grid; place-items: center; overflow: hidden; }
 .pic img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
 .pic.leer { background: var(--chip); font-size: 28px; }
-.laden { display: block; margin: 0; padding: 0; border: 0; background: none; font: inherit; line-height: 1.5;
-  font-size: 12px; color: var(--muted); cursor: pointer; text-align: left; }
+.laden { display: block; font-size: 12px; line-height: 1.5; color: var(--muted); }
 .laden b { color: var(--mc); font-weight: 700; }
-.laden u { text-decoration: none; color: var(--text); background: var(--chip); border-radius: 6px; padding: 0 5px; font-weight: 600; white-space: nowrap; }
+.card, .top { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.card:focus-visible, .top:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) { .card:hover, .top:hover { border-color: var(--muted); } }
+.dlg-prod { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.dlg-prod .pic { width: 56px; height: 56px; }
+.dlg-prod .n { font-weight: 600; line-height: 1.25; }
+.dlg-prod .s { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.dlg-prod .p { text-align: right; white-space: nowrap; font-weight: 700; }
+.dlg-prod .p small { display: block; font-weight: 600; color: var(--best); font-size: 13px; }
+.dlg-hint { margin: 0; padding: 10px 16px 0; color: var(--muted); font-size: 13px; }
 dialog { border: 0; border-radius: 18px; padding: 0; width: min(440px, calc(100vw - 32px)); max-height: 80vh;
   background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
 dialog::backdrop { background: rgba(10, 9, 8, .55); }
@@ -179,6 +185,8 @@ footer { color: var(--muted); font-size: 12px; text-align: center; padding: 18px
 </div>
 <dialog id="dlg" aria-labelledby="dlg-t">
   <div class="dlg-head"><div><h3 id="dlg-t"></h3><p id="dlg-s"></p></div><button class="dlg-x" id="dlg-x" aria-label="Schließen">✕</button></div>
+  <div id="dlg-p"></div>
+  <p class="dlg-hint" id="dlg-h"></p>
   <ul class="fil" id="dlg-l"></ul>
 </dialog>
 
@@ -200,18 +208,26 @@ const farbe = m => markt(m).farbe || "var(--line)";
 const kmTxt = k => k < 1 ? "vor Ort" : `${Math.round(k)} km`;
 const ortKurz = o => (o || "").replace(/^\d{5}\s*/, "");
 
-function ladenZeile(a) {
-  const m = markt(a.markt), f = m.filialen || [];
-  if (!f.length) return `<span class="laden"><b>${esc(a.markt)}</b></span>`;
-  const n = f[0], mehr = f.length - 1;
-  return `<button class="laden" data-m="${esc(a.markt)}" aria-label="Filialen von ${esc(a.markt)} anzeigen">
-    <b>${esc(a.markt)}</b>&nbsp;· ${esc(ortKurz(n.ort))}&nbsp;${kmTxt(n.km).replace(" ", "&nbsp;")}${mehr ? ` <u>+${mehr}&nbsp;Filialen</u>` : " ›"}</button>`;
+function ladenZeile(a) {            // grob: Laden + Ort der nächsten Filiale
+  const f = markt(a.markt).filialen || [];
+  return `<span class="laden"><b>${esc(a.markt)}</b>${f.length ? `&nbsp;· ${esc(ortKurz(f[0].ort))}` : ""}</span>`;
 }
 
-function dialogAuf(name) {
-  const m = markt(name);
-  $("dlg-t").textContent = m.filialen.length === 1 ? `${name}-Filiale` : `${m.filialen.length} ${name}-Filialen`;
-  $("dlg-s").textContent = (name === "EDEKA" ? "Angebot gilt nur in diesem Markt." : "Prospektangebot gilt in allen Filialen im Umkreis.")
+const bildHtml = a => a.bild
+  ? `<div class="pic"><img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async"></div>`
+  : `<div class="pic leer" aria-hidden="true">🍺</div>`;
+const nameTxt = a => a.produkt && a.produkt.toLowerCase() !== (a.marke || "").toLowerCase() ? `${a.marke} ${a.produkt}` : (a.marke || a.produkt);
+const pfandTxt = a => a.pfand === 0 ? "pfandfrei" : a.pfand ? `+ ${eur(a.pfand)} Pfand` : "zzgl. Pfand";
+
+function dialogAuf(a) {            // Klick auf ein Angebot: Laden mit allen Filialen, Adresse, Entfernung, Route
+  const name = a.markt, m = markt(name);
+  $("dlg-t").textContent = name;
+  $("dlg-s").textContent = m.filialen.length ? (m.filialen.length === 1 ? "1 Filiale im Umkreis" : `${m.filialen.length} Filialen im Umkreis`) : "";
+  const g = gueltig(a);
+  $("dlg-p").innerHTML = `<div class="dlg-prod">${bildHtml(a)}
+    <div><div class="n">${esc(nameTxt(a))}</div><div class="s">${esc(a.gebinde_text)} · ${pfandTxt(a)}${g ? " · " + esc(g) : ` · ${dm(a.von)}–${dm(a.bis)}`}</div></div>
+    <div class="p">${eur(a.preis)}<small>${num(a.eur_l)} €/l</small></div></div>`;
+  $("dlg-h").textContent = (name === "EDEKA" ? "Angebot gilt nur in diesem Markt." : "Prospektangebot gilt in allen Filialen im Umkreis.")
     + (m.hinweis ? " " + m.hinweis.charAt(0).toUpperCase() + m.hinweis.slice(1) + "." : "");
   $("dlg-l").innerHTML = m.filialen.map(f => `<li>
       <div><div class="ad">${esc(f.adresse)}</div><div class="ort">${esc(ortKurz(f.ort))} · ${kmTxt(f.km)}</div></div>
@@ -248,7 +264,9 @@ function renderTabs() {
     `<button class="chip" aria-pressed="${st.arten.has(a)}" data-a="${esc(a)}">${esc(a)}</button>`).join("");
 }
 
-function karte(a, min) {
+let LISTE = [], TOP = null;
+
+function karte(a, min, i) {
   const tags = [];
   const g = gueltig(a);
   if (g) tags.push(`<span class="tag tage">${esc(g)}</span>`);
@@ -262,14 +280,11 @@ function karte(a, min) {
       : `<span class="tag">schon mal ${num(b.eur_l)} €/l (${esc(b.markt)})</span>`);
   }
   if (a.weitere_gebinde.length) tags.push(`<span class="tag">auch ${esc(a.weitere_gebinde.join(", "))}</span>`);
-  const pf = a.pfand === 0 ? "pfandfrei" : a.pfand ? `+ ${eur(a.pfand)} Pfand` : "zzgl. Pfand";
+  const pf = pfandTxt(a);
   const name = a.produkt && a.produkt.toLowerCase() !== (a.marke || "").toLowerCase()
     ? `${esc(a.marke)} <span>${esc(a.produkt)}</span>` : esc(a.marke || a.produkt);
-  const pic = a.bild
-    ? `<div class="pic"><img src="${esc(a.bild)}" alt="" loading="lazy" decoding="async"></div>`
-    : `<div class="pic leer" aria-hidden="true">🍺</div>`;
-  return `<div class="card" style="--mc:${farbe(a.markt)}">
-    ${pic}
+  return `<div class="card" style="--mc:${farbe(a.markt)}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(nameTxt(a))} bei ${esc(a.markt)}: Filialen anzeigen">
+    ${bildHtml(a)}
     <div>
       ${ladenZeile(a)}
       <div class="name">${name}</div>
@@ -290,7 +305,8 @@ function render() {
   const list = gefiltert().sort((a, b) => st.sort === "p" ? a.preis - b.preis || a.eur_l - b.eur_l : a.eur_l - b.eur_l || a.preis - b.preis);
   const min = list.length ? Math.min(...list.map(a => a.eur_l)) : 0;
   $("count").textContent = list.length ? `${list.length} Angebot${list.length === 1 ? "" : "e"} · sortiert nach ${st.sort === "p" ? "Preis" : "Literpreis"}` : "";
-  $("list").innerHTML = list.length ? list.map(a => karte(a, min)).join("") : `<div class="empty">Keine passenden Angebote diese Woche.</div>`;
+  LISTE = list;
+  $("list").innerHTML = list.length ? list.map((a, i) => karte(a, min, i)).join("") : `<div class="empty">Keine passenden Angebote diese Woche.</div>`;
 }
 
 function renderTop() {
@@ -303,21 +319,14 @@ function renderTop() {
   k.staffel.forEach(s => tags.push(`<span class="tag app">${esc(s.bedingung)}: ${eur(s.preis)}</span>`));
   if (k.normal && k.normal > k.preis) tags.push(`<span class="tag deal">statt ${eur(k.normal)}</span>`);
   if (k.bisher_bester && k.bisher_bester.eur_l > k.eur_l) tags.push(`<span class="tag best">günstiger als je zuvor</span>`);
-  const pf = k.pfand === 0 ? "pfandfrei" : k.pfand ? `+ ${eur(k.pfand)} Pfand` : "zzgl. Pfand";
-  const f = markt(k.markt).filialen || [], n = f[0];
-  const wo = n
-    ? `<b>${esc(k.markt)}</b> ${esc(n.adresse)}, ${esc(ortKurz(n.ort))} · ${kmTxt(n.km)}
-       <a href="${esc(n.maps)}" target="_blank" rel="noopener">Route</a>${f.length > 1 ? `<button data-m="${esc(k.markt)}">+${f.length - 1} weitere Filiale${f.length > 2 ? "n" : ""}</button>` : ""}`
-    : `<b>${esc(k.markt)}</b>`;
-  const pic = k.bild
-    ? `<div class="pic"><img src="${esc(k.bild)}" alt=""></div>`
-    : `<div class="pic leer" aria-hidden="true">🍺</div>`;
-  $("top").innerHTML = `<div class="top" style="--mc:${farbe(k.markt)}">
-    ${pic}
+  const pf = pfandTxt(k);
+  TOP = k;
+  $("top").innerHTML = `<div class="top" style="--mc:${farbe(k.markt)}" data-i="top" role="button" tabindex="0" aria-label="${esc(nameTxt(k))} bei ${esc(k.markt)}: Filialen anzeigen">
+    ${bildHtml(k)}
     <div><div class="lbl">Günstigster Kasten diese Woche</div>
       <div class="what">${esc(k.marke)} ${esc(k.produkt)}</div>
       <div class="sub">${esc(k.gebinde_text)}${k.info_kurz ? " · " + esc(k.info_kurz) : ""}</div>
-      <div class="wo">${wo}</div>
+      <div class="wo">${ladenZeile(k)}</div>
       <div class="tags">${tags.join("")}</div></div>
     <div class="big"><b>${eur(k.preis)}</b><span class="lp">${num(k.eur_l)} €/l</span><span class="pf">${pf}</span></div>
   </div>`;
@@ -335,8 +344,8 @@ function init() {
 }
 
 document.addEventListener("click", e => {
-  const l = e.target.closest("[data-m]");
-  if (l) { dialogAuf(l.dataset.m); return; }
+  const l = e.target.closest("[data-i]");
+  if (l) { dialogAuf(l.dataset.i === "top" ? TOP : LISTE[+l.dataset.i]); return; }
   const t = e.target.closest("[data-k]");
   if (t) { st.tab = t.dataset.k; render(); return; }
   const c = e.target.closest("[data-a]");
@@ -346,6 +355,10 @@ document.addEventListener("click", e => {
     if (!st.arten.size) st.arten.add(a);
     render();
   }
+});
+document.addEventListener("keydown", e => {
+  const l = e.target.closest && e.target.closest("[data-i]");
+  if (l && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); l.click(); }
 });
 $("dlg-x").addEventListener("click", () => $("dlg").close());
 $("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
