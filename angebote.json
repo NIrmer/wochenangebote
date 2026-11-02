@@ -56,7 +56,6 @@
   "🛒": "Lebensmittel"
  },
  "ausgeblendet": [
-  "EDEKA Like Pflanzliche Fleischalternativen",
   "LIDL Hähnchen-Hackfleisch",
   "LIDL Putenbrustfilet",
   "EDEKA Arla Skyr",
@@ -6877,6 +6876,26 @@
      "seite": 13
     },
     {
+     "id": "edeka-33-274",
+     "emoji": "🌱",
+     "kategorie": "Vegane Alternativen",
+     "gruppe": "Lebensmittel",
+     "produkt": "Like Pflanzliche Fleischalternativen",
+     "kurz": "Like Fleischalternativen",
+     "warn": false,
+     "info": "aus Soja- oder Erbsenprotein, versch. Sorten, 175/180g Packung, 1kg = 18,80/18,28",
+     "preis": 3.29,
+     "app": false,
+     "normal": null,
+     "ersparnis": null,
+     "aktion": false,
+     "tage": null,
+     "grundpreis": "18.80 €/kg",
+     "bild": "img/edeka-33-274.webp",
+     "prospekt": "img/edeka-33-274-p.webp",
+     "seite": 33
+    },
+    {
      "id": "edeka-4-27",
      "emoji": "🐄",
      "kategorie": "Rinderhack",
@@ -12296,26 +12315,6 @@
      "grundpreis": "8.54 €/l",
      "bild": "img/w-edeka-33-282.webp",
      "prospekt": "img/w-edeka-33-282-p.webp",
-     "seite": 33
-    },
-    {
-     "id": "edeka-33-274",
-     "emoji": "🛒",
-     "kategorie": "Lebensmittel",
-     "gruppe": "Lebensmittel",
-     "produkt": "Like Pflanzliche Fleischalternativen",
-     "kurz": "Like Fleischalternativen",
-     "warn": false,
-     "info": "aus Soja- oder Erbsenprotein, versch. Sorten, 175/180g Packung, 1kg = 18,80/18,28",
-     "preis": 3.29,
-     "app": false,
-     "normal": null,
-     "ersparnis": null,
-     "aktion": false,
-     "tage": null,
-     "grundpreis": "18.80 €/kg",
-     "bild": "img/w-edeka-33-274.webp",
-     "prospekt": "img/w-edeka-33-274-p.webp",
      "seite": 33
     },
     {

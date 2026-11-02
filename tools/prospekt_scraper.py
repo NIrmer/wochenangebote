@@ -339,9 +339,10 @@ def gruppe(o):
 
 def weitere_angebote(alle, sel):
     """Alle übrigen Lebensmittel-Angebote (keine Watchlist-Treffer) + ausgeblendete ('kein') Treffer."""
-    sel_ids = {r.get("id") for r in sel if r.get("hervorhebung") != "kein"}
+    sichtbar, versteckt = _sichtbar(sel)
+    sel_ids = {r.get("id") for r in sichtbar}
     res, seen = [], set()
-    kandidaten = [r for r in sel if r.get("hervorhebung") == "kein"] + [o for o in alle if o.get("id") not in sel_ids]
+    kandidaten = versteckt + [o for o in alle if o.get("id") not in sel_ids]
     for o in kandidaten:
         if not isinstance(o.get("preis"), (int, float)) or not o["preis"]:
             continue
@@ -608,8 +609,9 @@ def write_bilder(sel, folder, prefix, weitere=(), leeren=True):
         return Image.open(io.BytesIO(requests.get(url, headers=UA, timeout=30).content))
 
     n = 0
+    sichtbar_ids = {id(r) for r in _sichtbar(sel)[0]}
     for i, r in enumerate(sel):
-        if r.get("hervorhebung") == "kein":
+        if id(r) not in sichtbar_ids:
             continue
         key = re.sub(r"[^a-z0-9-]", "", str(r.get("id") or i).lower())[:24].rstrip("-")
         try:
@@ -766,8 +768,15 @@ def _label(r):
     prod = _produkt_info(r)[0]
     return prod if prod.upper().startswith(r["markt"]) else f"{r['markt']} {prod}"
 
+# Diese Marken/Produkte sind immer Highlights, auch ohne Rabatt/Aktion (Noahs Wunsch)
+IMMER_HIGHLIGHT = [r"\blike\b", r"like meat"]
+
+def _immer(r):
+    return _rx(IMMER_HIGHLIGHT, f"{r.get('marke') or ''} {r.get('produkt') or ''}")
+
 def _sichtbar(sel):
-    return [r for r in sel if r.get("hervorhebung") != "kein"], [r for r in sel if r.get("hervorhebung") == "kein"]
+    zeigen = lambda r: r.get("hervorhebung") != "kein" or _immer(r)
+    return [r for r in sel if zeigen(r)], [r for r in sel if not zeigen(r)]
 
 def to_notion_md(sel, quellen, stand, hinweise=""):
     kw = _kw(sel, stand)
