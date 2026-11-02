@@ -209,7 +209,7 @@ WATCHLIST = [w for w in WATCHLIST if w["name"] != "Reis & Nudeln (LIDL)"] + [
     {"name": "Nudeln (LIDL)", "prio": 2, "store": "LIDL",
      "any": [r"nudel", r"spaghetti", r"penne", r"fusilli", r"farfalle", r"pasta", r"tagliatelle", r"barilla", r"combino"],
      "exclude": [r"waffel", r"chips", r"fertig", r"suppe", r"salat", r"sauce", r"soße", r"pfanne", r"brot", r"brötchen",
-                 r"bowl", r"gericht", r"tiefgefroren", r"maschine", r"topf", r"dampfnudel", r"zahnpasta"]}]
+                 r"bowl", r"gericht", r"tiefgefroren", r"maschine", r"topf", r"dampfnudel", r"zahnpasta", r"pesto", r"sauce"]}]
 for w in WATCHLIST:
     if w["name"] == "Kartoffeln":   # nur rohe Kartoffeln
         w["any"] = [r"\bkartoffeln\b", r"speisekartoffel", r"drillinge", r"\bfrühkartoffel"]
@@ -278,7 +278,7 @@ WATCHLIST = [w for w in WATCHLIST if w]
 for w in WATCHLIST:
     if w["name"] == "Nüsse & Erdnussbutter":
         w["any"] = w["any"] + [r"nussmus", r"mandelmus", r"cashewmus", r"haselnussmus"]
-    extra = {"Hähnchen": [r"pommes", r"panini", r"gänse", r"\bfix\b", r"puten", r"\bpute"],
+    extra = {"Hähnchen": [r"pommes", r"panini", r"gänse", r"\bfix\b", r"puten", r"\bpute", r"tasche"],
              "Pute": [r"salami", r"wurst"],
              "Salami & Schinken": [r"schnitzel", r"braten", r"steak", r"kotelett"],
              "Zuckerfreie Limo": [r"bonbon", r"kaugummi"],
