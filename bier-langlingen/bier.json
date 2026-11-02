@@ -1,5 +1,5 @@
 {
- "stand": "2026-11-02 11:09",
+ "stand": "2026-11-02 11:14",
  "woche": {
   "kw": 45,
   "von": "2026-11-02",
@@ -755,7 +755,7 @@
    "markt": "EDEKA",
    "marke": "Krombacher",
    "produkt": "",
-   "info": "versch. Sorten, + 3,42/3,10 Pfand, je nach Verfügbarkeit im Markt, 24x0,33l/20x0,5l Flasche",
+   "info": "versch. Sorten, je nach Verfügbarkeit im Markt, 24x0,33l Flasche + 3,42 Pfand / 20x0,5l Flasche + 3,10 Pfand",
    "info_kurz": "versch. Sorten, je nach Verfügbarkeit im Markt",
    "typ": "Kasten",
    "art": "Bier",
@@ -773,7 +773,7 @@
    "tiefst30": 17.99,
    "eur_l": 1.39,
    "eur_l_bester": 1.39,
-   "pfand": 3.1,
+   "pfand": 3.42,
    "von": "2026-11-02",
    "bis": "2026-11-07",
    "quelle": "edeka.de",
