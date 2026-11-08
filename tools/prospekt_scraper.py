@@ -163,7 +163,8 @@ WATCHLIST = [
                  # langlebige Haushaltswaren (nur Verbrauchsartikel gewünscht, Noah 19.10.2026)
                  r"kleiderbügel", r"kehrgarnitur", r"handfeger", r"wäschewanne", r"wäschekorb", r"wäscheständer",
                  r"wäscheklammer", r"bügel", r"schutzhülle", r"aufbewahrung", r"box mit deckel", r"box", r"eimer",
-                 r"starter-?set", r"teleskop", r"wischer", r"reinigungshelfer", r"bürste(?!.{0,3}zahn)", r"besen",
+                 r"starter-?set", r"feuerzeug", r"niederdruck", r"\btopf\b", r"trinkflasche", r"haartrockner", r"föhn",
+                 r"rotationsrasierer", r"folienrasierer", r"haarschneider", r"teleskop", r"wischer", r"reinigungshelfer", r"bürste(?!.{0,3}zahn)", r"besen",
                  r"glas", r"gläser", r"kristallglas", r"aperitif", r"champus", r"tasse", r"teller", r"schüssel",
                  r"handtuch", r"geschirrtuch", r"lappen(?!.{0,10}tücher)", r"schwammtuch", r"korb", r"regal",
                  # Geräte/Gebrauchsgüter/Reisen statt Verbrauchsartikel (KW 44)

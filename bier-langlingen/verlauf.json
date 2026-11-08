@@ -525,6 +525,248 @@
     "preis": 15.82,
     "eur_l": 2.4
    }
+  ],
+  "2026-W46": [
+   {
+    "markt": "Netto",
+    "marke": "Hasseröder",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.99,
+    "eur_l": 0.9
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Holsten",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.99,
+    "eur_l": 1.0
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Nörten-Hardenberger",
+    "produkt": "Pils",
+    "gebinde": "30 × 0,33 l",
+    "preis": 9.99,
+    "eur_l": 1.01
+   },
+   {
+    "markt": "Netto",
+    "marke": "Radeberger",
+    "produkt": "Pilsner",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.49,
+    "eur_l": 1.05
+   },
+   {
+    "markt": "Netto",
+    "marke": "Warsteiner",
+    "produkt": "Premium Pilsener / Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Beck's",
+    "produkt": "Pils / Blue Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Bitburger",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.99,
+    "eur_l": 1.2
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Jever",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 12.49,
+    "eur_l": 1.25
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Beck's",
+    "produkt": "Pils / Gold",
+    "gebinde": "24 × 0,33 l",
+    "preis": 9.99,
+    "eur_l": 1.26
+   },
+   {
+    "markt": "METRO",
+    "marke": "Bitburger",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.67,
+    "eur_l": 1.37
+   },
+   {
+    "markt": "Netto",
+    "marke": "Krombacher Biere",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Clausthaler",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "METRO",
+    "marke": "Bayreuther",
+    "produkt": "Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.98,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Mönchshof",
+    "produkt": "Bier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "SAN Miguel",
+    "produkt": "Especial",
+    "gebinde": "24 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.51
+   },
+   {
+    "markt": "METRO",
+    "marke": "Paulaner",
+    "produkt": "Hefe-Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.46,
+    "eur_l": 1.55
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Astra",
+    "produkt": "Urtyp",
+    "gebinde": "27 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 1.57
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Paulaner",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.49,
+    "eur_l": 1.65
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Karlsberg",
+    "produkt": "Mixery Cola-Bier / Mixery Iced Blue",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.99,
+    "eur_l": 1.7
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Landbier / Kellerbier",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.99,
+    "eur_l": 1.7
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Erdinger Brauhaus",
+    "produkt": "Helles / Helles Alkoholfrei / Natur Radler",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.99,
+    "eur_l": 1.7
+   },
+   {
+    "markt": "METRO",
+    "marke": "Chiemseer",
+    "produkt": "Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.24,
+    "eur_l": 1.72
+   },
+   {
+    "markt": "METRO",
+    "marke": "Budweiser Budvar",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.84,
+    "eur_l": 1.78
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Stiegl",
+    "produkt": "Goldbräu",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.99,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Bayreuther",
+    "produkt": "Hell",
+    "gebinde": "20 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 2.12
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Rut Wiess",
+    "produkt": "Kölsch",
+    "gebinde": "20 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 2.12
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Heineken",
+    "produkt": "Premium Lager",
+    "gebinde": "28 × 0,25 l",
+    "preis": 14.99,
+    "eur_l": 2.14
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Grevensteiner",
+    "produkt": "Original",
+    "gebinde": "20 × 0,33 l",
+    "preis": 14.49,
+    "eur_l": 2.2
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Hofbräuhaus München",
+    "produkt": "Helles",
+    "gebinde": "20 × 0,33 l",
+    "preis": 15.99,
+    "eur_l": 2.42
+   },
+   {
+    "markt": "METRO",
+    "marke": "Heineken",
+    "produkt": "",
+    "gebinde": "20 × 0,4 l",
+    "preis": 20.93,
+    "eur_l": 2.62
+   }
   ]
  }
 }
