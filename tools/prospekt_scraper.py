@@ -67,7 +67,7 @@ WATCHLIST = [
     {"name": "Softdrinks & Energy", "prio": 1,  # nur Markengetränke, keine Eigenmarken; Zero ist meist mit im Angebot
      "any": [r"coca.?cola", r"\bcoke\b", r"fanta", r"sprite", r"mezzo.?mix", r"pepsi", r"7.?up", r"seven.?up",
              r"schwip.?schwap", r"mirinda", r"dr\.? ?pepper", r"schweppes", r"mountain dew", r"red bull",
-             r"monster", r"rockstar", r"fuze", r"lipton ice", r"\blift\b"],
+             r"monster", r"rockstar", r"fuze", r"lipton ice", r"\blift\b", r"\bspezi\b"],
      "exclude": [r"\bja!", r"\briver\b", r"freeway", r"k-?classic", r"gut ?& ?günstig", r"herzstücke", r"beste wahl",
                  r"booster", r"solevita", r"\bbillig", r"bier", r"radler", r"likör", r"wein", r"kaffee", r"muffin"]},
     {"name": "Zero Sirup", "prio": 1,
@@ -365,6 +365,19 @@ EMOJI.update({"Dr. Oetker Intermezzo": "🍕", "Tillman's Toasty": "🥪", "Mozz
 EMOJI.update({"Kerrygold Butter": "🟨", "Weight Watchers": "⚖️", "Protein-/Light-Eis": "🍦", "Zuckerfreie Limo": "🫧",
               "Salami & Schinken": "🥓", "Käse": "🫕", "Obst": "🍎", "Pesto & Pastasauce": "🌿", "Zero-/Light-Saucen": "🥫",
               "Konfitüre": "🍓", "Toast": "🥖", "Wraps, Pita & Fladenbrot": "🫓", "Gnocchi": "🥟"})
+# Highlights ergänzt (Noah, 08.11.2026) – immer anzeigen, auch ohne Rabatt/Aktion
+WATCHLIST += [
+    {"name": "H-Milch", "prio": 2, "any": [r"\bh-?milch\b", r"haltbare.{0,15}milch"],
+     "exclude": NIE + [r"haar", r"körper", r"reinigung", r"schoko", r"kakao", r"drink", r"hafer", r"soja", r"mandel"]},
+    {"name": "Butcher's Burger Buns", "prio": 2, "any": [r"butcher.{0,25}\bbuns?\b"], "exclude": NIE},
+    {"name": "Salakis", "prio": 1, "any": [r"salakis"], "exclude": NIE},
+    {"name": "Somersby", "prio": 2, "any": [r"somersby"]},  # Cider – bewusst ohne Alkohol-Ausschluss
+    {"name": "Eingelegte Gurken", "prio": 2,
+     "any": [r"spreewal", r"gewürzgurk", r"essiggurk", r"senfgurk", r"cornichon", r"eingelegte.{0,15}gurk",
+             r"gurken.{0,40}\bglas\b", r"kühne.{0,30}gurk"],
+     "exclude": NIE + [r"gurkensalat", r"chips", r"relish", r"\bmini gurke", r"salatgurke"]}]
+IMMER_NAMEN = {"H-Milch", "Butcher's Burger Buns", "Salakis", "Somersby", "Eingelegte Gurken"}
+EMOJI.update({"H-Milch": "📦", "Butcher's Burger Buns": "🍔", "Salakis": "🐑", "Somersby": "🍏", "Eingelegte Gurken": "🥒"})
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
 
@@ -770,10 +783,11 @@ def _label(r):
     return prod if prod.upper().startswith(r["markt"]) else f"{r['markt']} {prod}"
 
 # Diese Marken/Produkte sind immer Highlights, auch ohne Rabatt/Aktion (Noahs Wunsch)
-IMMER_HIGHLIGHT = [r"\blike\b", r"like meat"]
+IMMER_HIGHLIGHT = [r"\blike\b", r"like meat", r"\bspezi\b"]
 
 def _immer(r):
-    return _rx(IMMER_HIGHLIGHT, f"{r.get('marke') or ''} {r.get('produkt') or ''}")
+    return (r.get("kategorie_watch") in IMMER_NAMEN
+            or _rx(IMMER_HIGHLIGHT, f"{r.get('marke') or ''} {r.get('produkt') or ''}"))
 
 def _sichtbar(sel):
     zeigen = lambda r: r.get("hervorhebung") != "kein" or _immer(r)
