@@ -376,7 +376,33 @@ WATCHLIST += [
      "any": [r"spreewal", r"gewürzgurk", r"essiggurk", r"senfgurk", r"cornichon", r"eingelegte.{0,15}gurk",
              r"gurken.{0,40}\bglas\b", r"kühne.{0,30}gurk"],
      "exclude": NIE + [r"gurkensalat", r"chips", r"relish", r"\bmini gurke", r"salatgurke"]}]
-IMMER_NAMEN = {"H-Milch", "Butcher's Burger Buns", "Salakis", "Somersby", "Eingelegte Gurken"}
+# Highlights ergänzt (Noah, 15.11.2026) – immer anzeigen, auch ohne Rabatt/Aktion
+OHNE_ALK = NIE[NIE.index(r"\d ?% ?vol"):]
+WATCHLIST += [
+    {"name": "Gemüsebrühe", "prio": 2, "any": [r"gemüse.?brühe", r"gemüse.?bouillon", r"bouillon.{0,20}gemüse", r"brühe.{0,20}gemüse"],
+     "exclude": OHNE_ALK + [r"suppe\b", r"eintopf"]},
+    {"name": "Rama Cremefine & Kochcreme", "prio": 2,
+     "any": [r"cremefine", r"rama.{0,25}(koch|creme|crème|cuisine)", r"kochcreme", r"kochsahne", r"zum kochen", r"\bcuisine\b"],
+     "exclude": OHNE_ALK + [r"schlag", r"sprüh", r"schoko", r"eis\b"]},
+    {"name": "Milram Käse", "prio": 2, "any": [r"milram"], "all": [r"käse", r"burlander", r"gouda", r"tilsiter", r"edamer",
+                                                                    r"bergkäse", r"\bscheiben\b", r"frischkäse", r"butterkäse"],
+     "exclude": OHNE_ALK},
+    {"name": "Black Tiger Garnelen", "prio": 2, "any": [r"black.?tiger", r"tiger.?garnel", r"tiger.?prawn"], "exclude": OHNE_ALK},
+    {"name": "Rindergulasch", "prio": 2, "any": [r"rinder.?gulasch", r"gulasch.{0,25}\brind", r"\brind.{0,25}gulasch"],
+     "exclude": OHNE_ALK + [r"suppe", r"eintopf", r"\bdose\b", r"konserve", r"fertiggericht", r"\bfix\b", r"gewürz"]},
+    {"name": "Geriebener Käse", "prio": 2, "any": [r"gerieben", r"reibekäse", r"pizzakäse", r"streukäse", r"käse.{0,20}geraspelt"],
+     "exclude": OHNE_ALK + [r"kartoffel", r"möhre", r"karotte", r"nuss", r"kokos", r"schoko", r"meerrettich", r"zitrone"]},
+    {"name": "Patros", "prio": 2, "any": [r"patros"], "exclude": OHNE_ALK},
+    {"name": "Knorr Suppen & Fix", "prio": 2, "any": [r"knorr"], "exclude": OHNE_ALK},
+    {"name": "Tomatenmark", "prio": 2, "any": [r"tomatenmark", r"tomaten.?mark"], "exclude": OHNE_ALK},
+    {"name": "Passierte Tomaten", "prio": 2, "any": [r"passiert.{0,15}tomat", r"tomat.{0,25}passiert", r"passata"],
+     "exclude": OHNE_ALK + [r"suppe"]}]
+IMMER_NAMEN = {"H-Milch", "Butcher's Burger Buns", "Salakis", "Somersby", "Eingelegte Gurken",
+               "Gemüsebrühe", "Rama Cremefine & Kochcreme", "Milram Käse", "Black Tiger Garnelen", "Rindergulasch",
+               "Geriebener Käse", "Patros", "Knorr Suppen & Fix", "Tomatenmark", "Passierte Tomaten"}
+EMOJI.update({"Gemüsebrühe": "🍲", "Rama Cremefine & Kochcreme": "🥛", "Milram Käse": "🧀", "Black Tiger Garnelen": "🦐",
+              "Rindergulasch": "🥘", "Geriebener Käse": "🧀", "Patros": "🐐", "Knorr Suppen & Fix": "🥣",
+              "Tomatenmark": "🍅", "Passierte Tomaten": "🥫"})
 EMOJI.update({"H-Milch": "📦", "Butcher's Burger Buns": "🍔", "Salakis": "🐑", "Somersby": "🍏", "Eingelegte Gurken": "🥒"})
 MARKT_TITEL = {"LIDL": "LIDL – Celler Straße 81", "REWE": "REWE – Wendenring 2", "EDEKA": "EDEKA Center Görge – Hamburger Str. 280"}
 VARIANT_RX = re.compile(r"versch\.?\s*sorten|verschiedene\s+sorten|versch\.\s|sortiert|sorten|\boder\b|weitere|auswahl", re.I)
@@ -569,9 +595,21 @@ def _ist_reduziert(r):
     n, p = r.get("normalpreis"), r.get("preis")
     return isinstance(n, (int, float)) and isinstance(p, (int, float)) and n > p > 0
 
-def apply_hervorhebung(sel, aktion):
+def _aktion_key(r):
+    return f"{r.get('markt')}|{r.get('produkt')}|{r.get('preis')}"
+
+def apply_hervorhebung(sel, aktion, aktion_pfad=None):
+    # kaufDA vergibt bei neu veröffentlichten Prospekten neue Angebots-IDs (z. B. zwischen Schritt 4 und 7).
+    # Fallback: Einstufung über Markt|Produkt|Preis aus crops/liste.json (liegt neben aktion.json im Arbeitsordner).
+    alt = {}
+    try:
+        for c in json.load(open(os.path.join(os.path.dirname(os.path.abspath(aktion_pfad or "")), "crops", "liste.json"))):
+            if c["id"] in aktion:
+                alt[_aktion_key(c)] = aktion[c["id"]]
+    except Exception:
+        pass
     for r in sel:
-        a = aktion.get(r.get("id") or "", {})
+        a = aktion.get(r.get("id") or "") or alt.get(_aktion_key(r), {})
         if a.get("normal") and not r.get("normalpreis"):
             r["normalpreis"] = a["normal"]
         if a.get("prozent"):
@@ -931,7 +969,7 @@ if __name__ == "__main__":
         quellen["EDEKA"] = "nicht ausgelesen"
     sel = selection(alle)
     aktion = json.load(open(a.aktion)) if a.aktion else {}
-    apply_hervorhebung(sel, aktion)
+    apply_hervorhebung(sel, aktion, a.aktion)
     hinweise = open(a.hinweise, encoding="utf-8").read().strip() if a.hinweise and os.path.exists(a.hinweise) else ""
     print(f"{len(alle)} Angebote geladen, {len(sel)} interessant, davon {sum(r.get('hervorhebung') == 'kein' for r in sel)} ausgeblendet")
     print_selection(sel)
