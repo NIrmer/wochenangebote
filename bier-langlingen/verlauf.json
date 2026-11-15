@@ -767,6 +767,264 @@
     "preis": 20.93,
     "eur_l": 2.62
    }
+  ],
+  "2026-W47": [
+   {
+    "markt": "Trinkgut",
+    "marke": "Traugott Simon",
+    "produkt": "Pilsener / Alkoholfrei / Gold / Alt",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.99,
+    "eur_l": 0.9
+   },
+   {
+    "markt": "combi",
+    "marke": "Paderborner",
+    "produkt": "Pilger",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.99,
+    "eur_l": 0.9
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Wicküler",
+    "produkt": "Pilsener / Pilsener 0,0%",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.49,
+    "eur_l": 0.95
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Radeberger",
+    "produkt": "Pilsner / Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 9.79,
+    "eur_l": 0.98
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Jever",
+    "produkt": "Pilsener / Fun Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.49,
+    "eur_l": 1.05
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Warsteiner",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 10.99,
+    "eur_l": 1.1
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Mönchshof",
+    "produkt": "Bier- und Bierspezialitäten",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.99,
+    "eur_l": 1.2
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Gilde",
+    "produkt": "Pilsener",
+    "gebinde": "30 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.21
+   },
+   {
+    "markt": "combi",
+    "marke": "Haake Beck",
+    "produkt": "Pils",
+    "gebinde": "25 × 0,33 l",
+    "preis": 10.49,
+    "eur_l": 1.27
+   },
+   {
+    "markt": "combi",
+    "marke": "Jever",
+    "produkt": "Pilsener",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Paulaner",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "combi",
+    "marke": "Franziskaner",
+    "produkt": "Weissbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "METRO",
+    "marke": "Paulaner",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.98,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Franziskaner",
+    "produkt": "Premium-Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Spaten",
+    "produkt": "Münchner Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Kapuziner",
+    "produkt": "Weißbier / Weißbier alkoholfrei / Kellerweizen",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Tucher",
+    "produkt": "Hefe Weizen Hell / Hefe Weizen Dunkel / Hefe Weizen Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Bitburger",
+    "produkt": "Pils Stubbi",
+    "gebinde": "20 × 0,33 l",
+    "preis": 9.99,
+    "eur_l": 1.51
+   },
+   {
+    "markt": "combi",
+    "marke": "Jever",
+    "produkt": "Pilsener",
+    "gebinde": "24 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.51
+   },
+   {
+    "markt": "METRO",
+    "marke": "Jever",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.46,
+    "eur_l": 1.55
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Benediktiner",
+    "produkt": "Weissbier Naturtrüb / Weissbier Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "METRO",
+    "marke": "Erdinger",
+    "produkt": "Weißbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.12,
+    "eur_l": 1.71
+   },
+   {
+    "markt": "combi",
+    "marke": "Veltins",
+    "produkt": "Pülleken",
+    "gebinde": "24 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 1.77
+   },
+   {
+    "markt": "METRO",
+    "marke": "Anheuser Busch",
+    "produkt": "Bud",
+    "gebinde": "24 × 0,3 l",
+    "preis": 12.96,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Arcobräu",
+    "produkt": "Mooser Liesl Helles",
+    "gebinde": "20 × 0,5 l",
+    "preis": 18.99,
+    "eur_l": 1.9
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Kloster Andechs",
+    "produkt": "Vollbier Hell / Hell Alkoholfrei / Spezial Hell",
+    "gebinde": "20 × 0,5 l",
+    "preis": 19.99,
+    "eur_l": 2.0
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Heineken",
+    "produkt": "International Premium Beer",
+    "gebinde": "20 × 0,4 l",
+    "preis": 16.99,
+    "eur_l": 2.12
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Peroni",
+    "produkt": "Nastro Azzurro",
+    "gebinde": "24 × 0,33 l",
+    "preis": 16.99,
+    "eur_l": 2.15
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Corona",
+    "produkt": "Extra",
+    "gebinde": "20 × 0,355 l",
+    "preis": 15.99,
+    "eur_l": 2.25
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Corona",
+    "produkt": "Extra",
+    "gebinde": "12 × 0,355 l",
+    "preis": 9.99,
+    "eur_l": 2.35
+   },
+   {
+    "markt": "METRO",
+    "marke": "Peroni",
+    "produkt": "Nastro Azzurro",
+    "gebinde": "24 × 0,33 l",
+    "preis": 21.41,
+    "eur_l": 2.7
+   },
+   {
+    "markt": "METRO",
+    "marke": "Heineken",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 22,
+    "eur_l": 2.78
+   }
   ]
  }
 }

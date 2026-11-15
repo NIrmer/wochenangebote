@@ -194,11 +194,16 @@ def prospekte(montag, samstag):
 
 def _deals(deals):
     """kaufDA-Preisarten -> preis, app_preis, normal, staffel."""
-    verkauf = [d for d in deals if d.get("type") == "SALES_PRICE" and d.get("min")]
+    bed = lambda d: " ".join(c.get("other") or "" for c in d.get("conditions", []))
+    # METRO: Mengenstaffel als SALES_PRICE ("Je, ab 3 Kisten") und Einzelpreis "je Flasche" -> nicht als Kastenpreis werten
+    je_einheit = lambda d: re.search(r"je\s+(Flasche|Dose|Liter)\b", bed(d), re.I)
+    ab_menge = lambda d: (m := re.search(r"ab\s*(\d+)\s*(Kiste|Kästen|Kasten|Sixpack|Fourpack|Pack|Träger)", bed(d), re.I)) and int(m.group(1)) >= 2
+    alle_verkauf = [d for d in deals if d.get("type") == "SALES_PRICE" and d.get("min") and not je_einheit(d)]
+    verkauf = [d for d in alle_verkauf if not ab_menge(d)] or alle_verkauf
     spezial = [d for d in deals if d.get("type") == "SPECIAL_PRICE" and d.get("min")]
+    spezial += [d for d in alle_verkauf if d not in verkauf]
     normal = [d.get("max") or d.get("min") for d in deals
               if d.get("type") in ("REGULAR_PRICE", "RECOMMENDED_RETAIL_PRICE") and (d.get("max") or d.get("min"))]
-    bed = lambda d: " ".join(c.get("other") or "" for c in d.get("conditions", []))
     app = [d for d in spezial if re.search(r"app|plus", bed(d), re.I)]
     staffel = [d for d in spezial if re.search(r"\bab\b|für", bed(d), re.I) and d not in app]
     preis = min((d["min"] for d in verkauf), default=None)
