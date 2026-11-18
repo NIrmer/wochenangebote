@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Restaurants · Noah & Helen</title>
+<meta name="description" content="Unsere Restaurant-Liste für Braunschweig: ausprobieren, bewerten, Favoriten.">
+<meta name="theme-color" content="#f4ece6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#120f14" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Restaurants">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BD%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<style>
+:root {
+  --text: #1c1917; --muted: #6b625c; --faint: #a39a93;
+  --glass: rgba(255, 255, 255, .52); --glass-strong: rgba(255, 255, 255, .72);
+  --glass-line: rgba(255, 255, 255, .75); --glass-edge: rgba(0, 0, 0, .06);
+  --shadow: 0 10px 40px rgba(60, 30, 10, .14), 0 2px 8px rgba(60, 30, 10, .06);
+  --accent: #ff5a36; --accent2: #ff2d55; --gold: #ffb800; --ok: #1f9d55; --warn: #d97706; --bad: #dc2626;
+  --noah: #0a84ff; --helen: #ff375f;
+  --blob1: #ffb38a; --blob2: #ff7aa2; --blob3: #ffd27a; --blob4: #9ad0ff; --bg: #f4ece6;
+  --r: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f5f2ef; --muted: #b3aaa3; --faint: #776f69;
+    --glass: rgba(40, 34, 40, .48); --glass-strong: rgba(48, 42, 50, .72);
+    --glass-line: rgba(255, 255, 255, .14); --glass-edge: rgba(255, 255, 255, .06);
+    --shadow: 0 10px 40px rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .3);
+    --blob1: #7a2e14; --blob2: #6b1d43; --blob3: #6b4a0a; --blob4: #123b66; --bg: #120f14;
+  }
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); overflow-x: hidden;
+  font: 16px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+body.locked { overflow: hidden; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+
+/* ---------- lebendiger Hintergrund ---------- */
+.bg { position: fixed; inset: -20vmax; z-index: -1; filter: blur(60px) saturate(140%); opacity: .9; pointer-events: none; }
+.bg i { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; mix-blend-mode: normal; }
+.bg i:nth-child(1) { background: radial-gradient(circle, var(--blob1) 0, transparent 65%); left: 0; top: 0; animation: drift1 26s ease-in-out infinite alternate; }
+.bg i:nth-child(2) { background: radial-gradient(circle, var(--blob2) 0, transparent 65%); right: 0; top: 10vmax; animation: drift2 32s ease-in-out infinite alternate; }
+.bg i:nth-child(3) { background: radial-gradient(circle, var(--blob3) 0, transparent 65%); left: 15vmax; bottom: 0; animation: drift3 29s ease-in-out infinite alternate; }
+.bg i:nth-child(4) { background: radial-gradient(circle, var(--blob4) 0, transparent 60%); right: 5vmax; bottom: 10vmax; opacity: .7; animation: drift1 35s ease-in-out infinite alternate-reverse; }
+@keyframes drift1 { to { transform: translate(18vmax, 12vmax) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-16vmax, 18vmax) scale(.9); } }
+@keyframes drift3 { to { transform: translate(12vmax, -16vmax) scale(1.1); } }
+@media (prefers-reduced-motion: reduce) { .bg i { animation: none !important; } }
+
+/* ---------- Liquid Glass ---------- */
+.glass {
+  position: relative; background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(185%); backdrop-filter: blur(28px) saturate(185%);
+  border: 1px solid var(--glass-line); box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 var(--glass-edge);
+}
+.glass::before { /* spiegelnde Kante */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.18) 100%);
+  mix-blend-mode: soft-light;
+}
+@media (prefers-color-scheme: dark) { .glass { box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.12); } }
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 16px calc(120px + env(safe-area-inset-bottom)); }
+
+/* ---------- Kopf ---------- */
+header { padding: calc(18px + env(safe-area-inset-top)) 0 6px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.eyebrow { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+h1 { margin: 2px 0 0; font-size: 34px; line-height: 1.05; letter-spacing: -.03em; font-weight: 800; }
+h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hbtns { display: flex; gap: 8px; padding-bottom: 2px; }
+.cbtn { width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; font-size: 20px; }
+.cbtn[aria-pressed="true"] { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+.cbtn:active, .pbtn:active, .card:active { transform: scale(.97); }
+.cbtn, .pbtn, .card, .chip, .tab { transition: transform .18s cubic-bezier(.3,.7,.4,1.4), background .2s, box-shadow .2s; }
+
+/* ---------- Statistik ---------- */
+.stats { margin-top: 14px; border-radius: var(--r); padding: 14px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; }
+.stats b { display: block; font-size: 22px; letter-spacing: -.02em; line-height: 1.1; }
+.stats span { font-size: 11px; color: var(--muted); font-weight: 600; }
+.stats .n b { color: var(--noah); } .stats .h b { color: var(--helen); }
+.stats .duel { grid-column: 1 / -1; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--glass-line); font-size: 13px; color: var(--muted); text-align: left; }
+.stats .duel:empty { display: none; }
+.stats .duel b { display: inline; font-size: inherit; color: var(--text); letter-spacing: 0; }
+
+/* ---------- Suche & Filter ---------- */
+.controls { position: sticky; top: -1px; z-index: 10; margin: 12px -16px 0; padding: 8px 16px 8px; transition: padding .2s; }
+.controls.stuck { padding-top: calc(8px + env(safe-area-inset-top)); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); background: color-mix(in srgb, var(--bg) 55%, transparent); }
+.search { display: flex; align-items: center; gap: 8px; border-radius: 16px; padding: 0 12px; height: 44px; }
+.search svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: var(--text); }
+.search input::placeholder { color: var(--muted); }
+.chips { display: flex; gap: 6px; overflow-x: auto; margin: 4px -16px -8px; padding: 8px 16px 14px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; border: 0; border-radius: 999px; padding: 7px 12px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 3px 10px rgba(60,30,10,.08), inset 0 1px 0 rgba(255,255,255,.55); }
+.chip[aria-pressed="true"] { background: var(--text); color: var(--bg); box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.chip[aria-pressed="true"]::before { display: none; }
+.sortrow { display: flex; justify-content: space-between; align-items: center; margin: 12px 2px 8px; gap: 10px; }
+.count { font-size: 13px; color: var(--muted); font-weight: 600; }
+.seg { display: inline-flex; border-radius: 12px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: none; border-radius: 9px; padding: 5px 10px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--glass-strong); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+
+/* ---------- Karten ---------- */
+.list { display: grid; gap: 14px; }
+@media (min-width: 640px) { .list { grid-template-columns: 1fr 1fr; } }
+.card { border-radius: var(--r); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+.cover { position: relative; height: 150px; background: var(--c, #888); overflow: hidden; }
+.cover .art { position: absolute; inset: 0; background:
+  radial-gradient(120% 90% at 85% 10%, rgba(255,255,255,.35), transparent 55%),
+  radial-gradient(90% 80% at 0% 100%, rgba(0,0,0,.35), transparent 60%),
+  linear-gradient(135deg, color-mix(in srgb, var(--c) 80%, #fff 20%), color-mix(in srgb, var(--c) 70%, #000 30%)); }
+.cover .emo { position: absolute; right: 14px; bottom: -14px; font-size: 96px; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,.3)); transform: rotate(-8deg); }
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s; }
+.cover img.on { opacity: 1; }
+.cover .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.0) 40%, rgba(0,0,0,.45)); }
+.badges { position: absolute; left: 10px; top: 10px; right: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+.bdg { font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 999px; color: #fff;
+  background: rgba(0,0,0,.28); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border: 1px solid rgba(255,255,255,.28); }
+.bdg.fav { background: rgba(255, 184, 0, .85); color: #3a2a00; }
+.bdg.open { background: rgba(31, 157, 85, .85); } .bdg.soon { background: rgba(217, 119, 6, .9); } .bdg.closed { background: rgba(0,0,0,.4); }
+.bdg.rank { background: linear-gradient(135deg, #ffd34d, #ff9f0a); color: #3a2400; }
+.scorepill { position: absolute; right: 10px; bottom: 10px; font-weight: 800; font-size: 15px; padding: 5px 10px; border-radius: 14px; color: #fff;
+  background: rgba(0,0,0,.3); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.3); }
+.body { padding: 12px 14px 14px; }
+.name { font-size: 19px; font-weight: 750; letter-spacing: -.02em; line-height: 1.2; }
+.sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.rates { display: flex; gap: 8px; margin-top: 10px; }
+.rate { flex: 1; border-radius: 14px; padding: 7px 10px; background: color-mix(in srgb, var(--who) 12%, transparent); }
+.rate small { display: block; font-size: 11px; font-weight: 700; color: var(--who); }
+.stars { font-size: 14px; letter-spacing: 1px; color: var(--gold); white-space: nowrap; }
+.stars .off { color: color-mix(in srgb, var(--faint) 50%, transparent); }
+.rate .none { font-size: 12px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; margin-top: 10px; font-size: 12px; color: var(--muted); font-weight: 600; row-gap: 2px; }
+.meta span { white-space: nowrap; } .meta span + span::before { content: "·"; margin: 0 6px; }
+.empty { text-align: center; padding: 40px 20px; border-radius: var(--r); color: var(--muted); }
+.empty b { display: block; font-size: 40px; margin-bottom: 6px; }
+
+/* ---------- Karte (Map) ---------- */
+#mapwrap { border-radius: var(--r); overflow: hidden; height: calc(100vh - 280px); min-height: 380px; }
+#map { width: 100%; height: 100%; }
+.pin { width: 44px; height: 44px; border-radius: 50% 50% 50% 4px; transform: rotate(-45deg); display: grid; place-items: center;
+  background: var(--c); border: 3px solid #fff; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.pin span { transform: rotate(45deg); font-size: 22px; }
+.leaflet-container { font: inherit; background: transparent; }
+.darktiles { filter: invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.6); }
+.leaflet-control-attribution { font-size: 10px; }
+
+/* ---------- Tab-Leiste ---------- */
+.tabbar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 20;
+  display: flex; gap: 2px; padding: 5px; border-radius: 30px; width: min(440px, calc(100vw - 24px)); }
+.tab { flex: 1; border: 0; background: none; border-radius: 24px; padding: 6px 4px 5px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; color: var(--muted); }
+.tab b { font-size: 21px; line-height: 1.1; filter: grayscale(.6); opacity: .8; }
+.tab span { font-size: 11px; font-weight: 650; }
+.tab[aria-selected="true"] { background: var(--glass-strong); color: var(--text); box-shadow: 0 2px 10px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.6); }
+.tab[aria-selected="true"] b { filter: none; opacity: 1; }
+
+/* ---------- Bottom Sheet ---------- */
+.scrim { position: fixed; inset: 0; z-index: 40; background: rgba(10, 6, 4, .35); opacity: 0; pointer-events: none; transition: opacity .3s; }
+.scrim.on { opacity: 1; pointer-events: auto; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; margin: 0 auto; max-width: 720px; max-height: calc(100vh - env(safe-area-inset-top) - 24px);
+  border-radius: 30px 30px 0 0; transform: translateY(105%); transition: transform .42s cubic-bezier(.2, .9, .25, 1); display: flex; flex-direction: column;
+  background: var(--glass-strong); }
+.sheet { visibility: hidden; transform: translateY(calc(100% + 60px)); transition: transform .42s cubic-bezier(.2, .9, .25, 1), visibility 0s .42s; }
+.sheet.on { visibility: visible; transform: translateY(0); transition: transform .42s cubic-bezier(.2, .9, .25, 1); }
+.sheet .grab { padding: 8px 0 4px; display: grid; place-items: center; cursor: grab; flex: none; touch-action: none; }
+.sheet .grab i { width: 40px; height: 5px; border-radius: 3px; background: var(--faint); }
+.sheet .scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(24px + env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+.sx { position: absolute; right: 14px; top: 12px; z-index: 3; width: 34px; height: 34px; border-radius: 50%; border: 0; font-size: 16px; cursor: pointer; display: grid; place-items: center; }
+
+.hero { position: relative; border-radius: 22px; overflow: hidden; height: 210px; background: var(--c); margin-top: 4px; }
+.hero .art, .hero .emo { position: absolute; }
+.hero .art { inset: 0; background:
+  radial-gradient(120% 90% at 85% 10%, rgba(255,255,255,.35), transparent 55%),
+  linear-gradient(135deg, color-mix(in srgb, var(--c) 80%, #fff 20%), color-mix(in srgb, var(--c) 70%, #000 30%)); }
+.hero .emo { right: 18px; bottom: -20px; font-size: 130px; transform: rotate(-8deg); filter: drop-shadow(0 12px 24px rgba(0,0,0,.3)); }
+.gallery { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.gallery::-webkit-scrollbar { display: none; }
+.gallery figure { margin: 0; flex: 0 0 100%; height: 100%; scroll-snap-align: center; position: relative; }
+.gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 10px; color: #fff; background: rgba(0,0,0,.4); padding: 2px 6px; border-radius: 6px; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gallery figcaption a { text-decoration: none; }
+.gcount { position: absolute; right: 10px; bottom: 10px; }
+.s-title { margin: 14px 2px 2px; font-size: 26px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+.s-sub { margin: 4px 2px 0; color: var(--muted); font-size: 14px; }
+.s-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.s-chips span { font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--text) 7%, transparent); }
+.s-chips .warn { background: color-mix(in srgb, var(--bad) 15%, transparent); color: var(--bad); }
+
+.actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
+.pbtn { border: 0; border-radius: 18px; padding: 10px 4px 9px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; font-size: 12px; font-weight: 650; text-align: center; }
+.pbtn b { font-size: 22px; line-height: 1; }
+.pbtn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: 0; }
+.pbtn.primary::before { display: none; }
+.pbtn.dis { opacity: .4; pointer-events: none; }
+
+.sec { margin-top: 14px; border-radius: 20px; padding: 14px; }
+.sec h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+.sec h3 a { text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 700; }
+.big-rates { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center; }
+.big-rates div { border-radius: 16px; padding: 10px 4px; background: color-mix(in srgb, var(--who, var(--gold)) 12%, transparent); }
+.big-rates b { display: block; font-size: 26px; letter-spacing: -.02em; color: var(--who, var(--text)); }
+.big-rates small { font-size: 12px; font-weight: 700; color: var(--muted); }
+.big-rates .stars { font-size: 12px; }
+.note { margin-top: 10px; font-size: 14px; padding: 10px 12px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 14%, transparent); }
+.rate-cta { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; padding: 11px; border-radius: 14px; text-decoration: none; font-weight: 700; font-size: 14px;
+  background: var(--text); color: var(--bg); }
+.hl { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.hl li { display: flex; gap: 10px; font-size: 15px; line-height: 1.35; }
+.hl li::before { content: "✦"; color: var(--accent); flex: none; }
+.loc { padding: 10px 0; border-top: 1px solid var(--glass-line); }
+.loc:first-of-type { border-top: 0; padding-top: 0; }
+.loc .l1 { font-weight: 700; display: flex; justify-content: space-between; gap: 8px; }
+.loc .l2 { font-size: 14px; color: var(--muted); margin-top: 2px; }
+.loc .dist { font-size: 13px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.hours { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+.hours td { padding: 4px 0; } .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+.hours tr.today td { font-weight: 800; }
+.hours tr.today td:first-child::after { content: " · heute"; color: var(--accent); font-weight: 700; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.mapframe { width: 100%; height: 200px; border: 0; border-radius: 14px; margin-top: 10px; background: color-mix(in srgb, var(--text) 6%, transparent); }
+.links { display: grid; gap: 8px; }
+.links a { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 14px; text-decoration: none; font-weight: 650; font-size: 15px;
+  background: color-mix(in srgb, var(--text) 5%, transparent); }
+.links a span { flex: 1; } .links a i { font-style: normal; color: var(--faint); }
+.links a b { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 17px; background: var(--glass-strong); }
+.review { padding: 10px 0; border-top: 1px solid var(--glass-line); font-size: 14px; }
+.review:first-of-type { border-top: 0; padding-top: 0; }
+.review .who { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; }
+.review .who img { width: 24px; height: 24px; border-radius: 50%; }
+.review .who small { color: var(--muted); font-weight: 600; }
+.review p { margin: 6px 0 0; color: color-mix(in srgb, var(--text) 85%, transparent); }
+.gattr { font-size: 11px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+.extern { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.extern b { font-size: 22px; }
+
+/* ---------- Zufall ---------- */
+.dice { text-align: center; padding: 6px 4px 4px; }
+.dice h2 { margin: 6px 0 4px; font-size: 24px; letter-spacing: -.02em; }
+.dice p { margin: 0; color: var(--muted); font-size: 14px; }
+.slot { margin: 18px auto 14px; height: 120px; border-radius: 24px; display: grid; place-items: center; overflow: hidden; position: relative; }
+.slot .v { font-size: 26px; font-weight: 800; letter-spacing: -.02em; padding: 0 16px; }
+.slot .v small { display: block; font-size: 14px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+.slot .v.spin { animation: blur .09s linear infinite; }
+@keyframes blur { 0% { transform: translateY(-6px); filter: blur(2px); } 100% { transform: translateY(6px); filter: blur(2px); } }
+.slot .v.land { animation: land .5s cubic-bezier(.2,1.6,.4,1); }
+@keyframes land { from { transform: scale(.7); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+.dice .seg { margin-top: 12px; }
+.go { width: 100%; border: 0; border-radius: 18px; padding: 15px; font-size: 17px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 40%, transparent); }
+.go.sec2 { background: var(--text); color: var(--bg); box-shadow: none; margin-top: 8px; }
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 10px 14px; border-radius: 16px; font-weight: 650; font-size: 15px; cursor: pointer; }
+.sw { position: relative; width: 50px; height: 30px; border-radius: 999px; background: color-mix(in srgb, var(--muted) 40%, transparent); transition: background .2s; flex: none; }
+.sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3); transition: transform .25s cubic-bezier(.3,.7,.4,1.4); }
+.toggle[aria-checked="true"] .sw { background: #34c759; }
+.toggle[aria-checked="true"] .sw::after { transform: translateX(20px); }
+
+.toast { position: fixed; left: 50%; bottom: calc(100px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px); z-index: 60; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 650; opacity: 0; pointer-events: none; transition: .3s; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 26px; line-height: 1.6; }
+footer a { color: var(--muted); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow" id="eyebrow">Noah &amp; Helen · Braunschweig</div>
+      <h1>Unsere <em>Restaurants</em></h1>
+    </div>
+    <div class="hbtns">
+      <button class="cbtn glass" id="locbtn" aria-pressed="false" aria-label="Entfernung anzeigen" title="Entfernung anzeigen">📍</button>
+      <button class="cbtn glass" id="dicebtn" aria-label="Zufall: Wo essen wir heute?" title="Wo essen wir heute?">🎲</button>
+    </div>
+  </header>
+
+  <section class="stats glass" id="stats" aria-label="Statistik"></section>
+
+  <div class="controls" id="controls">
+    <label class="search glass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Restaurant, Küche, Gericht …" autocomplete="off" enterkeyhint="search">
+    </label>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="sortrow" id="sortrow">
+    <div class="count" id="count"></div>
+    <div class="seg glass" id="sortseg" role="group" aria-label="Sortieren">
+      <button data-sort="score">Ø</button><button data-sort="dist">Nähe</button><button data-sort="name">A–Z</button>
+    </div>
+  </div>
+
+  <main id="list" class="list" aria-live="polite"></main>
+  <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div></div></section>
+
+  <footer id="footer"></footer>
+</div>
+
+<nav class="tabbar glass" role="tablist" aria-label="Ansichten">
+  <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
+  <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
+  <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
+  <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-label="Details">
+  <div class="grab" id="grab"><i></i></div>
+  <button class="sx glass" id="sx" aria-label="Schließen">✕</button>
+  <div class="scroll" id="sheetbody"></div>
+</div>
+<div class="toast glass" id="toast"></div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const WT = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const KUECHE_EMO = { Italienisch: "🍕", Türkisch: "🧆", Griechisch: "🫒", Argentinisch: "🥩", Deutsch: "🍺", Asiatisch: "🥢" };
+const FARBEN = ["#ff6b35", "#7b61ff", "#00a389", "#e0457b", "#2f80ed", "#c27c0e"];
+
+let D = null, CFG = {}, G = {};          // Daten, Konfiguration, Google-Ergebnisse je id
+const st = { tab: "ranking", q: "", chips: new Set(), sort: "score", pos: null, open: null };
+try { Object.assign(st, JSON.parse(localStorage.getItem("rs-state") || "{}"), { open: null, chips: new Set(JSON.parse(localStorage.getItem("rs-chips") || "[]")) }); } catch (e) {}
+const save = () => { try { localStorage.setItem("rs-state", JSON.stringify({ tab: st.tab, sort: st.sort })); localStorage.setItem("rs-chips", JSON.stringify([...st.chips])); } catch (e) {} };
+
+/* ---------- Hilfen ---------- */
+const det = r => r.details || {};
+const color = (r, i) => det(r).farbe || FARBEN[i % FARBEN.length];
+const emoji = r => det(r).emoji || KUECHE_EMO[r.kueche] || "🍽️";
+const avg = r => { const v = [r.noah, r.helen].filter(Boolean); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+const fmt1 = n => n == null ? "–" : n.toFixed(1).replace(".", ",");
+const starHtml = n => `<span class="stars">${"★".repeat(n || 0)}<span class="off">${"★".repeat(5 - (n || 0))}</span></span>`;
+const locs = r => det(r).standorte || [];
+const toast = t => { const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); };
+
+function berlinNow() {   // Wochentag + Minuten in Europe/Berlin, unabhängig vom Gerät
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Berlin", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday), min: (+p.hour) * 60 + (+p.minute) };
+}
+const toMin = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+
+function zeitenOf(r, l) { return (G[r.id] && G[r.id].zeiten) || l.zeiten || null; }   // Google gewinnt, falls vorhanden
+
+const WK = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+function statusOf(r) {    // offen/zu über alle Standorte; sonst nächste Öffnung
+  const n = berlinNow(), now = n.day * 1440 + n.min; let next = null, known = false;
+  for (const l of locs(r)) {
+    const z = zeitenOf(r, l); if (!z) continue; known = true;
+    for (let d = 0; d < 7; d++) for (const [a, b] of z[d] || []) {
+      const s = toMin(a), e0 = toMin(b), e = e0 <= s ? e0 + 1440 : e0;
+      for (const w of [-7, 0, 7]) {                       // Wochenwechsel abdecken
+        const S = (d + w) * 1440 + s, E = (d + w) * 1440 + e;
+        if (now >= S && now < E) { const left = E - now; return { k: left <= 45 ? "soon" : "open", t: left <= 45 ? `Schließt um ${b}` : `Geöffnet bis ${b}` }; }
+        if (S > now && (!next || S < next.S)) next = { S, a, d };
+      }
+    }
+  }
+  if (!known) return null;
+  if (!next) return { k: "closed", t: "Geschlossen" };
+  const tage = Math.floor(next.S / 1440) - n.day;
+  return { k: "closed", t: tage === 0 ? `Öffnet ${next.a}` : tage === 1 ? `Morgen ab ${next.a}` : `${WK[next.d]} ab ${next.a}` };
+}
+const isOpen = r => { const s = statusOf(r); return s && (s.k === "open" || s.k === "soon"); };
+
+function km(a, b) {
+  const R = 6371, dLa = (b.lat - a.lat) * Math.PI / 180, dLo = (b.lng - a.lng) * Math.PI / 180;
+  const x = Math.sin(dLa / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+function distOf(r) { if (!st.pos) return null; const d = locs(r).filter(l => l.lat).map(l => km(st.pos, l)); return d.length ? Math.min(...d) : null; }
+const distTxt = d => d == null ? "" : (d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1).replace(".", ",")} km`);
+const wegTxt = d => { if (d == null) return ""; const f = Math.round(d / 4.8 * 60), r = Math.round(d / 15 * 60); return d < 2.5 ? `${f} min zu Fuß` : `${Math.max(r, 1)} min Rad`; };
+
+function routeUrl(l) {
+  const q = encodeURIComponent(l.adresse);
+  return IOS ? `https://maps.apple.com/?daddr=${q}&dirflg=d` : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+}
+const gmapsUrl = r => (G[r.id] && G[r.id].url) || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(det(r).google_query || r.name + " Braunschweig")}`;
+
+/* ---------- Filter ---------- */
+const CHIPS = [
+  { k: "offen", l: "🟢 Jetzt offen", f: r => isOpen(r) },
+  { k: "vegan", l: "🌱 Vegan", f: r => (det(r).tags || []).some(t => /vegan/i.test(t)) },
+  { k: "liefer", l: "🛵 Lieferung", f: r => !!(det(r).links || {}).bestellen || (det(r).tags || []).some(t => /liefer/i.test(t)) },
+  { k: "protein", l: "💪 Protein", f: r => /steak|argent|grill/i.test(`${r.kueche} ${det(r).kueche_detail} ${(det(r).tags || []).join(" ")}`) },
+];
+function kuechen() { return [...new Set(D.restaurants.map(r => r.kueche).filter(Boolean))].sort(); }
+
+function filtered(tab = st.tab) {
+  const q = st.q.trim().toLowerCase();
+  return D.restaurants.filter(r => {
+    if (tab === "neu" && r.liste === "Favorit") return false;
+    if (tab === "fav" && r.liste !== "Favorit") return false;
+    for (const c of st.chips) {
+      const def = CHIPS.find(x => x.k === c);
+      if (def ? !def.f(r) : r.kueche !== c.slice(2)) return false;
+    }
+    if (q) {
+      const d = det(r), hay = [r.name, r.kueche, r.notiz, d.voller_name, d.kueche_detail, d.untertitel, ...(d.highlights || []), ...(d.tags || []), ...locs(r).map(l => l.adresse + " " + l.stadtteil)].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+function sorted(list) {
+  const s = st.tab === "ranking" ? "score" : st.sort;
+  const by = {
+    score: (a, b) => (avg(b) ?? -1) - (avg(a) ?? -1) || ((G[b.id]?.rating ?? det(b).extern?.wert ?? 0) - (G[a.id]?.rating ?? det(a).extern?.wert ?? 0)) || a.name.localeCompare(b.name, "de"),
+    dist: (a, b) => (distOf(a) ?? 1e9) - (distOf(b) ?? 1e9),
+    name: (a, b) => a.name.localeCompare(b.name, "de"),
+  };
+  return list.slice().sort(by[s] || by.score);
+}
+
+/* ---------- Rendern ---------- */
+function renderStats() {
+  const R = D.restaurants, rated = R.filter(r => avg(r) != null);
+  const mean = k => { const v = R.map(r => r[k]).filter(Boolean); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const both = R.filter(r => r.noah && r.helen);
+  let duel = "";
+  if (both.length) {
+    const einig = both.filter(r => Math.abs(r.noah - r.helen) <= 1).length;
+    const streit = both.slice().sort((a, b) => Math.abs(b.noah - b.helen) - Math.abs(a.noah - a.helen))[0];
+    duel = `🤝 Bei ${einig} von ${both.length} seid ihr euch einig (±1★)` +
+      (streit && Math.abs(streit.noah - streit.helen) >= 2 ? ` · größter Streitfall: <b>${esc(streit.name)}</b>` : "");
+  } else duel = `✨ Nach dem nächsten Besuch in Notion bewerten – hier erscheint dann euer Ranking.`;
+  $("stats").innerHTML = `
+    <div><b>${R.length}</b><span>Restaurants</span></div>
+    <div><b>${rated.length}</b><span>bewertet</span></div>
+    <div class="n"><b>${fmt1(mean("noah"))}</b><span>Ø Noah</span></div>
+    <div class="h"><b>${fmt1(mean("helen"))}</b><span>Ø Helen</span></div>
+    <div class="duel">${duel}</div>`;
+}
+
+function renderChips() {
+  const k = kuechen().map(x => ({ k: "k:" + x, l: `${KUECHE_EMO[x] || "🍽️"} ${x}` }));
+  $("chips").innerHTML = [...CHIPS, ...k].map(c => `<button class="chip glass" data-chip="${esc(c.k)}" aria-pressed="${st.chips.has(c.k)}">${esc(c.l)}</button>`).join("");
+}
+
+function card(r, i, rank) {
+  const s = statusOf(r), a = avg(r), d = distOf(r), dd = det(r), g = G[r.id];
+  const photo = g && g.photos && g.photos[0];
+  const bad = g && g.status && g.status !== "OPERATIONAL";
+  const badges = [];
+  if (rank && a != null) badges.push(`<span class="bdg rank">#${rank}</span>`);
+  if (r.liste === "Favorit") badges.push(`<span class="bdg fav">❤️ Favorit</span>`);
+  if (bad) badges.push(`<span class="bdg closed">⚠️ ${g.status === "CLOSED_PERMANENTLY" ? "Dauerhaft geschlossen" : "Vorübergehend zu"}</span>`);
+  else if (s) badges.push(`<span class="bdg ${s.k}">${esc(s.t)}</span>`);
+  const ext = g?.rating ?? dd.extern?.wert;
+  const rate = (who, n, c) => `<div class="rate" style="--who:${c}"><small>${who}</small>${n ? starHtml(n) : `<span class="none">noch offen</span>`}</div>`;
+  const meta = [dd.kueche_detail || r.kueche, dd.preis, locs(r).length > 1 ? `${locs(r).length} Standorte` : (locs(r)[0]?.stadtteil)].filter(Boolean);
+  return `<article class="card glass" data-id="${r.id}" tabindex="0" role="button" aria-label="${esc(r.name)} öffnen" style="--c:${color(r, i)}">
+    <div class="cover"><div class="art"></div><div class="emo">${emoji(r)}</div>
+      ${photo ? `<img alt="" loading="lazy" decoding="async" src="${esc(photo.url)}" onload="this.classList.add('on')">` : ""}
+      <div class="shade"></div>
+      <div class="badges">${badges.join("")}</div>
+      ${a != null ? `<div class="scorepill">Ø ${fmt1(a)} ★</div>` : ext ? `<div class="scorepill" title="externe Bewertung">${fmt1(ext)} ★ ext.</div>` : ""}
+    </div>
+    <div class="body">
+      <div class="name">${esc(r.name)}</div>
+      <div class="sub">${esc(dd.untertitel || (r.details ? "" : "Details folgen – vollen Namen in Notion ergänzen"))}</div>
+      <div class="rates">${rate("Noah", r.noah, "var(--noah)")}${rate("Helen", r.helen, "var(--helen)")}</div>
+      <div class="meta">${[...meta.map(esc), d != null ? `📍 ${distTxt(d)}` : ""].filter(Boolean).map(x => `<span>${x}</span>`).join("")}</div>
+    </div>
+  </article>`;
+}
+
+function render() {
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === st.tab));
+  document.querySelectorAll("#sortseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.sort === st.sort));
+  document.querySelectorAll("[data-chip]").forEach(b => b.setAttribute("aria-pressed", st.chips.has(b.dataset.chip)));
+  $("sortseg").hidden = st.tab === "ranking" || st.tab === "karte";
+  const map = st.tab === "karte";
+  $("mapview").hidden = !map; $("list").hidden = map;
+  const list = sorted(filtered(map ? "alle" : st.tab));
+  let L = list;
+  if (st.tab === "ranking") L = list.filter(r => avg(r) != null);
+  $("count").textContent = map ? `${list.length} auf der Karte` : st.tab === "ranking" ? (L.length ? `${L.length} bewertet · nach Ø von euch beiden` : "") : `${L.length} ${L.length === 1 ? "Restaurant" : "Restaurants"}`;
+  if (map) { showMap(list); return; }
+  if (!L.length) {
+    const e = st.tab === "ranking" && !st.q && !st.chips.size
+      ? `<b>🏆</b>Noch keine Bewertungen.<br>Nach dem Essen in Notion Sterne vergeben – dann steht hier euer Ranking.<div style="margin-top:14px"><a class="rate-cta" href="${esc(D.notion)}" target="_blank" rel="noopener">In Notion öffnen ↗</a></div>`
+      : `<b>🔍</b>Nichts gefunden. Filter oder Suche anpassen.`;
+    $("list").innerHTML = `<div class="empty glass">${e}</div>`; return;
+  }
+  $("list").innerHTML = L.map((r, i) => card(r, D.restaurants.indexOf(r), st.tab === "ranking" ? i + 1 : 0)).join("");
+}
+
+/* ---------- Detail-Sheet ---------- */
+function hoursTable(r, l) {
+  const z = zeitenOf(r, l), n = berlinNow();
+  const g = G[r.id];
+  if (!z) return `<div class="hint">${esc(l.zeiten_hinweis || "Öffnungszeiten unbekannt.")} <a href="${esc(gmapsUrl(r))}" target="_blank" rel="noopener">Bei Google prüfen ↗</a></div>`;
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  return `<table class="hours">${order.map(d => `<tr class="${d === n.day ? "today" : ""}"><td>${WT[d]}</td><td>${(z[d] || []).length ? z[d].map(([a, b]) => `${a}–${b === "24:00" ? "24:00" : b}`).join(", ") : "geschlossen"}</td></tr>`).join("")}</table>
+    <div class="hint">${g && g.zeiten ? "Live von Google." : esc(l.zeiten_hinweis || "")}</div>`;
+}
+
+function openSheet(id, push = true) {
+  const r = D.restaurants.find(x => x.id === id); if (!r) return;
+  st.open = id;
+  const i = D.restaurants.indexOf(r), dd = det(r), lk = dd.links || {}, g = G[r.id] || {}, s = statusOf(r), a = avg(r), L = locs(r);
+  const tel = L.find(l => l.telefon)?.telefon || g.tel;
+  const web = lk.website || g.web;
+  const photos = g.photos || [];
+  const chips = [];
+  if (g.status && g.status !== "OPERATIONAL") chips.push(`<span class="warn">⚠️ ${g.status === "CLOSED_PERMANENTLY" ? "Laut Google dauerhaft geschlossen" : "Laut Google vorübergehend geschlossen"}</span>`);
+  if (s) chips.push(`<span style="color:${s.k === "open" ? "var(--ok)" : s.k === "soon" ? "var(--warn)" : "var(--muted)"}">${s.k === "closed" ? "⏾" : "●"} ${esc(s.t)}</span>`);
+  if (dd.preis) chips.push(`<span>${esc(dd.preis)}</span>`);
+  (dd.tags || []).forEach(t => chips.push(`<span>${esc(t)}</span>`));
+
+  const act = (emo, label, href, cls = "") => href
+    ? `<a class="pbtn glass ${cls}" href="${esc(href)}" ${href.startsWith("tel:") ? "" : 'target="_blank" rel="noopener"'}><b>${emo}</b>${label}</a>`
+    : `<span class="pbtn glass dis"><b>${emo}</b>${label}</span>`;
+  const linkRow = (emo, label, href, sub = "") => href ? `<a href="${esc(href)}" target="_blank" rel="noopener"><b>${emo}</b><span>${label}${sub ? `<br><small style="color:var(--muted);font-weight:500">${esc(sub)}</small>` : ""}</span><i>↗</i></a>` : "";
+
+  const ext = g.rating != null ? { wert: g.rating, anzahl: g.count, quelle: "Google · live" } : dd.extern;
+  const reviews = (g.reviews || []).slice(0, 3);
+
+  $("sheetbody").innerHTML = `
+    <div class="hero" style="--c:${color(r, i)}"><div class="art"></div><div class="emo">${emoji(r)}</div>
+      ${photos.length ? `<div class="gallery" id="gal">${photos.map(p => `<figure><img src="${esc(p.url)}" alt="" loading="lazy">${p.attr ? `<figcaption>📷 ${p.attr}</figcaption>` : ""}</figure>`).join("")}</div>
+      <span class="bdg gcount" id="gcount">1 / ${photos.length}</span>` : ""}
+    </div>
+    <h2 class="s-title">${esc(dd.voller_name || r.name)}</h2>
+    <p class="s-sub">${esc([dd.kueche_detail || r.kueche, dd.untertitel].filter(Boolean).join(" · ") || "Noch keine Details recherchiert.")}</p>
+    <div class="s-chips">${chips.join("")}</div>
+
+    <div class="actions">
+      ${act("🧭", "Route", L[0] ? routeUrl(L[0]) : "", "primary")}
+      ${act("📞", "Anrufen", tel ? "tel:" + tel.replace(/\s/g, "") : "")}
+      ${act("📖", "Karte", lk.speisekarte || (r.details ? "" : gmapsUrl(r)))}
+      ${act(lk.reservieren ? "📅" : lk.bestellen ? "🛵" : "🌐", lk.reservieren ? "Tisch" : lk.bestellen ? "Bestellen" : "Website", lk.reservieren || lk.bestellen || web || "")}
+    </div>
+
+    <section class="sec glass">
+      <h3>Eure Bewertung <a href="${esc(r.notion_url)}" target="_blank" rel="noopener">Bearbeiten ↗</a></h3>
+      <div class="big-rates">
+        <div style="--who:var(--noah)"><small>Noah</small><b>${r.noah ?? "–"}</b>${starHtml(r.noah)}</div>
+        <div style="--who:var(--helen)"><small>Helen</small><b>${r.helen ?? "–"}</b>${starHtml(r.helen)}</div>
+        <div><small>Ø</small><b>${fmt1(a)}</b>${starHtml(Math.round(a || 0))}</div>
+      </div>
+      ${r.notiz ? `<div class="note">📝 ${esc(r.notiz)}</div>` : ""}
+      ${a == null ? `<a class="rate-cta" href="${esc(r.notion_url)}" target="_blank" rel="noopener">⭐ Jetzt in Notion bewerten</a>` : ""}
+    </section>
+
+    ${(dd.highlights || []).length ? `<section class="sec glass"><h3>Highlights</h3><ul class="hl">${dd.highlights.map(h => `<li>${esc(h)}</li>`).join("")}</ul>
+      ${dd.preis_hinweis ? `<div class="hint">💶 ${esc(dd.preis_hinweis)}</div>` : ""}</section>` : ""}
+
+    ${ext ? `<section class="sec glass"><h3>Andere Gäste</h3><div class="extern"><b>${fmt1(ext.wert)} ★</b><span>${ext.anzahl ? `${ext.anzahl.toLocaleString("de-DE")} Bewertungen · ` : ""}${esc(ext.quelle)}</span></div>
+      ${reviews.length ? `<div style="margin-top:12px">${reviews.map(v => `<div class="review"><div class="who">${v.photo ? `<img src="${esc(v.photo)}" alt="" referrerpolicy="no-referrer">` : "👤"}${v.uri ? `<a href="${esc(v.uri)}" target="_blank" rel="noopener">${esc(v.author)}</a>` : esc(v.author)} <small>${starHtml(v.rating)} · ${esc(v.when)}</small></div><p>${esc(v.text)}</p></div>`).join("")}</div>
+        <div class="gattr">Bewertungen von Google</div>` : ""}</section>` : ""}
+
+    ${L.map(l => {
+      const dd2 = st.pos && l.lat ? km(st.pos, l) : null;
+      return `<section class="sec glass"><h3>${esc(L.length > 1 ? l.label : "Adresse & Zeiten")}<a href="${esc(routeUrl(l))}" target="_blank" rel="noopener">Route ↗</a></h3>
+        <div class="loc"><div class="l1"><span>${esc(l.adresse)}</span>${dd2 != null ? `<span class="dist">${distTxt(dd2)}</span>` : ""}</div>
+        <div class="l2">${esc(l.stadtteil || "")}${dd2 != null ? ` · ${wegTxt(dd2)}` : ""}${l.telefon ? ` · <a href="tel:${esc(l.telefon)}">${esc(l.telefon)}</a>` : ""}</div></div>
+        ${hoursTable(r, l)}
+        <iframe class="mapframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Karte ${esc(l.label)}"
+          src="https://maps.google.com/maps?q=${encodeURIComponent(l.adresse)}&z=16&output=embed"></iframe>
+      </section>`;
+    }).join("")}
+
+    <section class="sec glass"><h3>Links</h3><div class="links">
+      ${linkRow("📸", "Fotos & Speisekarte bei Google", gmapsUrl(r), "Bilder, Karte, Stoßzeiten")}
+      ${linkRow("📖", "Speisekarte", lk.speisekarte)}
+      ${linkRow("🌐", "Website", web)}
+      ${linkRow("📅", "Tisch reservieren", lk.reservieren)}
+      ${linkRow("🛵", "Bestellen / Lieferung", lk.bestellen)}
+      ${linkRow("📷", "Instagram", lk.instagram)}
+      ${linkRow("🗒️", "In Notion öffnen", r.notion_url, "Bewerten, Notiz, Liste ändern")}
+      ${dd.parken ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Parken " + (L[0]?.adresse || ""))}" target="_blank" rel="noopener"><b>🅿️</b><span>${esc(dd.parken)}</span><i>↗</i></a>` : ""}
+      <a href="#" id="sharebtn"><b>📤</b><span>Teilen</span><i>›</i></a>
+    </div>
+    ${dd.hinweis ? `<div class="hint" style="margin-top:10px">ℹ️ ${esc(dd.hinweis)}</div>` : ""}
+    </section>`;
+  $("scrim").classList.add("on"); $("sheet").classList.add("on"); $("sheet").style.transform = "";
+  $("sheetbody").scrollTop = 0; document.body.classList.add("locked");
+  if (push) { history.pushState({ id }, "", "#" + id); st.pushed = true; }
+  const gal = $("gal");
+  if (gal) gal.addEventListener("scroll", () => { $("gcount").textContent = `${Math.round(gal.scrollLeft / gal.clientWidth) + 1} / ${gal.children.length}`; }, { passive: true });
+  $("sharebtn").addEventListener("click", e => {
+    e.preventDefault();
+    const url = location.href.split("#")[0] + "#" + id, text = `${dd.voller_name || r.name} – ${L[0]?.adresse || ""}`;
+    if (navigator.share) navigator.share({ title: r.name, text, url }).catch(() => {});
+    else navigator.clipboard?.writeText(url).then(() => toast("Link kopiert"));
+  });
+  if (CFG.google_maps_api_key && !G[r.id]) loadGoogle([r]).then(() => { if (st.open === id) openSheet(id, false); });
+}
+function closeSheet(pop = true) {
+  if (!st.open) return;
+  st.open = null; $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); $("sheet").style.transform = "";
+  document.body.classList.remove("locked");
+  if (pop && location.hash) { if (st.pushed) history.back(); else history.replaceState(null, "", location.pathname + location.search); }
+  st.pushed = false;
+}
+
+/* Sheet nach unten wischen */
+(() => {
+  let y0 = null, dy = 0; const sh = $("sheet"), sc = $("sheetbody");
+  const start = e => { if (e.target.closest("#grab") || sc.scrollTop <= 0) { y0 = e.touches[0].clientY; dy = 0; sh.style.transition = "none"; } };
+  const move = e => { if (y0 == null) return; dy = Math.max(0, e.touches[0].clientY - y0); if (dy > 0 && sc.scrollTop <= 0) { sh.style.transform = `translateY(${dy}px)`; if (e.cancelable) e.preventDefault(); } };
+  const end = () => { if (y0 == null) return; sh.style.transition = ""; y0 = null; if (dy > 110) closeSheet(); else sh.style.transform = ""; };
+  sh.addEventListener("touchstart", start, { passive: true }); sh.addEventListener("touchmove", move, { passive: false }); sh.addEventListener("touchend", end);
+})();
+
+/* ---------- Zufall ---------- */
+const dice = { pool: "alle", nurOffen: false };
+function openDice() {
+  st.open = "dice";
+  $("sheetbody").innerHTML = `<div class="dice">
+    <h2>🎲 Wo essen wir heute?</h2><p>Lasst den Zufall entscheiden – ohne Diskussion.</p>
+    <div class="seg glass" id="dpool" role="group">
+      <button data-pool="alle">Alle</button><button data-pool="fav">Favoriten</button><button data-pool="neu">Was Neues</button></div>
+    <div class="toggle glass" id="dopen" role="switch" aria-checked="${dice.nurOffen}"><span>Nur was gerade offen hat</span><span class="sw"></span></div>
+    <div class="slot glass"><div class="v" id="slotv">🤔<small>Bereit?</small></div></div>
+    <button class="go" id="spin">Drehen!</button>
+    <button class="go sec2" id="spingo" hidden>Details ansehen</button>
+  </div>`;
+  const sync = () => { document.querySelectorAll("#dpool button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pool === dice.pool)); $("dopen").setAttribute("aria-checked", dice.nurOffen); };
+  sync();
+  $("dpool").onclick = e => { const b = e.target.closest("[data-pool]"); if (b) { dice.pool = b.dataset.pool; sync(); } };
+  $("dopen").onclick = () => { dice.nurOffen = !dice.nurOffen; sync(); };
+  $("spin").onclick = () => {
+    let pool = D.restaurants.filter(r => (dice.pool === "alle" || (dice.pool === "fav") === (r.liste === "Favorit")) && (!dice.nurOffen || isOpen(r)));
+    if (!pool.length) { $("slotv").innerHTML = `😕<small>Nichts passt – Filter lockern</small>`; return; }
+    // gewichtet: gute Bewertungen etwas öfter
+    const w = pool.map(r => 1 + (avg(r) || 2.5) / 2.5);
+    const pick = () => { let x = Math.random() * w.reduce((a, b) => a + b, 0); for (let i = 0; i < pool.length; i++) { x -= w[i]; if (x <= 0) return pool[i]; } return pool.at(-1); };
+    const v = $("slotv"); v.className = "v spin"; $("spin").disabled = true; $("spingo").hidden = true;
+    let n = 0, delay = 50; const final = pick();
+    const tick = () => {
+      const r = n < 18 ? pool[n % pool.length] : final;
+      v.innerHTML = `${emoji(r)} ${esc(r.name)}<small>${esc(det(r).kueche_detail || r.kueche || "")}</small>`;
+      if (n++ < 18) { delay *= 1.12; setTimeout(tick, delay); }
+      else { v.className = "v land"; $("spin").disabled = false; $("spin").textContent = "Nochmal"; $("spingo").hidden = false; $("spingo").onclick = () => openSheet(final.id); if (navigator.vibrate) navigator.vibrate(30); }
+    };
+    tick();
+  };
+  $("scrim").classList.add("on"); $("sheet").classList.add("on"); document.body.classList.add("locked");
+}
+
+/* ---------- Karte ---------- */
+let MAP = null, LAYER = null, MAPLOADING = null;
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  return MAPLOADING ||= new Promise((ok, err) => {
+    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.append(css);
+    const s = document.createElement("script"); s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload = ok; s.onerror = err; document.head.append(s);
+  });
+}
+async function showMap(list) {
+  try { await loadLeaflet(); } catch (e) { $("map").innerHTML = `<div class="empty">Karte konnte nicht geladen werden.</div>`; return; }
+  if (!MAP) {
+    MAP = L.map("map", { zoomControl: false, attributionControl: true }).setView([52.2689, 10.5268], 13);
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, className: dark ? "darktiles" : "", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(MAP);
+    LAYER = L.layerGroup().addTo(MAP);
+  }
+  setTimeout(() => MAP.invalidateSize(), 50);
+  LAYER.clearLayers(); const pts = [];
+  list.forEach(r => locs(r).filter(l => l.lat).forEach(l => {
+    const icon = L.divIcon({ className: "", iconSize: [44, 44], iconAnchor: [6, 44], html: `<div class="pin" style="--c:${color(r, D.restaurants.indexOf(r))}"><span>${emoji(r)}</span></div>` });
+    L.marker([l.lat, l.lng], { icon, title: r.name }).addTo(LAYER).on("click", () => openSheet(r.id));
+    pts.push([l.lat, l.lng]);
+  }));
+  if (st.pos) { L.circleMarker([st.pos.lat, st.pos.lng], { radius: 8, color: "#fff", weight: 3, fillColor: "#0a84ff", fillOpacity: 1 }).addTo(LAYER); pts.push([st.pos.lat, st.pos.lng]); }
+  if (pts.length) MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 15 });
+}
+
+/* ---------- Geocoding (genauere Pins, einmalig, gecacht) ---------- */
+async function refineCoords() {
+  for (const r of D.restaurants) for (const l of locs(r)) {
+    const key = "geo:" + l.adresse; let c = null;
+    try { c = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+    if (!c) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de&q=${encodeURIComponent(l.adresse.replace("–", "-"))}`, { headers: { "Accept-Language": "de" } });
+        const j = await res.json(); if (j[0]) { c = { lat: +j[0].lat, lng: +j[0].lon }; localStorage.setItem(key, JSON.stringify(c)); }
+      } catch (e) {}
+      await new Promise(ok => setTimeout(ok, 1100));
+    }
+    if (c && (!l.lat || km(l, c) < 6)) { l.lat = c.lat; l.lng = c.lng; }
+  }
+  if (st.tab === "karte") render();
+}
+
+/* ---------- Google Places (optional, mit API-Key) ---------- */
+let GLOAD = null;
+function loadGoogleApi() {
+  return GLOAD ||= new Promise((ok, err) => {
+    window.__gmok = ok;
+    const s = document.createElement("script");
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(CFG.google_maps_api_key)}&v=weekly&language=de&region=DE&loading=async&callback=__gmok`;
+    s.onerror = err; document.head.append(s);
+  });
+}
+function periodsToZeiten(periods) {
+  if (!periods || !periods.length) return null;
+  const z = {}; const p2 = n => String(n).padStart(2, "0");
+  for (const p of periods) {
+    if (!p.open) continue;
+    if (!p.close) { for (let d = 0; d < 7; d++) z[d] = [["00:00", "24:00"]]; return z; }   // 24/7
+    (z[p.open.day] ||= []).push([`${p2(p.open.hour)}:${p2(p.open.minute)}`, `${p2(p.close.hour)}:${p2(p.close.minute)}`]);
+  }
+  return z;
+}
+async function loadGoogle(list) {
+  if (!CFG.google_maps_api_key) return;
+  let cache = {}; try { cache = JSON.parse(sessionStorage.getItem("rs-g") || "{}"); } catch (e) {}
+  const need = list.filter(r => !G[r.id] && !(G[r.id] = cache[r.id]));
+  if (!need.length) return;
+  try { await loadGoogleApi(); } catch (e) { console.warn("Google Maps API nicht ladbar", e); return; }
+  const { Place } = await google.maps.importLibrary("places");
+  await Promise.all(need.map(async r => {
+    const l = locs(r)[0];
+    try {
+      const { places } = await Place.searchByText({
+        textQuery: det(r).google_query || `${r.name} Restaurant Braunschweig`,
+        fields: ["id", "displayName", "photos", "rating", "userRatingCount", "regularOpeningHours", "googleMapsURI", "websiteURI", "nationalPhoneNumber", "businessStatus", "reviews"],
+        language: "de", region: "de", maxResultCount: 1,
+        ...(l && l.lat ? { locationBias: { lat: l.lat, lng: l.lng } } : {}),
+      });
+      const p = places && places[0]; if (!p) return;
+      G[r.id] = {
+        url: p.googleMapsURI, web: p.websiteURI, tel: p.nationalPhoneNumber, rating: p.rating, count: p.userRatingCount, status: p.businessStatus,
+        zeiten: periodsToZeiten(p.regularOpeningHours && p.regularOpeningHours.periods),
+        photos: (p.photos || []).slice(0, 8).map(ph => ({ url: ph.getURI({ maxWidth: 1200, maxHeight: 900 }),
+          attr: (ph.authorAttributions || []).map(a => a.uri ? `<a href="${esc(a.uri)}" target="_blank" rel="noopener">${esc(a.displayName)}</a>` : esc(a.displayName)).join(", ") })),
+        reviews: (p.reviews || []).filter(v => v.text).map(v => ({ rating: v.rating, text: v.text.length > 320 ? v.text.slice(0, 317) + "…" : v.text, when: v.relativePublishTimeDescription,
+          author: v.authorAttribution?.displayName || "Gast", uri: v.authorAttribution?.uri, photo: v.authorAttribution?.photoURI })),
+      };
+      cache[r.id] = G[r.id];
+    } catch (e) { console.warn("Places:", r.name, e); }
+  }));
+  try { sessionStorage.setItem("rs-g", JSON.stringify(cache)); } catch (e) {}
+}
+
+/* ---------- Standort ---------- */
+function locate() {
+  if (!navigator.geolocation) return toast("Standort nicht verfügbar");
+  $("locbtn").textContent = "⏳";
+  navigator.geolocation.getCurrentPosition(p => {
+    st.pos = { lat: p.coords.latitude, lng: p.coords.longitude };
+    $("locbtn").textContent = "📍"; $("locbtn").setAttribute("aria-pressed", "true");
+    if (st.tab !== "ranking") st.sort = "dist";
+    render(); toast("Entfernungen werden angezeigt");
+  }, () => { $("locbtn").textContent = "📍"; toast("Standort nicht freigegeben"); }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click", e => {
+  const c = e.target.closest(".card[data-id]"); if (c) { openSheet(c.dataset.id); return; }
+  const t = e.target.closest(".tab"); if (t) { st.tab = t.dataset.tab; save(); render(); scrollTo({ top: 0, behavior: "smooth" }); return; }
+  const ch = e.target.closest("[data-chip]");
+  if (ch) { const k = ch.dataset.chip; st.chips.has(k) ? st.chips.delete(k) : st.chips.add(k); save(); render(); return; }
+  const so = e.target.closest("[data-sort]");
+  if (so) { st.sort = so.dataset.sort; if (st.sort === "dist" && !st.pos) locate(); save(); render(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeSheet();
+  const c = e.target.closest && e.target.closest(".card[data-id]"); if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openSheet(c.dataset.id); }
+});
+$("scrim").onclick = () => closeSheet(); $("sx").onclick = () => closeSheet();
+$("q").addEventListener("input", e => { st.q = e.target.value; render(); });
+$("locbtn").onclick = locate;
+$("dicebtn").onclick = openDice;
+addEventListener("popstate", () => { const id = location.hash.slice(1); if (id && D.restaurants.some(r => r.id === id)) openSheet(id, false); else closeSheet(false); });
+const ctl = $("controls"); new IntersectionObserver(([e]) => ctl.classList.toggle("stuck", e.intersectionRatio < 1), { threshold: [1], rootMargin: "-1px 0px 0px 0px" }).observe(ctl);
+setInterval(() => { if (D && !st.open) render(); }, 60000);   // Offen/Zu aktuell halten
+
+/* ---------- Start ---------- */
+Promise.all([
+  fetch("data.json", { cache: "no-cache" }).then(r => r.json()),
+  fetch("config.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+]).then(async ([d, cfg]) => {
+  D = d; CFG = cfg || {};
+  const stand = new Date(D.stand);
+  $("footer").innerHTML = `Bewertungen aus <a href="${esc(D.notion)}" target="_blank" rel="noopener">Notion</a> · Stand ${stand.toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}<br>
+    Öffnungszeiten &amp; Infos ohne Gewähr${CFG.google_maps_api_key ? " · Fotos &amp; Live-Daten von Google" : ""} · <a href="../">Wochenangebote</a>`;
+  renderStats(); renderChips(); render();
+  const id = location.hash.slice(1); if (id) openSheet(id, false);
+  if (CFG.google_maps_api_key) loadGoogle(D.restaurants).then(() => { renderStats(); render(); });
+  refineCoords();
+}).catch(err => { console.error(err); $("list").innerHTML = `<div class="empty glass"><b>😵</b>Daten konnten nicht geladen werden.</div>`; });
+</script>
+</body>
+</html>

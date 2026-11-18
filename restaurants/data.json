@@ -1,0 +1,542 @@
+{
+ "stand": "2026-11-18T10:51+01:00",
+ "notion": "https://www.notion.so/41c334cadfee801b85d1dcffd349fcc1",
+ "restaurants": [
+  {
+   "id": "41c334cadfee8199a8aacf4202b99544",
+   "name": "Diego to Napoli",
+   "liste": "Favorit",
+   "noah": null,
+   "helen": null,
+   "kueche": "Italienisch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee8199a8aacf4202b99544",
+   "details": {
+    "voller_name": "Diego to Napoli",
+    "untertitel": "Pizza Napoletana in einer Minute bei 480 °C – jetzt auch als Pub",
+    "emoji": "🔥",
+    "farbe": "#1d5fa8",
+    "kueche_detail": "Neapolitanisch · Pizza · Pub",
+    "preis": "€€",
+    "standorte": [
+     {
+      "label": "Restaurant",
+      "adresse": "Friedrich-Wilhelm-Straße 34, 38100 Braunschweig",
+      "stadtteil": "Friedrich-Wilhelm-Viertel",
+      "lat": 52.2611201,
+      "lng": 10.5207265,
+      "telefon": "+4953121599400",
+      "zeiten": {
+       "0": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "1": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "2": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "3": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "4": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "5": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ],
+       "6": [
+        [
+         "11:30",
+         "22:00"
+        ]
+       ]
+      },
+      "zeiten_hinweis": "Laut Apple Maps."
+     },
+     {
+      "label": "Pizzeria & Pub",
+      "adresse": "Kastanienallee 53, 38104 Braunschweig",
+      "stadtteil": "Östliches Ringgebiet",
+      "lat": 52.2635184,
+      "lng": 10.5478513,
+      "zeiten": {
+       "0": [
+        [
+         "15:00",
+         "24:00"
+        ]
+       ],
+       "1": [
+        [
+         "17:00",
+         "24:00"
+        ]
+       ],
+       "2": [
+        [
+         "17:00",
+         "24:00"
+        ]
+       ],
+       "3": [
+        [
+         "17:00",
+         "24:00"
+        ]
+       ],
+       "4": [
+        [
+         "17:00",
+         "24:00"
+        ]
+       ],
+       "5": [
+        [
+         "16:00",
+         "24:00"
+        ]
+       ],
+       "6": [
+        [
+         "15:00",
+         "24:00"
+        ]
+       ]
+      },
+      "zeiten_hinweis": "Seit 15.10.2026 offen; Schluss open end. Hier keine Reservierung."
+     }
+    ],
+    "links": {
+     "website": "https://diego-to-napoli.de/",
+     "speisekarte": "https://diego-to-napoli.de/wp-content/uploads/2026/09/diego_to_napoli_speise_und_getraenkekarte-1-pdf.jpg",
+     "reservieren": "https://app.resmio.com/diego-to-napoli/widget",
+     "bestellen": "https://app.diegotonapoli.de/",
+     "instagram": "https://www.instagram.com/diegotonapoli/"
+    },
+    "highlights": [
+     "Fluffiger Rand, knuspriger Boden – echte Pizza Napoletana",
+     "Fünf vegane Pizzen mit Pflanzenkäse",
+     "Eigene Kreationen neben den Klassikern",
+     "Pub-Standort mit DJ, Drinks und „Vegan des Monats“",
+     "Riesiges Maradona-Porträt an der Pub-Fassade"
+    ],
+    "tags": [
+     "Neapolitanisch",
+     "Vegan-freundlich",
+     "Online bestellen",
+     "2 Standorte"
+    ],
+    "google_query": "Diego to Napoli Friedrich-Wilhelm-Straße Braunschweig"
+   }
+  },
+  {
+   "id": "41c334cadfee815aab4ae2d9ea3d2606",
+   "name": "L'Osteria",
+   "liste": "Favorit",
+   "noah": null,
+   "helen": null,
+   "kueche": "Italienisch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee815aab4ae2d9ea3d2606",
+   "details": {
+    "voller_name": "L'Osteria Braunschweig",
+    "untertitel": "Italienische Kette mit Riesen-Pizzen über den Tellerrand",
+    "emoji": "🍕",
+    "farbe": "#c8102e",
+    "kueche_detail": "Italienisch · Pizza & Pasta",
+    "preis": "€€",
+    "preis_hinweis": "Pizza ca. 12–18 €",
+    "standorte": [
+     {
+      "label": "BraWo Park",
+      "adresse": "BraWo-Allee 1, 38102 Braunschweig",
+      "stadtteil": "Am Hauptbahnhof",
+      "lat": 52.2550505,
+      "lng": 10.5429662,
+      "telefon": "+4953170747190",
+      "zeiten": {
+       "0": [
+        [
+         "11:30",
+         "23:00"
+        ]
+       ],
+       "1": [
+        [
+         "11:30",
+         "23:00"
+        ]
+       ],
+       "2": [
+        [
+         "11:30",
+         "23:00"
+        ]
+       ],
+       "3": [
+        [
+         "11:30",
+         "23:00"
+        ]
+       ],
+       "4": [
+        [
+         "11:30",
+         "23:00"
+        ]
+       ],
+       "5": [
+        [
+         "11:30",
+         "24:00"
+        ]
+       ],
+       "6": [
+        [
+         "11:30",
+         "24:00"
+        ]
+       ]
+      },
+      "zeiten_hinweis": "Ab 11:30 Uhr; Schlusszeit ungefähr."
+     }
+    ],
+    "links": {
+     "website": "https://losteria.net/de/restaurants/restaurant/braunschweig/",
+     "speisekarte": "https://www.speisekarte.de/braunschweig/restaurant/losteria_braunschweig/speisekarte",
+     "bestellen": "https://wolt.com/de/deu/brunswick/brand/losteria"
+    },
+    "highlights": [
+     "Pizzen mit rund 45 cm – locker zu zweit teilbar",
+     "Hausgemachte Pasta",
+     "Lebhaft und eher laut – nicht fürs ruhige Date",
+     "Direkt am Hauptbahnhof, gut mit Bahn/Tram erreichbar"
+    ],
+    "tags": [
+     "Lieferung",
+     "Familienfreundlich",
+     "Am Hbf"
+    ],
+    "extern": {
+     "wert": 4.3,
+     "anzahl": 3292,
+     "quelle": "Google (Stand Recherche)"
+    },
+    "google_query": "L'Osteria Braunschweig BraWo-Allee"
+   }
+  },
+  {
+   "id": "41c334cadfee818ea067d7a085ebb700",
+   "name": "Sud Italia",
+   "liste": "Favorit",
+   "noah": null,
+   "helen": null,
+   "kueche": "Italienisch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee818ea067d7a085ebb700",
+   "details": {
+    "voller_name": "Pizza Sud Italia",
+    "untertitel": "Neapolitanische Pizza mit San-Marzano-Tomaten und Fior di Latte",
+    "emoji": "🍅",
+    "farbe": "#2f7a4b",
+    "kueche_detail": "Neapolitanisch · Pizza",
+    "preis": "€–€€",
+    "preis_hinweis": "Margherita ca. 12 €, Spezialitäten bis ca. 21 €",
+    "standorte": [
+     {
+      "label": "Hamburger Straße",
+      "adresse": "Hamburger Straße 283, 38114 Braunschweig",
+      "stadtteil": "Nordstadt",
+      "lat": 52.2759961,
+      "lng": 10.5219426,
+      "telefon": "+491732803034",
+      "zeiten": {
+       "0": [
+        [
+         "16:30",
+         "21:00"
+        ]
+       ],
+       "2": [
+        [
+         "16:30",
+         "21:00"
+        ]
+       ],
+       "3": [
+        [
+         "16:30",
+         "21:00"
+        ]
+       ],
+       "4": [
+        [
+         "16:30",
+         "21:00"
+        ]
+       ],
+       "5": [
+        [
+         "12:30",
+         "21:00"
+        ]
+       ],
+       "6": [
+        [
+         "12:30",
+         "21:00"
+        ]
+       ]
+      },
+      "zeiten_hinweis": "Laut Lieferdienst; montags Ruhetag."
+     }
+    ],
+    "links": {
+     "bestellen": "https://wolt.com/de/deu/brunswick/restaurant/pizza-sud-italia-braunschweig",
+     "speisekarte": "https://www.lieferando.de/speisekarte/pizza-sud-italia"
+    },
+    "highlights": [
+     "Pizza Tartufina mit Trüffelcreme und Burrata",
+     "Bufalina, Diavola, Mortadella – Klassiker aus Neapel",
+     "Dessert-Pizza mit Ricotta, Nutella und Pistazie",
+     "Vegane Pizza mit saisonalem Gemüse",
+     "Sehr gute Bewertungen für Teig und Zutaten"
+    ],
+    "tags": [
+     "Neapolitanisch",
+     "Lieferung",
+     "Vegan-Option",
+     "Mo Ruhetag"
+    ],
+    "extern": {
+     "wert": 4.7,
+     "anzahl": 290,
+     "quelle": "werkenntdenBESTEN"
+    },
+    "hinweis": "Ältere Einträge nennen noch Celler Str. 63 – aktuell laut Impressum Hamburger Str. 283.",
+    "google_query": "Pizza Sud Italia Hamburger Straße 283 Braunschweig"
+   }
+  },
+  {
+   "id": "41c334cadfee81d5b8fdf6ebe5b9e341",
+   "name": "El Gaucho",
+   "liste": "Ausprobieren",
+   "noah": null,
+   "helen": null,
+   "kueche": "Argentinisch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee81d5b8fdf6ebe5b9e341",
+   "details": {
+    "voller_name": "Steak House El Gaucho",
+    "untertitel": "Familien-Steakhaus seit 1990 – argentinisches Rind vom Holzkohlegrill",
+    "emoji": "🥩",
+    "farbe": "#b02a1a",
+    "kueche_detail": "Argentinisch · Steakhouse",
+    "preis": "€€€",
+    "preis_hinweis": "Rumpsteak 200 g ab ca. 23 €",
+    "standorte": [
+     {
+      "label": "Wendenring",
+      "adresse": "Wendenring 1–4, 38114 Braunschweig",
+      "stadtteil": "Nordstadt",
+      "lat": 52.2749183,
+      "lng": 10.5209392,
+      "telefon": "+49531342884",
+      "zeiten": null,
+      "zeiten_hinweis": "Öffnet in der Regel ab 12 Uhr, abends bis spät."
+     }
+    ],
+    "links": {
+     "website": "https://www.el-gaucho-steakhouse.de/",
+     "speisekarte": "https://www.speisekarte.de/braunschweig/restaurant/steak_house_el_gaucho_inh_eduard_varga/speisekarte"
+    },
+    "highlights": [
+     "Argentinische Steaks, klassisch über Holzkohle gegrillt",
+     "„Bife de Lomo La Cabaña“: 500 g Filet für zwei, am Tisch flambiert",
+     "Rumpsteak in 200/300/400 g – Baby Beef für großen Hunger 💪",
+     "Seit Jahrzehnten in Familienhand (Varga)",
+     "Englische Karte vorhanden"
+    ],
+    "tags": [
+     "Protein-Paradies",
+     "Holzkohlegrill",
+     "Klassiker",
+     "Take-away"
+    ],
+    "extern": {
+     "wert": 4.7,
+     "anzahl": 2224,
+     "quelle": "werkenntdenBESTEN (6 Portale)"
+    },
+    "google_query": "Steak House El Gaucho Wendenring Braunschweig"
+   }
+  },
+  {
+   "id": "41c334cadfee81d18aa3ddef0794a0af",
+   "name": "To",
+   "liste": "Ausprobieren",
+   "noah": null,
+   "helen": null,
+   "kueche": null,
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee81d18aa3ddef0794a0af",
+   "details": null
+  },
+  {
+   "id": "41c334cadfee814a8afee7fbee377524",
+   "name": "Tresor",
+   "liste": "Ausprobieren",
+   "noah": null,
+   "helen": null,
+   "kueche": "Deutsch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee814a8afee7fbee377524",
+   "details": {
+    "voller_name": "Genuss-Tresor am Bankplatz",
+    "untertitel": "Restaurant & Bar in einer ehemaligen Bank mitten in der Innenstadt",
+    "emoji": "🏦",
+    "farbe": "#8a5a2b",
+    "kueche_detail": "Deutsch · International · Bar",
+    "preis": "€€€",
+    "preis_hinweis": "Bowl/Salat ab ca. 19 €, Entrecôte ca. 34 €",
+    "standorte": [
+     {
+      "label": "Bankplatz",
+      "adresse": "Bankplatz 8, 38100 Braunschweig",
+      "stadtteil": "Innenstadt",
+      "lat": 52.2615519,
+      "lng": 10.518848,
+      "zeiten": {
+       "1": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ],
+       "2": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ],
+       "3": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ],
+       "4": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ],
+       "5": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ],
+       "6": [
+        [
+         "12:00",
+         "24:00"
+        ]
+       ]
+      },
+      "zeiten_hinweis": "Ab 12 Uhr, sonntags zu. Schluss je nach Quelle 0–3 Uhr."
+     }
+    ],
+    "links": {
+     "speisekarte": "https://www.speisekarte.de/braunschweig/restaurant/genusstresor_am_bankplatz_braunschweig/speisekarte"
+    },
+    "highlights": [
+     "Caesar Salad „aus dem Tresor“ – das Signature-Gericht",
+     "Entrecôte in Café-de-Paris-Sauce mit Pommes",
+     "Veganes Linsencurry in Erdnusssoße",
+     "Mittagstisch unter der Woche",
+     "Abends eher Bar-Stimmung – gut für Drinks danach"
+    ],
+    "tags": [
+     "Mittagstisch",
+     "Bar",
+     "Innenstadt",
+     "Reservierung telefonisch"
+    ],
+    "parken": "Parkhaus Steinstraße am Bankplatz (wenige Minuten zu Fuß)",
+    "hinweis": "Annahme: „Tresor“ = Genuss-Tresor am Bankplatz.",
+    "google_query": "Genuss-Tresor am Bankplatz Braunschweig"
+   }
+  },
+  {
+   "id": "41c334cadfee8188a2e5cb7cc3ff285a",
+   "name": "Troja",
+   "liste": "Ausprobieren",
+   "noah": null,
+   "helen": null,
+   "kueche": "Türkisch",
+   "notiz": "",
+   "notion_url": "https://www.notion.so/41c334cadfee8188a2e5cb7cc3ff285a",
+   "details": {
+    "voller_name": "Troja Café & Restaurant",
+    "untertitel": "Türkisch-orientalische Küche in bunt dekoriertem Gastraum",
+    "emoji": "🧆",
+    "farbe": "#d9480f",
+    "kueche_detail": "Türkisch · Orientalisch · Meze",
+    "preis": "€€",
+    "preis_hinweis": "Hauptgerichte grob 20–30 €",
+    "standorte": [
+     {
+      "label": "Bültenweg",
+      "adresse": "Bültenweg 6, 38106 Braunschweig",
+      "stadtteil": "Nähe TU / Bültenweg",
+      "lat": 52.2718548,
+      "lng": 10.5331754,
+      "zeiten": null,
+      "zeiten_hinweis": "Öffnungszeiten widersprüchlich angegeben – vorher bei Google prüfen."
+     }
+    ],
+    "links": {},
+    "highlights": [
+     "Meze-Platten, Grillgerichte und frische Salate",
+     "Gute vegane Auswahl, z. B. Çiğ Köfte und Petersiliensalat",
+     "Auffällig farbenfrohe, orientalische Einrichtung",
+     "Türkischer Wein und Cocktails",
+     "Wird schnell voll – Reservieren lohnt sich"
+    ],
+    "tags": [
+     "Vegan-freundlich",
+     "Terrasse",
+     "Cocktails",
+     "Frühstück"
+    ],
+    "extern": {
+     "wert": 4.3,
+     "anzahl": 2485,
+     "quelle": "Google (Stand Recherche)"
+    },
+    "hinweis": "Ein Verzeichnis listet den Laden als geschlossen – vor dem Besuch kurz checken.",
+    "google_query": "Troja Café Restaurant Bültenweg 6 Braunschweig"
+   }
+  }
+ ]
+}
