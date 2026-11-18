@@ -88,6 +88,12 @@ def main() -> None:
         sys.exit("Keine Notion-Zeilen gelesen – data.json bleibt unverändert.")
 
     liste.sort(key=lambda r: (r["liste"] != "Favorit", r["name"].lower()))
+    if liste == alt.get("restaurants"):
+        print("Keine Änderungen – data.json bleibt unverändert.")
+        for r in liste:
+            if not r["details"]:
+                print(f"FEHLT: {r['name']} ({r['id']}) – noch keine Details recherchiert")
+        return
     data = {
         "stand": dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="minutes"),
         "notion": NOTION_DB,
