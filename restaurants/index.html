@@ -92,7 +92,7 @@ h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), va
 .stats .duel b { display: inline; font-size: inherit; color: var(--text); letter-spacing: 0; }
 
 /* ---------- Suche & Filter ---------- */
-.controls { position: sticky; top: -1px; z-index: 10; margin: 12px -16px 0; padding: 8px 16px 8px; transition: padding .2s; }
+.controls { position: sticky; top: -1px; z-index: 10; margin: 4px -16px 0; padding: 8px 16px 8px; transition: padding .2s; }
 .controls.stuck { padding-top: calc(8px + env(safe-area-inset-top)); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); background: color-mix(in srgb, var(--bg) 55%, transparent); }
 .search { display: flex; align-items: center; gap: 8px; border-radius: 16px; padding: 0 12px; height: 44px; }
 .search svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
@@ -357,7 +357,6 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
     </div>
   </header>
 
-  <section class="stats glass" id="stats" aria-label="Statistik"></section>
 
   <div class="controls" id="controls">
     <label class="search glass">
@@ -507,6 +506,7 @@ function sorted(list) {
 
 /* ---------- Übersicht ---------- */
 function renderStats() {
+  if (!$("stats")) return;
   const R = D.restaurants, rated = R.filter(r => avg(r) != null);
   const mean = k => { const v = R.map(r => r[k]).filter(Boolean); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
   const both = R.filter(r => r.noah && r.helen);
