@@ -387,7 +387,7 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   h1 em { display: inline; }
   .tab[data-tab="karte"] { display: none; }
   .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, 40%); gap: 28px; align-items: start; }
-  #mapview { display: block !important; position: sticky; top: 20px; margin-top: 20px; height: calc(100vh - 40px); height: calc(100dvh - 40px); }
+  #mapview { position: sticky; top: 20px; margin-top: 20px; height: calc(100vh - 40px); height: calc(100dvh - 40px); }
   #mapview #mapwrap { height: 100%; min-height: 0; }
   .controls { position: sticky; top: 0; }
   .list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
@@ -436,10 +436,68 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 }
 
 /* Breite Monitore: Titel, Tabs und Knöpfe in einer Zeile über der Liste */
-@media (min-width: 1900px) {
+@media (min-width: 1024px) { .col { container-type: inline-size; } }
+@container (min-width: 1280px) {
   header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 24px; }
   .tabbar { justify-self: center; align-self: end; }
 }
+
+/* ===== Runde 3: Entdecken, Karten-Steuerung, Detail-Spalte ===== */
+@media (prefers-color-scheme: dark) { :root { --noah: #5aa9ff; --helen: #ff7a98; } }
+.deskonly { display: none !important; }
+.card .body { display: flex; flex-direction: column; flex: 1; }
+.card .body > .name { padding-bottom: 8px; }
+.card .body > .sub { margin: -6px 0 10px; }
+.card .body > .sub:empty { display: none; }
+.card .body > .rates, .card .body > .discrow { margin-top: auto; }
+.discrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; }
+.gstars { font-size: 13px; font-weight: 700; color: var(--muted); }
+.gstars b { color: var(--gold); font-size: 15px; }
+.onlist { font-size: 12px; font-weight: 800; color: var(--ok); white-space: nowrap; }
+.addmini { border: 0; border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 6px 14px color-mix(in srgb, var(--accent) 30%, transparent); }
+.addmini:active { transform: scale(.95); }
+.discadd { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.discadd .go { margin-top: 0; padding: 13px 8px; font-size: 15px; }
+.skel { border-radius: var(--r); height: 300px; background: linear-gradient(100deg, var(--glass) 30%, var(--glass-strong) 50%, var(--glass) 70%); background-size: 300% 100%; animation: shimmer 1.3s linear infinite; }
+@keyframes shimmer { to { background-position: -150% 0; } }
+.discnote { font-size: 12px; color: var(--muted); margin: 4px 2px 0; }
+/* Kartensteuerung */
+#mapwrap { position: relative; }
+.mapctl { position: absolute; right: 12px; top: 12px; z-index: 5; display: grid; gap: 1px; border-radius: 14px; overflow: hidden;
+  background: rgba(30, 32, 38, .72); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 8px 22px rgba(0,0,0,.35); }
+.mapctl button { width: 40px; height: 40px; border: 0; background: transparent; color: #f2f2f4; font-size: 19px; cursor: pointer; display: grid; place-items: center; }
+.mapctl button + button { border-top: 1px solid rgba(255,255,255,.1); }
+.mapctl button:hover { background: rgba(255,255,255,.08); }
+.mapctl button:active { background: rgba(255,255,255,.16); }
+.mapclose { position: absolute; left: 12px; top: 12px; z-index: 5; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); cursor: pointer;
+  color: #f2f2f4; background: rgba(30, 32, 38, .72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); font-size: 14px; place-items: center; }
+
+
+@media (min-width: 1024px) {
+  .deskonly { display: grid !important; }
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .layout.m { grid-template-columns: minmax(0, 1fr) minmax(380px, 36%); }
+  .layout.d { grid-template-columns: minmax(0, 1fr) clamp(440px, 32vw, 680px); }
+  .layout.d.m { grid-template-columns: minmax(0, 1fr) clamp(440px, 30vw, 640px) minmax(340px, 26%); }
+  .layout > .sheet { position: sticky; top: 20px; margin: 20px 0 0; height: calc(100vh - 40px); height: calc(100dvh - 40px); left: auto; right: auto; bottom: auto;
+    width: auto; max-width: none; max-height: none; transform: none !important; opacity: 1; visibility: visible; transition: none; display: none; border-radius: 28px; z-index: 5; }
+  .layout > .sheet.on { display: flex; animation: slidein .35s cubic-bezier(.2,.9,.25,1); }
+  .layout > .sheet .grab { display: none; }
+  .layout > .sheet .scroll { padding: 18px 22px 26px; }
+  .layout > .sheet .hero { height: 260px; }
+  .layout > .sheet .s-title { font-size: 30px; }
+  .layout > .sheet .tapstars button { font-size: 34px; }
+  .layout > .sheet .rrow .who { font-size: 17px; }
+  .scrim { display: none !important; }
+  .toast { right: 24px; }
+}
+@keyframes slidein { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@media (min-width: 1024px) and (max-width: 1599px) {
+  .layout.d.m { grid-template-columns: minmax(0, 1fr) clamp(420px, 38vw, 620px); }
+  .layout.d.m > #mapview { display: none !important; }
+}
+@media (min-width: 1900px) { .layout > .sheet .scroll { padding: 22px 28px 30px; } .layout > .sheet { font-size: 17px; } }
 </style>
 </head>
 <body>
@@ -447,7 +505,7 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 
 <div class="wrap">
 
-  <div class="layout">
+  <div class="layout" id="layout">
     <div class="col">
     <header>
       <div class="titlebox">
@@ -458,12 +516,14 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
         <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
         <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
         <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
+        <button class="tab" role="tab" data-tab="entdecken"><b>🧭</b><span>Entdecken</span></button>
         <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
       </nav>
       <div class="hbtns">
         <button class="addbtn" id="addbtn" hidden>＋ Hinzufügen</button>
         <button class="cbtn glass" id="locbtn" aria-pressed="false" aria-label="Entfernung anzeigen" title="Entfernung anzeigen">📍</button>
         <button class="cbtn glass" id="dicebtn" aria-label="Zufall: Wo essen wir heute?" title="Wo essen wir heute?">🎲</button>
+        <button class="cbtn glass deskonly" id="mapbtn" aria-pressed="false" aria-label="Karte ein-/ausblenden" title="Karte ein-/ausblenden">🗺️</button>
         <button class="cbtn glass avatar" id="acctbtn" aria-label="Anmelden" title="Anmelden">👤</button>
       </div>
     </header>
@@ -483,7 +543,13 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
       <main id="list" class="list" aria-live="polite"></main>
       <footer id="footer2" class="footin"></footer>
     </div>
-    <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div></div></section>
+    <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div>
+      <div class="mapctl" id="mapctl">
+        <button data-mz="in" aria-label="Hineinzoomen">＋</button><button data-mz="out" aria-label="Herauszoomen">－</button>
+        <button data-mz="all" aria-label="Alle zeigen" title="Alle zeigen">⤢</button><button data-mz="me" aria-label="Mein Standort" title="Mein Standort">◎</button>
+      </div>
+      <button class="mapclose deskonly" data-mz="close" aria-label="Karte einklappen" title="Karte einklappen">✕</button>
+    </div></section>
   </div>
 
   <footer id="footer"></footer>
@@ -518,6 +584,7 @@ const ME = { user: null, who: null, ready: false };   // angemeldete Person
 let LIVE = false;                                     // Daten kommen live aus Firestore
 const st = { tab: "ranking", q: "", chips: new Set(), sort: "score", pos: null, open: null, pushed: false };
 try { const s = JSON.parse(localStorage.getItem("rs-state") || "{}"); st.tab = s.tab || st.tab; st.sort = s.sort || st.sort; st.chips = new Set(JSON.parse(localStorage.getItem("rs-chips") || "[]")); } catch (e) {}
+st.mapOpen = (() => { try { return localStorage.getItem("rs-map") === "1"; } catch (e) { return false; } })();
 const save = () => { try { localStorage.setItem("rs-state", JSON.stringify({ tab: st.tab, sort: st.sort })); localStorage.setItem("rs-chips", JSON.stringify([...st.chips])); } catch (e) {} };
 
 /* ---------- Hilfen ---------- */
@@ -528,7 +595,9 @@ const avg = r => { const v = [r.noah, r.helen].filter(Boolean); return v.length 
 const fmt1 = n => n == null ? "–" : n.toFixed(1).replace(".", ",");
 const starHtml = n => `<span class="stars">${"★".repeat(n || 0)}<span class="off">${"★".repeat(5 - (n || 0))}</span></span>`;
 const locs = r => det(r).standorte || [];
-const byId = id => D.restaurants.find(x => x.id === id);
+const byId = id => D.restaurants.find(x => x.id === id) || DISC.items.find(x => x.id === id);
+const nname = s => (s || "").toLowerCase().replace(/[^a-z0-9äöüß]/g, "");
+const inList = r => { const a = nname(r.name); return D.restaurants.some(x => { const b = nname(x.name); return a === b || (Math.min(a.length, b.length) >= 5 && (a.includes(b) || b.includes(a))); }); };
 const canEdit = () => !!(FB && ME.user && ME.ready);
 const toast = t => { const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2400); };
 const clean = o => JSON.parse(JSON.stringify(o));     // Firestore mag kein undefined
@@ -630,6 +699,10 @@ function renderStats() {
     <div class="duel">${duel}</div>`;
 }
 function renderChips() {
+  if (st.tab === "entdecken") {
+    $("chips").innerHTML = DISC_CATS.map(([k, l]) => `<button class="chip glass" data-dcat="${k}" aria-pressed="${DISC.cat === k}">${l}</button>`).join("");
+    return;
+  }
   const k = kuechen().map(x => ({ k: "k:" + x, l: `${KUECHE_EMO[x] || "🍽️"} ${x}` }));
   $("chips").innerHTML = [...CHIPS, ...k].map(c => `<button class="chip glass" data-chip="${esc(c.k)}" aria-pressed="${st.chips.has(c.k)}">${esc(c.l)}</button>`).join("");
 }
@@ -639,7 +712,7 @@ function card(r, rank) {
   const photo = g && g.photos && g.photos[0];
   const bad = g && g.status && g.status !== "OPERATIONAL";
   const badges = [];
-  if (rank && a != null) badges.push(`<span class="bdg rank">#${rank}</span>`);
+  if (rank && (a != null || r._disc)) badges.push(`<span class="bdg rank">#${rank}</span>`);
   if (r.liste === "Favorit") badges.push(`<span class="bdg fav">❤️ Favorit</span>`);
   if (bad) badges.push(`<span class="bdg closed">⚠️ ${g.status === "CLOSED_PERMANENTLY" ? "Dauerhaft geschlossen" : "Vorübergehend zu"}</span>`);
   else if (s) badges.push(`<span class="bdg ${s.k}">${esc(s.t)}</span>`);
@@ -653,12 +726,13 @@ function card(r, rank) {
       ${photo ? `<img alt="" loading="lazy" decoding="async" src="${esc(photo.url)}" onload="this.classList.add('on')">` : ""}
       <div class="shade"></div>
       <div class="badges">${badges.join("")}</div>
-      ${a != null ? `<div class="scorepill">Ø ${fmt1(a)} ★</div>` : ext ? `<div class="scorepill" title="externe Bewertung">${fmt1(ext)} ★ ext.</div>` : ""}
+      ${a != null ? `<div class="scorepill">Ø ${fmt1(a)} ★</div>` : ext && !r._disc ? `<div class="scorepill" title="externe Bewertung">${fmt1(ext)} ★ ext.</div>` : ""}
     </div>
     <div class="body">
       <div class="name">${esc(r.name)}</div>
       <div class="sub">${esc(dd.untertitel || r.notiz || "")}</div>
-      <div class="rates">${PERS.map(rate).join("")}</div>
+      ${r._disc ? `<div class="discrow"><span class="gstars"><b>★ ${fmt1(g?.rating)}</b> · ${(g?.count || 0).toLocaleString("de-DE")} Bewertungen</span>${inList(r) ? `<span class="onlist">✓ Auf eurer Liste</span>` : canEdit() ? `<button class="addmini" data-add="${esc(r.id)}">＋ Ausprobieren</button>` : ""}</div>`
+        : `<div class="rates">${PERS.map(rate).join("")}</div>`}
       <div class="meta">${meta.map(x => `<span>${x}</span>`).join("")}</div>
     </div>
   </article>`;
@@ -668,13 +742,17 @@ function render() {
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === st.tab));
   document.querySelectorAll("#sortseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.sort === st.sort));
   document.querySelectorAll("[data-chip]").forEach(b => b.setAttribute("aria-pressed", st.chips.has(b.dataset.chip)));
-  $("sortseg").hidden = st.tab === "ranking" || st.tab === "karte";
+  $("sortseg").hidden = ["ranking", "karte", "entdecken"].includes(st.tab);
   $("fab").hidden = !canEdit(); $("addbtn").hidden = !canEdit();
   const desk = MQ.desk.matches;
   if (desk && st.tab === "karte") st.tab = "neu";
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === st.tab));
-  const map = st.tab === "karte";
-  $("mapview").hidden = !(map || desk); $("list").hidden = map; $("sortrow").hidden = false;
+  const map = st.tab === "karte", deskMap = desk && st.mapOpen;
+  $("mapbtn").setAttribute("aria-pressed", st.mapOpen);
+  $("layout").classList.toggle("m", deskMap);
+  $("mapview").hidden = !(map || deskMap); $("list").hidden = map; $("sortrow").hidden = false;
+  renderChips();
+  if (st.tab === "entdecken") { renderDisc(deskMap); return; }
   const list = sorted(filtered(map ? "alle" : st.tab));
   const L = st.tab === "ranking" ? list.filter(r => avg(r) != null) : list;
   $("count").textContent = map ? `${list.length} auf der Karte` : st.tab === "ranking" ? (L.length ? `${L.length} bewertet · nach Ø von euch beiden` : "") : `${L.length} ${L.length === 1 ? "Restaurant" : "Restaurants"}`;
@@ -684,10 +762,10 @@ function render() {
       ? `<b>🏆</b>Noch keine Bewertungen.<br>${canEdit() ? "Restaurant antippen und Sterne vergeben – dann steht hier euer Ranking." : "Oben rechts anmelden, dann könnt ihr direkt hier bewerten."}`
       : `<b>🔍</b>Nichts gefunden. Filter oder Suche anpassen.`;
     $("list").innerHTML = `<div class="empty glass">${e}</div>`;
-    if (desk) showMap(list); return;
+    if (deskMap) showMap(list); return;
   }
   $("list").innerHTML = L.map((r, i) => card(r, st.tab === "ranking" ? i + 1 : 0)).join("");
-  if (desk) showMap(L);
+  if (deskMap) showMap(L);
   fitMap();
 }
 /* Karte: Desktop per CSS (volle Fensterhöhe); iPhone/iPad-Kartentab einmalig bis Fensterrand */
@@ -703,8 +781,8 @@ function fitMap() {
   const h = Math.round(mw.getBoundingClientRect().height);
   if (MAP && Math.abs(h - LASTH) > 40) {                      // Ausschnitt nach echter Größenänderung neu einpassen
     LASTH = h;
-    if (MAPKIND === "leaflet") { MAP.invalidateSize(); MAPKEY = ""; }
-    else if (MAPKIND === "google" && LASTB) setTimeout(() => { MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }, 60);
+    if (MAPKIND === "leaflet") MAP.invalidateSize();
+    if (!FOCUSED) setTimeout(() => overview(false), 80);
   }
 }
 let fitT = 0, lastW = innerWidth, lastH = innerHeight;
@@ -715,17 +793,30 @@ addEventListener("resize", () => {           // nur echte Fensteränderungen, ni
 function renderAll() { renderStats(); renderChips(); render(); refreshSheet(); }
 
 /* ---------- Sheet-Grundlagen ---------- */
+function placeSheet() {   // Desktop: Details als Spalte im Layout, sonst als Overlay
+  const sh = $("sheet"), lay = $("layout");
+  if (MQ.desk.matches) { if (sh.parentElement !== lay) lay.insertBefore(sh, $("mapview")); }
+  else if (sh.parentElement !== document.body) document.body.insertBefore(sh, $("toast"));
+}
 function showSheet(html, id, push = true, keepScroll = false) {
-  const sc = $("sheetbody"), top = sc.scrollTop;
+  const sc = $("sheetbody"), top = sc.scrollTop, was = st.open;
   st.open = id; sc.innerHTML = html;
   $("scrim").classList.add("on"); $("sheet").classList.add("on"); $("sheet").style.transform = "";
-  sc.scrollTop = keepScroll ? top : 0; document.body.classList.add("locked");
-  if (push && id && !id.startsWith("_")) { history.pushState({ id }, "", "#" + id); st.pushed = true; }
+  $("layout").classList.add("d");
+  sc.scrollTop = keepScroll ? top : 0;
+  if (!MQ.desk.matches) document.body.classList.add("locked");
+  if (push && id && !id.startsWith("_")) {
+    if (was && !was.startsWith("_") && st.pushed) history.replaceState({ id }, "", "#" + id);
+    else { history.pushState({ id }, "", "#" + id); st.pushed = true; }
+  }
+  if (MAP && MAPKIND === "leaflet") setTimeout(() => MAP.invalidateSize(), 60);
 }
 function closeSheet(pop = true) {
   if (!st.open) return;
   st.open = null; $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); $("sheet").style.transform = "";
-  document.body.classList.remove("locked");
+  document.body.classList.remove("locked"); $("layout").classList.remove("d");
+  if (FOCUSED) { FOCUSED = false; setHot(null); setTimeout(() => overview(false), 120); }
+  if (MAP && MAPKIND === "leaflet") setTimeout(() => MAP.invalidateSize(), 60);
   if (pop && location.hash) { if (st.pushed) history.back(); else history.replaceState(null, "", location.pathname + location.search); }
   st.pushed = false;
 }
@@ -744,6 +835,10 @@ function hoursTable(r, l) {
 }
 
 function rateSection(r) {
+  if (r._disc) return `<section class="sec glass"><h3>${inList(r) ? "Auf eurer Liste" : "Noch nicht auf eurer Liste"}</h3>
+    ${inList(r) ? `<div class="note">✓ Steht schon bei euch – unter Ausprobieren oder Favoriten.</div>`
+      : canEdit() ? `<div class="discadd"><button class="go" data-addd="Ausprobieren">＋ Ausprobieren</button><button class="go sec2" data-addd="Favorit">❤️ Favorit</button></div>`
+      : `<div class="loginhint">${FB ? `<button data-act="login">Anmelden</button>, um es zu eurer Liste hinzuzufügen.` : ""}</div>`}</section>`;
   const a = avg(r), ed = canEdit();
   const row = p => `<div class="rrow" style="--who:${p.c}"><div class="who">${p.n}${ME.who === p.k ? "<small>du</small>" : ""}</div>
     <div class="tapstars${ed ? "" : " ro"}" data-rate="${p.k}" role="radiogroup" aria-label="Bewertung ${p.n}">${[1, 2, 3, 4, 5].map(i => `<button data-v="${i}" class="${(r[p.k] || 0) >= i ? "on" : ""}" aria-label="${i} Sterne">★</button>`).join("")}</div></div>`;
@@ -820,7 +915,7 @@ function openSheet(id, push = true, keepScroll = false) {
       ${linkRow("📷", "Instagram", lk.instagram)}
       ${dd.parken ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Parken " + (L[0]?.adresse || ""))}" target="_blank" rel="noopener"><b>🅿️</b><span>${esc(dd.parken)}</span><i>↗</i></a>` : ""}
       <a href="#" data-act="share"><b>📤</b><span>Teilen</span><i>›</i></a>
-      ${canEdit() ? `<a href="#" data-act="edit"><b>✏️</b><span>Bearbeiten</span><i>›</i></a>` : ""}
+      ${canEdit() && !r._disc ? `<a href="#" data-act="edit"><b>✏️</b><span>Bearbeiten</span><i>›</i></a>` : ""}
     </div>
     ${dd.hinweis ? `<div class="hint" style="margin-top:10px">ℹ️ ${esc(dd.hinweis)}</div>` : ""}
     </section>`, id, push, keepScroll);
@@ -829,12 +924,15 @@ function openSheet(id, push = true, keepScroll = false) {
   if (gal) gal.addEventListener("scroll", () => { $("gcount").textContent = `${Math.round(gal.scrollLeft / gal.clientWidth) + 1} / ${gal.children.length}`; }, { passive: true });
   const nz = $("notiz");
   if (nz) nz.addEventListener("change", () => patch(r.id, { notiz: nz.value.trim() }));
+  if (!keepScroll) focusMap(r);
   if (CFG.google_maps_api_key && !GFAIL && !GTRIED.has(r.id)) loadGoogle([r]).then(() => { if (st.open === id && G[r.id]) openSheet(id, false, true); });
 }
 
 /* Klicks im Sheet */
 $("sheetbody").addEventListener("click", async e => {
   const id = st.open, r = id && byId(id);
+  const ad = e.target.closest("[data-addd]");
+  if (ad && r && r._disc) { ad.disabled = true; await addFromDisc(r.id, ad.dataset.addd, true); return; }
   const star = e.target.closest("[data-rate] button");
   if (star && r && canEdit()) {
     const k = star.parentElement.dataset.rate, v = +star.dataset.v;
@@ -1243,7 +1341,57 @@ function setHot(id) {
   HOT = id;
   if (id) els(id).forEach(e => { e.classList.add("hot"); e.style.zIndex = 1000; });
 }
-document.addEventListener("mouseover", e => { if (!MQ.desk.matches) return; const c = e.target.closest && e.target.closest(".card[data-id]"); const id = c ? c.dataset.id : null; if (id !== HOT) setHot(id); });
+document.addEventListener("mouseover", e => { if (!MQ.desk.matches || !MAP) return; const c = e.target.closest && e.target.closest(".card[data-id]"); const id = c ? c.dataset.id : (FOCUSED && st.open ? st.open : null); if (id !== HOT) setHot(id); });
+let FOCUSED = false, LASTPTS = [], MAPFITTED = false;
+const gb = pts => { const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c })); return b; };
+const allVisible = () => { const cur = MAP.getBounds(); return !!cur && LASTPTS.every(([a, c]) => cur.contains({ lat: a, lng: c })); };
+function smoothZoom(target) {
+  const z = MAP.getZoom(); if (z === target) return;
+  google.maps.event.addListenerOnce(MAP, "zoom_changed", () => setTimeout(() => smoothZoom(target), 110));
+  MAP.setZoom(z + (target > z ? 1 : -1));
+}
+function stepOut(n) {
+  if (n > 6 || allVisible()) return;
+  google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(n + 1));
+  MAP.setZoom(MAP.getZoom() - 1);
+}
+function fitAll() {
+  if (!MAP || !LASTPTS.length) return;
+  if (MAPKIND === "google") { LASTB = gb(LASTPTS); MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }
+  else MAP.flyToBounds(LASTPTS, { padding: [50, 50], maxZoom: 15, duration: .7 });
+}
+function overview(force) {     // nur bewegen, wenn nötig – und dann sanft
+  if (!MAP || !LASTPTS.length) return;
+  if (force) return fitAll();
+  if (MAPKIND === "google") {
+    if (allVisible()) return;
+    MAP.panToBounds(gb(LASTPTS), 70);
+    google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(0));
+  } else {
+    const b = L.latLngBounds(LASTPTS); if (MAP.getBounds().contains(b)) return;
+    MAP.flyToBounds(b, { padding: [50, 50], maxZoom: MAP.getZoom(), duration: .7 });
+  }
+}
+function focusMap(r) {
+  if (!MAP || $("mapview").hidden) return;
+  const l = locs(r).find(x => x.lat); if (!l) return;
+  FOCUSED = true; setHot(r.id);
+  if (MAPKIND === "google") { MAP.panTo({ lat: l.lat, lng: l.lng }); google.maps.event.addListenerOnce(MAP, "idle", () => smoothZoom(Math.max(MAP.getZoom(), 15))); }
+  else MAP.flyTo([l.lat, l.lng], Math.max(MAP.getZoom(), 15), { duration: .8 });
+}
+$("mapwrap").addEventListener("click", e => {
+  const b = e.target.closest("[data-mz]"); if (!b) return;
+  const k = b.dataset.mz;
+  if (k === "close") { st.mapOpen = false; try { localStorage.setItem("rs-map", "0"); } catch (x) {} render(); return; }
+  if (!MAP) return;
+  if (k === "in") MAPKIND === "google" ? smoothZoom(MAP.getZoom() + 1) : MAP.zoomIn();
+  if (k === "out") MAPKIND === "google" ? smoothZoom(MAP.getZoom() - 1) : MAP.zoomOut();
+  if (k === "all") { FOCUSED = false; fitAll(); }
+  if (k === "me") {
+    const go = () => { if (!st.pos) return; MAPKIND === "google" ? (MAP.panTo(st.pos), smoothZoom(Math.max(MAP.getZoom(), 15))) : MAP.flyTo([st.pos.lat, st.pos.lng], 15); };
+    if (st.pos) go(); else { locate(); setTimeout(go, 2500); }
+  }
+});
 const pinHtml = r => `<div class="pin" style="--c:${color(r)}"><span>${emoji(r)}</span></div><div class="gtip">${esc(r.name)}${avg(r) != null ? ` · Ø ${fmt1(avg(r))} ★` : ""}</div>`;
 
 function loadLeaflet() {
@@ -1265,7 +1413,7 @@ async function initGoogleMap() {
     onRemove() { this.el.remove(); }
   };
   MAP = new Map($("map"), { center: { lat: 52.2689, lng: 10.5268 }, zoom: 13, styles: DARK_STYLE, backgroundColor: "#1b1e24",
-    disableDefaultUI: true, zoomControl: MQ.wide.matches, zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP }, clickableIcons: false, gestureHandling: MQ.wide.matches ? "greedy" : "cooperative", keyboardShortcuts: false });
+    disableDefaultUI: true, zoomControl: false, clickableIcons: false, gestureHandling: MQ.wide.matches ? "greedy" : "cooperative", keyboardShortcuts: false });
   MAPKIND = "google";
 }
 async function initLeafletMap() {
@@ -1293,11 +1441,12 @@ async function showMap(list) {
     }));
     if (st.pos) { const o = new PinOverlay(new google.maps.LatLng(st.pos.lat, st.pos.lng), "", null, "gme"); o.setMap(MAP); GOV.push(o); pts.push([st.pos.lat, st.pos.lng]); }
     const key = pts.map(p => p.join()).join("|");
+    LASTPTS = pts;
+    if (FOCUSED && st.open && byId(st.open)) setHot(st.open);
     if (pts.length && key !== MAPKEY) {
       MAPKEY = key;
-      const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c }));
-      LASTB = b; MAP.fitBounds(b, 70);
-      google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); });
+      if (!MAPFITTED) { MAPFITTED = true; fitAll(); }
+      else if (!FOCUSED) overview(false);
     }
     return;
   }
@@ -1312,7 +1461,89 @@ async function showMap(list) {
   }));
   if (st.pos) { L.circleMarker([st.pos.lat, st.pos.lng], { radius: 8, color: "#fff", weight: 3, fillColor: "#0a84ff", fillOpacity: 1 }).addTo(LAYER); pts.push([st.pos.lat, st.pos.lng]); }
   const key = pts.map(p => p.join()).join("|");
-  if (pts.length && key !== MAPKEY) { MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 15 }); MAPKEY = key; }
+  LASTPTS = pts;
+  if (pts.length && key !== MAPKEY) { MAPKEY = key; if (!MAPFITTED) { MAPFITTED = true; MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 15 }); } else if (!FOCUSED) overview(false); }
+}
+
+/* ---------- Entdecken: bestbewertete Restaurants in Braunschweig (Google) ---------- */
+const DISC = { cat: "alle", items: [], loading: false, err: "", key: "", seq: 0 };
+const DISC_CATS = [
+  ["alle", "✨ Alle", ["beste Restaurants Braunschweig", "Restaurant Braunschweig Innenstadt", "Restaurant Braunschweig"]],
+  ["italienisch", "🍕 Italienisch", ["italienisches Restaurant Braunschweig", "Pizzeria Braunschweig"]],
+  ["asiatisch", "🥢 Asiatisch", ["asiatisches Restaurant Braunschweig", "Sushi Braunschweig", "vietnamesisches Restaurant Braunschweig"]],
+  ["burger", "🍔 Burger", ["Burger Restaurant Braunschweig"]],
+  ["steak", "🥩 Steak & Grill", ["Steakhouse Braunschweig", "Grill Restaurant Braunschweig"]],
+  ["orient", "🧆 Orientalisch", ["orientalisches Restaurant Braunschweig", "türkisches Restaurant Braunschweig", "griechisches Restaurant Braunschweig"]],
+  ["fein", "🥂 Fine Dining", ["gehobenes Restaurant Braunschweig", "Fine Dining Braunschweig"]],
+  ["cafe", "☕ Frühstück & Café", ["Frühstück Café Braunschweig", "Brunch Braunschweig"]],
+];
+const DFIELDS = ["id", "displayName", "formattedAddress", "location", "rating", "userRatingCount", "priceLevel", "primaryTypeDisplayName", "photos", "regularOpeningHours", "nationalPhoneNumber", "websiteURI", "googleMapsURI", "editorialSummary", "businessStatus"];
+const DBASE = ["id", "displayName", "formattedAddress", "location", "rating", "userRatingCount", "photos", "regularOpeningHours", "nationalPhoneNumber", "websiteURI", "googleMapsURI", "businessStatus"];
+function placeToR(p) {
+  const typ = p.primaryTypeDisplayName || "", adr = kurzAdresse(p.formattedAddress), id = "g_" + p.id;
+  const kueche = (G_KUECHE.find(([re]) => re.test(typ)) || [])[1] || "";
+  const zeiten = periodsToZeiten(p.regularOpeningHours?.periods);
+  const g = { url: p.googleMapsURI, web: p.websiteURI, tel: p.nationalPhoneNumber, rating: p.rating, count: p.userRatingCount, status: p.businessStatus, zeiten, reviews: [],
+    photos: (p.photos || []).slice(0, 8).map(ph => ({ url: ph.getURI({ maxWidth: 1200, maxHeight: 900 }),
+      attr: (ph.authorAttributions || []).map(a => a.uri ? `<a href="${esc(a.uri)}" target="_blank" rel="noopener">${esc(a.displayName)}</a>` : esc(a.displayName)).join(", ") })) };
+  const r = { id, _disc: true, name: p.displayName, liste: "Entdecken", kueche, notiz: "", besuche: [],
+    details: { voller_name: p.displayName, kueche_detail: typ || null, untertitel: p.editorialSummary || null, preis: PREIS[p.priceLevel] || null, google_query: `${p.displayName} ${adr}`,
+      standorte: [{ adresse: adr, lat: p.location?.lat(), lng: p.location?.lng(), telefon: p.nationalPhoneNumber || null, zeiten, zeiten_hinweis: zeiten ? "Laut Google." : null }],
+      links: { website: p.websiteURI || null, google: p.googleMapsURI || null },
+      extern: p.rating ? { wert: p.rating, anzahl: p.userRatingCount, quelle: "Google" } : null } };
+  return { r, g };
+}
+async function discQuery(text) {
+  const ck = "rs-disc:" + text;
+  try { const c = JSON.parse(localStorage.getItem(ck) || "null"); if (c && Date.now() - c.t < 864e5) return c.v; } catch (e) {}
+  await withTimeout(loadGoogleApi(), 8000);
+  const { Place } = await google.maps.importLibrary("places");
+  const req = f => Place.searchByText({ textQuery: text, fields: f, language: "de", region: "de", maxResultCount: 20, minRating: 4, locationBias: { center: BS, radius: 12000 } });
+  let res; try { res = await withTimeout(req(DFIELDS), 9000); } catch (e) { res = await withTimeout(req(DBASE), 9000); }
+  const v = (res.places || []).filter(p => /Braunschweig/.test(p.formattedAddress || "") && (!p.businessStatus || p.businessStatus === "OPERATIONAL") && (p.userRatingCount || 0) >= 30).map(placeToR);
+  try { localStorage.setItem(ck, JSON.stringify({ t: Date.now(), v })); } catch (e) {}
+  return v;
+}
+const bayes = g => { const v = g.count || 0, R = g.rating || 0, m = 120, C = 4.2; return (v / (v + m)) * R + (m / (v + m)) * C; };
+let discT = 0;
+async function loadDisc() {
+  const cat = DISC_CATS.find(c => c[0] === DISC.cat) || DISC_CATS[0];
+  const q = st.q.trim();
+  const queries = q ? [`${q} Braunschweig`] : cat[2];
+  const key = queries.join("|");
+  if (key === DISC.key && (DISC.items.length || DISC.loading)) return;
+  if (!CFG.google_maps_api_key || GFAIL) { DISC.err = "Entdecken braucht Google – gerade nicht erreichbar."; render(); return; }
+  DISC.key = key; DISC.loading = true; DISC.err = ""; const my = ++DISC.seq; render();
+  try {
+    const all = (await Promise.all(queries.map(t => discQuery(t).catch(e => { console.warn("Entdecken:", t, e); return []; })))).flat();
+    if (my !== DISC.seq) return;
+    const seen = new Set(), items = [];
+    for (const { r, g } of all) { if (seen.has(r.id)) continue; seen.add(r.id); G[r.id] = g; GTRIED.add(r.id); r._score = bayes(g); items.push(r); }
+    items.sort((a, b) => b._score - a._score);
+    DISC.items = items.slice(0, 30);
+    if (!DISC.items.length) DISC.err = "Nichts gefunden.";
+  } catch (e) { console.warn(e); DISC.err = "Konnte gerade nichts laden."; }
+  DISC.loading = false; if (st.tab === "entdecken") render();
+}
+function renderDisc(deskMap) {
+  if (!DISC.key && !DISC.loading && !DISC.err) { loadDisc(); }
+  const list = DISC.items;
+  $("count").innerHTML = DISC.loading ? "Suche die besten Adressen …" : list.length ? `${list.length} Top-Adressen · Google-Bewertung, gewichtet nach Anzahl` : "";
+  if (DISC.loading && !list.length) { $("list").innerHTML = Array.from({ length: 6 }, () => `<div class="skel"></div>`).join(""); return; }
+  if (!list.length) { $("list").innerHTML = `<div class="empty glass"><b>🧭</b>${esc(DISC.err || "Nichts gefunden.")}</div>`; return; }
+  $("list").innerHTML = list.map((r, i) => card(r, i + 1)).join("");
+  if (deskMap) showMap(list);
+  fitMap();
+}
+async function addFromDisc(id, liste = "Ausprobieren", openAfter = false) {
+  const r = byId(id); if (!r || !canEdit()) { if (!canEdit()) toast("Bitte erst anmelden"); return; }
+  try {
+    const ref = await FB.fs.addDoc(FB.fs.collection(FB.db, "restaurants"),
+      clean({ name: r.name, liste, kueche: r.kueche || null, notiz: "", details: r.details, besuche: [], von: ME.who, erstellt: new Date().toISOString() }));
+    G[ref.id] = G[r.id]; GTRIED.add(ref.id);
+    toast(liste === "Favorit" ? `❤️ ${r.name} ist jetzt Favorit` : `✓ ${r.name} steht auf Ausprobieren`);
+    if (openAfter) setTimeout(() => openSheet(ref.id, false), 500); else render();
+  } catch (err) { console.error(err); toast(err.code === "permission-denied" ? "🔒 Dieses Konto darf nicht speichern" : "Hinzufügen fehlgeschlagen"); }
 }
 
 /* ---------- Google Places (optional, mit API-Key) ---------- */
@@ -1392,6 +1623,8 @@ function locate() {
 /* ---------- Events ---------- */
 document.addEventListener("click", e => {
   if (e.target.closest("#sheet")) return;
+  const ad = e.target.closest("[data-add]"); if (ad) { ad.disabled = true; ad.textContent = "…"; addFromDisc(ad.dataset.add); return; }
+  const dc = e.target.closest("[data-dcat]"); if (dc) { DISC.cat = dc.dataset.dcat; st.q = ""; $("q").value = ""; loadDisc(); render(); return; }
   const c = e.target.closest(".card[data-id]"); if (c) { openSheet(c.dataset.id); return; }
   const t = e.target.closest(".tab"); if (t) { st.tab = t.dataset.tab; save(); render(); scrollTo({ top: 0, behavior: "smooth" }); return; }
   const ch = e.target.closest("[data-chip]");
@@ -1404,10 +1637,11 @@ document.addEventListener("keydown", e => {
   const c = e.target.closest && e.target.closest(".card[data-id]"); if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openSheet(c.dataset.id); }
 });
 $("scrim").onclick = () => closeSheet(); $("sx").onclick = () => closeSheet();
-$("q").addEventListener("input", e => { st.q = e.target.value; render(); });
+$("q").addEventListener("input", e => { st.q = e.target.value; if (st.tab === "entdecken") { clearTimeout(discT); discT = setTimeout(loadDisc, 600); } else render(); });
+$("mapbtn").onclick = () => { st.mapOpen = !st.mapOpen; try { localStorage.setItem("rs-map", st.mapOpen ? "1" : "0"); } catch (e) {} render(); };
 $("locbtn").onclick = locate; $("dicebtn").onclick = openDice; $("acctbtn").onclick = openAccount;
 $("fab").onclick = () => openForm(null); $("addbtn").onclick = () => openForm(null);
-const onResize = () => { render(); setTimeout(() => { if (MAP) { if (MAPKIND === "leaflet") MAP.invalidateSize(); MAPKEY = ""; if (!$("mapview").hidden) render(); } }, 120); };
+const onResize = () => { placeSheet(); render(); setTimeout(() => { if (MAP) { if (MAPKIND === "leaflet") MAP.invalidateSize(); MAPKEY = ""; if (!$("mapview").hidden) render(); } }, 120); };
 MQ.desk.addEventListener("change", onResize); MQ.wide.addEventListener("change", onResize);
 addEventListener("popstate", () => { const id = location.hash.slice(1); if (id && byId(id)) openSheet(id, false); else closeSheet(false); });
 const ctl = $("controls"); new IntersectionObserver(([e]) => ctl.classList.toggle("stuck", e.intersectionRatio < 1), { threshold: [1], rootMargin: "-1px 0px 0px 0px" }).observe(ctl);
@@ -1422,7 +1656,7 @@ Promise.all([
   const seed = d.restaurants || [];
   D.restaurants = seed.map(r => ({ ...r }));       // sofort anzeigen, Firestore ersetzt es live
   $("footer").innerHTML = $("footer2").innerHTML = `${CFG.firebase ? `<span class="live" hidden>Live synchronisiert</span> · ` : ""}Öffnungszeiten &amp; Infos ohne Gewähr${CFG.google_maps_api_key ? " · Fotos &amp; Live-Daten von Google" : ""}<br><a href="../">Wochenangebote</a>`;
-  renderAll();
+  placeSheet(); renderAll();
   const id = location.hash.slice(1); if (id) openSheet(id, false);
   if (CFG.firebase && CFG.firebase.apiKey) initFirebase(seed).catch(e => { console.error("Firebase:", e); toast("Live-Sync gerade nicht erreichbar"); });
   if (CFG.google_maps_api_key) loadGoogle(D.restaurants).then(() => renderAll());
