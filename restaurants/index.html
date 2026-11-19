@@ -381,14 +381,13 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 
 /* Desktop (und großes iPad quer): Liste + Karte nebeneinander, Details als Seitenleiste */
 @media (min-width: 1024px) {
-  .wrap { max-width: 2600px; padding: 0 40px 40px; }
-  header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 28px; padding-top: 30px; padding-bottom: 14px; }
+  .wrap { max-width: 2600px; padding: 0 40px 20px; }
+  header { padding-top: 28px; padding-bottom: 10px; }
   h1 { font-size: 40px; white-space: nowrap; }
   h1 em { display: inline; }
-  .tabbar { justify-self: center; align-self: end; }
   .tab[data-tab="karte"] { display: none; }
   .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, 40%); gap: 28px; align-items: start; }
-  #mapview { display: block !important; position: sticky; top: 20px; height: calc(100vh - 140px); }
+  #mapview { display: block !important; position: sticky; top: 20px; margin-top: 20px; height: calc(100vh - 40px); height: calc(100dvh - 40px); }
   #mapview #mapwrap { height: 100%; min-height: 0; }
   .controls { position: sticky; top: 0; }
   .list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
@@ -435,33 +434,39 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   .footin { display: block; margin-top: 22px; }
   .wrap { padding-bottom: 20px !important; }
 }
+
+/* Breite Monitore: Titel, Tabs und Knöpfe in einer Zeile über der Liste */
+@media (min-width: 1900px) {
+  header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 24px; }
+  .tabbar { justify-self: center; align-self: end; }
+}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <div class="wrap">
-  <header>
-    <div class="titlebox">
-      <div class="eyebrow" id="eyebrow">Noah &amp; Helen · Braunschweig</div>
-      <h1>Unsere <em>Restaurants</em></h1>
-    </div>
-    <nav class="tabbar glass" role="tablist" aria-label="Ansichten">
-      <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
-      <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
-      <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
-      <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
-    </nav>
-    <div class="hbtns">
-      <button class="addbtn" id="addbtn" hidden>＋ Hinzufügen</button>
-      <button class="cbtn glass" id="locbtn" aria-pressed="false" aria-label="Entfernung anzeigen" title="Entfernung anzeigen">📍</button>
-      <button class="cbtn glass" id="dicebtn" aria-label="Zufall: Wo essen wir heute?" title="Wo essen wir heute?">🎲</button>
-      <button class="cbtn glass avatar" id="acctbtn" aria-label="Anmelden" title="Anmelden">👤</button>
-    </div>
-  </header>
 
   <div class="layout">
     <div class="col">
+    <header>
+      <div class="titlebox">
+        <div class="eyebrow" id="eyebrow">Noah &amp; Helen · Braunschweig</div>
+        <h1>Unsere <em>Restaurants</em></h1>
+      </div>
+      <nav class="tabbar glass" role="tablist" aria-label="Ansichten">
+        <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
+        <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
+        <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
+        <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
+      </nav>
+      <div class="hbtns">
+        <button class="addbtn" id="addbtn" hidden>＋ Hinzufügen</button>
+        <button class="cbtn glass" id="locbtn" aria-pressed="false" aria-label="Entfernung anzeigen" title="Entfernung anzeigen">📍</button>
+        <button class="cbtn glass" id="dicebtn" aria-label="Zufall: Wo essen wir heute?" title="Wo essen wir heute?">🎲</button>
+        <button class="cbtn glass avatar" id="acctbtn" aria-label="Anmelden" title="Anmelden">👤</button>
+      </div>
+    </header>
       <div class="controls" id="controls">
         <label class="search glass">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -685,31 +690,28 @@ function render() {
   if (desk) showMap(L);
   fitMap();
 }
-/* Karte genau bis zum Fensterrand */
+/* Karte: Desktop per CSS (volle Fensterhöhe); iPhone/iPad-Kartentab einmalig bis Fensterrand */
 function fitMap() {
   const mv = $("mapview"), mw = $("mapwrap");
   if (mv.hidden) return;
-  if (MQ.desk.matches) {
-    mw.style.height = "";
-    const top = Math.max(20, mv.getBoundingClientRect().top);
-    mv.style.height = Math.max(320, innerHeight - top - 20) + "px";
-  } else {
-    mv.style.height = "";
+  if (MQ.desk.matches) { mw.style.height = ""; }
+  else {
     const top = mw.getBoundingClientRect().top + scrollY;
-    const unten = MQ.wide.matches ? 28 : 112 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sab")) || 0);
-    mw.style.height = Math.max(340, innerHeight - top - unten) + "px";
+    const want = Math.max(340, Math.round(innerHeight - top - (MQ.wide.matches ? 28 : 112)));
+    if (Math.abs((parseFloat(mw.style.height) || 0) - want) > 2) mw.style.height = want + "px";
   }
-  if (MAP && MAPKIND === "leaflet") MAP.invalidateSize();
-  const h = mw.getBoundingClientRect().height;               // nach Größenänderung Ausschnitt neu einpassen
-  if (MAP && Math.abs(h - LASTH) > 40) {
+  const h = Math.round(mw.getBoundingClientRect().height);
+  if (MAP && Math.abs(h - LASTH) > 40) {                      // Ausschnitt nach echter Größenänderung neu einpassen
     LASTH = h;
-    if (MAPKIND === "google" && LASTB) setTimeout(() => { MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }, 60);
-    else if (MAPKIND === "leaflet") { MAPKEY = ""; }
+    if (MAPKIND === "leaflet") { MAP.invalidateSize(); MAPKEY = ""; }
+    else if (MAPKIND === "google" && LASTB) setTimeout(() => { MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }, 60);
   }
 }
-let fitRaf = 0;
-addEventListener("scroll", () => { if (!MQ.desk.matches) return; cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitMap); }, { passive: true });
-addEventListener("resize", () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitMap); });
+let fitT = 0, lastW = innerWidth, lastH = innerHeight;
+addEventListener("resize", () => {           // nur echte Fensteränderungen, nicht Scrollbalken-Zucken
+  if (Math.abs(innerWidth - lastW) < 30 && Math.abs(innerHeight - lastH) < 30) return;
+  lastW = innerWidth; lastH = innerHeight; clearTimeout(fitT); fitT = setTimeout(fitMap, 150);
+});
 function renderAll() { renderStats(); renderChips(); render(); refreshSheet(); }
 
 /* ---------- Sheet-Grundlagen ---------- */
