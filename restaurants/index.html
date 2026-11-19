@@ -323,6 +323,22 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 .suggest button { border: 0; border-radius: 10px; padding: 7px 10px; font-weight: 800; cursor: pointer; background: var(--gold); color: #3a2a00; }
 .live { display: inline-flex; align-items: center; gap: 5px; }
 .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.sugg { display: grid; gap: 6px; margin-top: 8px; }
+.sugg:empty { display: none; }
+.srow { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; border-radius: 16px; padding: 11px 12px; cursor: pointer; font: inherit; color: inherit;
+  background: color-mix(in srgb, var(--glass-strong) 85%, transparent); box-shadow: 0 2px 10px rgba(0,0,0,.06); transition: transform .15s; }
+.srow:active { transform: scale(.98); }
+.srow > b { font-size: 20px; flex: none; }
+.srow span { display: grid; min-width: 0; }
+.srow strong { font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.srow small { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.form .psearch input, .form .psearch input:focus { border: 0; background: none; box-shadow: none; padding: 0; border-radius: 0; font-size: 17px; }
+.srow.wait { cursor: default; color: var(--muted); font-size: 14px; background: none; box-shadow: none; }
+.srow.manual { background: none; box-shadow: none; border: 1px dashed var(--glass-line); }
+.spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--faint); border-top-color: var(--accent); animation: rot .7s linear infinite; }
+@keyframes rot { to { transform: rotate(360deg); } }
+.form .psearch label.search { display: flex; align-items: center; gap: 8px; height: 50px; color: var(--text); font-weight: 400; }
+.psearch .search input { font-size: 17px; }
 </style>
 </head>
 <body>
@@ -735,63 +751,198 @@ async function patch(id, fields, quiet = false) {
 }
 
 /* ---------- Hinzufügen / Bearbeiten ---------- */
+const BS = { lat: 52.2689, lng: 10.5268 };
+const CUISINE = { italian: "Italienisch", pizza: "Italienisch", turkish: "Türkisch", kebab: "Türkisch", greek: "Griechisch", german: "Deutsch", regional: "Deutsch",
+  asian: "Asiatisch", vietnamese: "Vietnamesisch", japanese: "Japanisch", sushi: "Japanisch", ramen: "Japanisch", indian: "Indisch", mexican: "Mexikanisch",
+  burger: "Burger", american: "Amerikanisch", steak_house: "Argentinisch", argentinian: "Argentinisch", chinese: "Chinesisch", thai: "Thai", korean: "Koreanisch",
+  french: "Französisch", spanish: "Spanisch", tapas: "Spanisch", lebanese: "Libanesisch", arab: "Libanesisch", syrian: "Libanesisch", coffee_shop: "Café", cake: "Café" };
+const G_KUECHE = [[/italien|pizz/i, "Italienisch"], [/türk|kebab|döner/i, "Türkisch"], [/griech/i, "Griechisch"], [/vietnam/i, "Vietnamesisch"], [/japan|sushi|ramen/i, "Japanisch"],
+  [/indisch|indian/i, "Indisch"], [/mexik/i, "Mexikanisch"], [/burger|hamburger/i, "Burger"], [/steak/i, "Argentinisch"], [/chines/i, "Chinesisch"], [/thai/i, "Thai"],
+  [/korean/i, "Koreanisch"], [/französ/i, "Französisch"], [/spani|tapas/i, "Spanisch"], [/liban|nahöst|orient/i, "Libanesisch"], [/asiat/i, "Asiatisch"],
+  [/deutsch|gutbürger|brauhaus|biergarten/i, "Deutsch"], [/café|cafe|kaffee|bäckerei/i, "Café"]];
+const PREIS = { PRICE_LEVEL_INEXPENSIVE: "€", INEXPENSIVE: "€", PRICE_LEVEL_MODERATE: "€€", MODERATE: "€€", PRICE_LEVEL_EXPENSIVE: "€€€", EXPENSIVE: "€€€", PRICE_LEVEL_VERY_EXPENSIVE: "€€€€", VERY_EXPENSIVE: "€€€€" };
+const kurzAdresse = a => (a || "").replace(/, Deutschland$|, Germany$/, "");
+
+function parseOSMHours(s) {          // OSM opening_hours → {Tag: ["HH:MM-HH:MM"]}, nur gängige Formen
+  if (!s) return null;
+  if (/^\s*24\/7\s*$/.test(s)) { const z = {}; for (let d = 0; d < 7; d++) z[d] = ["00:00-24:00"]; return z; }
+  const DN = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], z = {};
+  for (const part of s.split(";").map(x => x.trim()).filter(Boolean)) {
+    if (/^(PH|SH)\b/.test(part)) continue;
+    const m = part.match(/^((?:Mo|Tu|We|Th|Fr|Sa|Su)(?:\s*[-,]\s*(?:Mo|Tu|We|Th|Fr|Sa|Su))*)?\s*(.*)$/);
+    if (!m) return null;
+    const days = [];
+    if (!m[1]) days.push(0, 1, 2, 3, 4, 5, 6);
+    else for (const seg of m[1].split(",")) {
+      const [a, b] = seg.split("-").map(x => DN.indexOf(x.trim()));
+      if (b === undefined) days.push(a); else for (let d = a; ; d = (d + 1) % 7) { days.push(d); if (d === b) break; }
+    }
+    const t = m[2].trim();
+    if (/^(off|closed)$/i.test(t)) { days.forEach(d => z[d] = []); continue; }
+    const slots = t.split(",").map(x => x.trim().replace(/\+$/, "")).filter(x => /^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(x));
+    if (!slots.length) return null;
+    days.forEach(d => z[d] = slots.map(x => x.split("-").map(y => y.padStart(5, "0")).join("-")));
+  }
+  return Object.keys(z).length ? z : null;
+}
+
+/* Vorschläge: Google (mit Key) oder OpenStreetMap/Photon (ohne Key) */
+const SUG = { token: null, ctl: null };
+async function suggest(q) {
+  if (CFG.google_maps_api_key) {
+    try {
+      await loadGoogleApi();
+      const { AutocompleteSuggestion, AutocompleteSessionToken } = await google.maps.importLibrary("places");
+      SUG.token ||= new AutocompleteSessionToken();
+      const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({ input: q, sessionToken: SUG.token, language: "de", region: "de", locationBias: { center: BS, radius: 20000 } });
+      return suggestions.filter(s => s.placePrediction).slice(0, 6).map(s => ({ src: "google", name: s.placePrediction.mainText?.text || s.placePrediction.text.text, addr: s.placePrediction.secondaryText?.text || "", pred: s.placePrediction }));
+    } catch (e) { console.warn("Google-Vorschläge:", e); }
+  }
+  SUG.ctl?.abort(); SUG.ctl = new AbortController();
+  const tags = ["restaurant", "cafe", "fast_food", "bar", "pub", "biergarten", "ice_cream"].map(t => "&osm_tag=amenity:" + t).join("");
+  const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&lat=${BS.lat}&lon=${BS.lng}&limit=8&lang=de${tags}`, { signal: SUG.ctl.signal });
+  const j = await res.json();
+  return (j.features || []).filter(f => f.properties.name).slice(0, 6).map(f => {
+    const p = f.properties;
+    return { src: "osm", name: p.name, addr: [[p.street, p.housenumber].filter(Boolean).join(" "), [p.postcode, p.city].filter(Boolean).join(" ")].filter(Boolean).join(", "),
+      osm: (p.osm_type || "N")[0].toUpperCase() + p.osm_id, lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0] };
+  });
+}
+async function pick(s) {            // → { name, kueche, preis, untertitel, notiz?, details }
+  if (s.src === "google") {
+    const place = s.pred.toPlace();
+    const basis = ["displayName", "formattedAddress", "location", "nationalPhoneNumber", "websiteURI", "regularOpeningHours", "googleMapsURI", "rating", "userRatingCount"];
+    try { await place.fetchFields({ fields: [...basis, "primaryTypeDisplayName", "priceLevel", "editorialSummary"] }); }
+    catch (e) { await place.fetchFields({ fields: basis }); }
+    SUG.token = null;
+    const typ = place.primaryTypeDisplayName || "";
+    const kueche = (G_KUECHE.find(([re]) => re.test(typ)) || [])[1] || "";
+    const adr = kurzAdresse(place.formattedAddress);
+    return { name: place.displayName || s.name, kueche, preis: PREIS[place.priceLevel] || "", untertitel: place.editorialSummary || "", quelle: "Google",
+      details: { voller_name: place.displayName || s.name, kueche_detail: typ || null, google_query: `${place.displayName} ${adr}`,
+        standorte: [{ adresse: adr, lat: place.location?.lat(), lng: place.location?.lng(), telefon: place.nationalPhoneNumber || null,
+          zeiten: periodsToZeiten(place.regularOpeningHours?.periods), zeiten_hinweis: place.regularOpeningHours ? "Laut Google." : "Öffnungszeiten bei Google prüfen." }],
+        links: { website: place.websiteURI || null, google: place.googleMapsURI || null },
+        extern: place.rating ? { wert: place.rating, anzahl: place.userRatingCount, quelle: "Google" } : null } };
+  }
+  let x = {};
+  try { const j = await (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${s.osm}&format=json&extratags=1&addressdetails=1`, { headers: { "Accept-Language": "de" } })).json(); x = j[0] || {}; } catch (e) {}
+  const t = x.extratags || {}, a = x.address || {};
+  const cu = (t.cuisine || "").split(";").map(c => CUISINE[c.trim()]).find(Boolean) || "";
+  const adr = a.road ? `${a.road}${a.house_number ? " " + a.house_number : ""}, ${a.postcode || ""} ${a.city || a.town || "Braunschweig"}`.replace(/\s+/g, " ").trim() : s.addr;
+  const zeiten = parseOSMHours(t.opening_hours);
+  const tags = [];
+  if (/yes|only/.test(t["diet:vegan"] || "")) tags.push("Vegan-freundlich");
+  if (t.outdoor_seating === "yes") tags.push("Terrasse");
+  if (t.delivery === "yes") tags.push("Lieferung");
+  if (t.takeaway === "yes" || t.takeaway === "only") tags.push("Take-away");
+  return { name: s.name, kueche: cu, preis: "", untertitel: "", quelle: "OpenStreetMap",
+    details: { voller_name: s.name, kueche_detail: t.cuisine ? t.cuisine.split(";").map(c => CUISINE[c.trim()] || c.trim()).filter((v, i, arr) => arr.indexOf(v) === i).join(" · ") : null,
+      google_query: `${s.name} ${adr}`, tags,
+      standorte: [{ adresse: adr, lat: +(x.lat || s.lat), lng: +(x.lon || s.lng), telefon: t.phone || t["contact:phone"] || null, zeiten,
+        zeiten_hinweis: zeiten ? "Laut OpenStreetMap – ohne Gewähr." : "Öffnungszeiten bei Google prüfen." }],
+      links: { website: t.website || t["contact:website"] || null, speisekarte: t["website:menu"] || null, instagram: t["contact:instagram"] || null } } };
+}
+
 function openForm(r) {
   const neu = !r, d = r ? det(r) : {}, l = (r && locs(r)[0]) || {}, lk = d.links || {};
   const ku = kuechen().concat(Object.keys(KUECHE_EMO)).filter((x, i, a) => a.indexOf(x) === i).sort();
   showSheet(`<form class="form" id="rform" autocomplete="off">
     <h2>${neu ? "Restaurant hinzufügen" : "Bearbeiten"}</h2>
-    <label>Name<input name="name" required value="${esc(r ? r.name : "")}" placeholder="z. B. Bao Bar" enterkeyhint="next"></label>
+    ${neu ? `<div class="psearch">
+      <label class="search glass" style="margin-top:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="psearch" type="search" placeholder="Name eintippen, z. B. Bao Bar" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"></label>
+      <div class="sugg" id="psugg"></div>
+      <div class="gfill" id="pinfo">Vorschläge von ${CFG.google_maps_api_key ? "Google Maps" : "OpenStreetMap"} – antippen füllt alles aus.</div>
+    </div>` : ""}
+    <div id="fields" ${neu ? "hidden" : ""} class="form" style="margin:0">
+    <label>Name<input name="name" required value="${esc(r ? r.name : "")}"></label>
     <div class="listseg glass" role="group" aria-label="Liste" id="fliste">
       <button type="button" data-fl="Ausprobieren" aria-pressed="${!r || r.liste !== "Favorit"}">🍽️ Ausprobieren</button>
       <button type="button" data-fl="Favorit" aria-pressed="${!!r && r.liste === "Favorit"}">❤️ Favorit</button></div>
     <div class="row2">
       <label>Küche<input name="kueche" list="kl" value="${esc(r?.kueche || "")}" placeholder="Italienisch"></label>
-      <label>Preis<select name="preis">${["", "€", "€–€€", "€€", "€€–€€€", "€€€"].map(p => `<option ${d.preis === p ? "selected" : ""}>${p}</option>`).join("")}</select></label>
+      <label>Preis<select name="preis">${["", "€", "€–€€", "€€", "€€–€€€", "€€€", "€€€€"].map(p => `<option ${d.preis === p ? "selected" : ""}>${p}</option>`).join("")}</select></label>
     </div>
     <datalist id="kl">${ku.map(k => `<option value="${esc(k)}">`).join("")}</datalist>
     <label>Adresse<input name="adresse" value="${esc(l.adresse || "")}" placeholder="Straße Nr, PLZ Braunschweig"></label>
-    ${neu ? `<div class="gfill">${CFG.google_maps_api_key ? "💡 Leer lassen – Adresse, Telefon, Website und Zeiten holt die Seite von Google." : "💡 Adresse reicht – Karte, Route und Entfernung funktionieren dann automatisch."}</div>` : ""}
     <label>Kurzbeschreibung<input name="untertitel" value="${esc(d.untertitel || "")}" placeholder="Was ist das Besondere?"></label>
     <div class="row2">
       <label>Telefon<input name="telefon" type="tel" value="${esc(l.telefon || "")}"></label>
-      <label>Emoji<input name="emoji" value="${esc(d.emoji || "")}" placeholder="${esc(r ? emoji(r) : "🍽️")}" maxlength="4"></label>
+      <label>Emoji<input name="emoji" value="${esc(d.emoji || "")}" placeholder="${esc(r ? emoji(r) : "🍽️")}" maxlength="8"></label>
     </div>
     <label>Website<input name="website" type="url" inputmode="url" value="${esc(lk.website || "")}" placeholder="https://"></label>
     <label>Speisekarte (Link)<input name="speisekarte" type="url" inputmode="url" value="${esc(lk.speisekarte || "")}" placeholder="https://"></label>
     <label>Notiz<textarea name="notiz" rows="2">${esc(r?.notiz || "")}</textarea></label>
     <button class="go" type="submit">${neu ? "Hinzufügen" : "Speichern"}</button>
     ${neu ? "" : `<button class="danger" type="button" id="del">Restaurant löschen</button>`}
+    </div>
   </form>`, "_form", false);
-  let liste = r?.liste || "Ausprobieren";
+
+  let liste = r?.liste || "Ausprobieren", picked = null;
+  const F = $("rform"), setF = (k, v) => { if (F.elements[k] && v != null) F.elements[k].value = v; };
   $("fliste").onclick = e => { const b = e.target.closest("[data-fl]"); if (!b) return; liste = b.dataset.fl; $("fliste").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); };
+
+  if (neu) {
+    const inp = $("psearch"), box = $("psugg"); let tmr = null, last = [], seq = 0;
+    setTimeout(() => inp.focus(), 350);
+    const manual = `<button type="button" class="srow manual" data-manual="1"><b>✍️</b><span><strong>Selbst eintragen</strong><small>Ohne Vorschlag weiter</small></span></button>`;
+    inp.addEventListener("input", () => {
+      clearTimeout(tmr); const q = inp.value.trim();
+      if (q.length < 2) { box.innerHTML = ""; return; }
+      box.innerHTML = `<div class="srow wait"><span class="spin"></span><span>Suche …</span></div>`;
+      tmr = setTimeout(async () => {
+        const my = ++seq;
+        try { last = await suggest(q); } catch (e) { if (e.name === "AbortError") return; last = []; }
+        if (my !== seq) return;
+        box.innerHTML = last.map((s, i) => {
+          const dup = D.restaurants.find(x => x.name.toLowerCase() === s.name.toLowerCase());
+          return `<button type="button" class="srow" data-i="${i}"><b>${dup ? "✅" : "📍"}</b><span><strong>${esc(s.name)}</strong><small>${dup ? "Schon auf eurer Liste" : esc(s.addr || "Braunschweig")}</small></span></button>`;
+        }).join("") + (last.length ? "" : `<div class="srow wait"><span>Nichts gefunden.</span></div>`) + manual;
+      }, CFG.google_maps_api_key ? 220 : 320);
+    });
+    box.addEventListener("click", async e => {
+      const b = e.target.closest(".srow"); if (!b || b.classList.contains("wait")) return;
+      if (b.dataset.manual) { $("fields").hidden = false; setF("name", inp.value.trim()); box.innerHTML = ""; $("pinfo").textContent = "Selbst eintragen – die Adresse reicht für Karte und Route."; F.elements.name.focus(); return; }
+      const s = last[+b.dataset.i]; if (!s) return;
+      const dup = D.restaurants.find(x => x.name.toLowerCase() === s.name.toLowerCase());
+      if (dup) { openSheet(dup.id); return; }
+      box.innerHTML = `<div class="srow wait"><span class="spin"></span><span>Hole Details zu ${esc(s.name)} …</span></div>`;
+      try { picked = await pick(s); } catch (err) { console.warn(err); picked = null; }
+      box.innerHTML = "";
+      $("fields").hidden = false;
+      const p = picked || { name: s.name, details: { standorte: [{ adresse: s.addr, lat: s.lat, lng: s.lng }] } };
+      const st0 = p.details.standorte[0];
+      setF("name", p.name); setF("kueche", p.kueche); setF("preis", p.preis); setF("untertitel", p.untertitel);
+      setF("adresse", st0.adresse); setF("telefon", st0.telefon); setF("website", p.details.links?.website); setF("speisekarte", p.details.links?.speisekarte);
+      picked = p;
+      const z = st0.zeiten ? "Öffnungszeiten ✓" : "keine Öffnungszeiten";
+      $("pinfo").innerHTML = `✓ Ausgefüllt von ${esc(p.quelle || "der Suche")} · ${z}. Kurz prüfen, dann <b>Hinzufügen</b>.`;
+      inp.value = p.name;
+      setTimeout(() => F.querySelector(".go").scrollIntoView({ behavior: "smooth", block: "center" }), 120);
+    });
+  }
+
   if (!neu) $("del").onclick = async e => {
     if (e.target.dataset.sure !== "1") { e.target.dataset.sure = "1"; e.target.textContent = "Wirklich löschen? Nochmal tippen"; return; }
     try { await FB.fs.deleteDoc(FB.fs.doc(FB.db, "restaurants", r.id)); closeSheet(false); history.replaceState(null, "", location.pathname); toast("🗑️ Gelöscht"); }
     catch (err) { toast("Löschen fehlgeschlagen"); }
   };
-  $("rform").onsubmit = async e => {
+  F.onsubmit = async e => {
     e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.target).entries());
-    for (const k in f) f[k] = f[k].trim();
+    const f = Object.fromEntries(new FormData(F).entries());
+    for (const k in f) f[k] = String(f[k]).trim();
     if (!f.name) return;
-    const btn = e.target.querySelector(".go"); btn.disabled = true; btn.textContent = "Speichere …";
-    const details = clean(r?.details || {});
+    const btn = F.querySelector(".go"); btn.disabled = true; btn.textContent = "Speichere …";
+    const details = clean(picked ? picked.details : (r?.details || {}));
     details.voller_name = (r && r.name === f.name && details.voller_name) ? details.voller_name : f.name;
     details.untertitel = f.untertitel || null; details.preis = f.preis || null; details.emoji = f.emoji || null;
     details.links = { ...(details.links || {}), website: f.website || null, speisekarte: f.speisekarte || null };
     const st0 = (details.standorte || [])[0] || {};
-    const adrNeu = f.adresse && f.adresse !== st0.adresse;
-    let s0 = { ...st0, adresse: f.adresse || st0.adresse || null, telefon: f.telefon || null };
-    if (adrNeu) { s0.lat = null; s0.lng = null; const c = await geocode(f.adresse); if (c) Object.assign(s0, c); }
+    const s0 = { ...st0, adresse: f.adresse || st0.adresse || null, telefon: f.telefon || null };
+    if (f.adresse && f.adresse !== st0.adresse) { s0.lat = null; s0.lng = null; const c = await geocode(f.adresse); if (c) Object.assign(s0, c); }
     details.standorte = [s0, ...(details.standorte || []).slice(1)];
-    if (neu && CFG.google_maps_api_key) {                   // Google ergänzt fehlende Angaben
-      const p = await placeDetails(`${f.name} ${f.adresse || "Braunschweig"}`);
-      if (p) {
-        details.standorte[0] = { ...p.standort, ...Object.fromEntries(Object.entries(details.standorte[0]).filter(([, v]) => v)) };
-        details.links.website ||= p.web; details.google_query = `${f.name} ${p.standort.adresse}`;
-      }
-    }
-    if (!details.google_query) details.google_query = `${f.name} ${details.standorte[0].adresse || "Braunschweig"}`;
+    if (!details.google_query) details.google_query = `${f.name} ${s0.adresse || "Braunschweig"}`;
     const data = clean({ name: f.name, liste, kueche: f.kueche || null, notiz: f.notiz || "", details });
     try {
       if (neu) {
