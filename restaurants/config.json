@@ -1,1 +1,11 @@
-{"google_maps_api_key": "", "firebase": null}
+{
+ "google_maps_api_key": "",
+ "firebase": {
+  "apiKey": "AIzaSyB3z5Vw_ogdQgqLzSA1QCAOA8BAym9qkoU",
+  "authDomain": "restaurants-noah-helen.firebaseapp.com",
+  "projectId": "restaurants-noah-helen",
+  "storageBucket": "restaurants-noah-helen.firebasestorage.app",
+  "messagingSenderId": "159261835603",
+  "appId": "1:159261835603:web:3ef39cad7f8ad6e232e1a6"
+ }
+}
