@@ -697,7 +697,7 @@ function openSheet(id, push = true, keepScroll = false) {
   if (gal) gal.addEventListener("scroll", () => { $("gcount").textContent = `${Math.round(gal.scrollLeft / gal.clientWidth) + 1} / ${gal.children.length}`; }, { passive: true });
   const nz = $("notiz");
   if (nz) nz.addEventListener("change", () => patch(r.id, { notiz: nz.value.trim() }));
-  if (CFG.google_maps_api_key && !G[r.id]) loadGoogle([r]).then(() => { if (st.open === id) openSheet(id, false, true); });
+  if (CFG.google_maps_api_key && !GFAIL && !GTRIED.has(r.id)) loadGoogle([r]).then(() => { if (st.open === id && G[r.id]) openSheet(id, false, true); });
 }
 
 /* Klicks im Sheet */
@@ -789,14 +789,14 @@ function parseOSMHours(s) {          // OSM opening_hours → {Tag: ["HH:MM-HH:M
 /* Vorschläge: Google (mit Key) oder OpenStreetMap/Photon (ohne Key) */
 const SUG = { token: null, ctl: null };
 async function suggest(q) {
-  if (CFG.google_maps_api_key) {
+  if (CFG.google_maps_api_key && !GFAIL) {
     try {
-      await loadGoogleApi();
+      await withTimeout(loadGoogleApi(), 5000);
       const { AutocompleteSuggestion, AutocompleteSessionToken } = await google.maps.importLibrary("places");
       SUG.token ||= new AutocompleteSessionToken();
-      const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({ input: q, sessionToken: SUG.token, language: "de", region: "de", locationBias: { center: BS, radius: 20000 } });
+      const { suggestions } = await withTimeout(AutocompleteSuggestion.fetchAutocompleteSuggestions({ input: q, sessionToken: SUG.token, language: "de", region: "de", locationBias: { center: BS, radius: 20000 } }), 5000);
       return suggestions.filter(s => s.placePrediction).slice(0, 6).map(s => ({ src: "google", name: s.placePrediction.mainText?.text || s.placePrediction.text.text, addr: s.placePrediction.secondaryText?.text || "", pred: s.placePrediction }));
-    } catch (e) { console.warn("Google-Vorschläge:", e); }
+    } catch (e) { console.warn("Google-Vorschläge:", e); GFAIL = true; }
   }
   SUG.ctl?.abort(); SUG.ctl = new AbortController();
   const tags = ["restaurant", "cafe", "fast_food", "bar", "pub", "biergarten", "ice_cream"].map(t => "&osm_tag=amenity:" + t).join("");
@@ -853,7 +853,7 @@ function openForm(r) {
       <label class="search glass" style="margin-top:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="psearch" type="search" placeholder="Name eintippen, z. B. Bao Bar" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"></label>
       <div class="sugg" id="psugg"></div>
-      <div class="gfill" id="pinfo">Vorschläge von ${CFG.google_maps_api_key ? "Google Maps" : "OpenStreetMap"} – antippen füllt alles aus.</div>
+      <div class="gfill" id="pinfo">Vorschläge von ${CFG.google_maps_api_key && !GFAIL ? "Google Maps" : "OpenStreetMap"} – antippen füllt alles aus.</div>
     </div>` : ""}
     <div id="fields" ${neu ? "hidden" : ""} class="form" style="margin:0">
     <label>Name<input name="name" required value="${esc(r ? r.name : "")}"></label>
@@ -1110,7 +1110,9 @@ async function showMap(list) {
 }
 
 /* ---------- Google Places (optional, mit API-Key) ---------- */
-let GLOAD = null;
+let GLOAD = null, GFAIL = false; const GTRIED = new Set();
+window.gm_authFailure = () => { GFAIL = true; console.warn("Google-Key abgelehnt – nutze OpenStreetMap"); const i = $("pinfo"); if (i) i.textContent = "Vorschläge von OpenStreetMap – antippen füllt alles aus."; };
+const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
 function loadGoogleApi() {
   return GLOAD ||= new Promise((ok, err) => {
     window.__gmok = ok;
@@ -1143,11 +1145,12 @@ async function placeDetails(query) {   // für neue Restaurants
   } catch (e) { console.warn(e); return null; }
 }
 async function loadGoogle(list) {
-  if (!CFG.google_maps_api_key) return;
+  if (!CFG.google_maps_api_key || GFAIL) return;
   let cache = {}; try { cache = JSON.parse(sessionStorage.getItem("rs-g") || "{}"); } catch (e) {}
-  const need = list.filter(r => !G[r.id] && !(G[r.id] = cache[r.id]));
+  const need = list.filter(r => !G[r.id] && !(G[r.id] = cache[r.id]) && !GTRIED.has(r.id));
+  need.forEach(r => GTRIED.add(r.id));
   if (!need.length) return;
-  try { await loadGoogleApi(); } catch (e) { console.warn("Google Maps API nicht ladbar", e); return; }
+  try { await withTimeout(loadGoogleApi(), 8000); } catch (e) { GFAIL = true; console.warn("Google Maps API nicht ladbar", e); return; }
   await Promise.all(need.map(async r => {
     const l = locs(r)[0];
     try {
