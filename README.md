@@ -10,7 +10,7 @@ Zeigt die gefilterten Prospekt-Angebote von LIDL (Celler Str.), REWE (Wendenring
 
 ## /restaurants
 
-- `restaurants/index.html` – Restaurant-Liste von Noah & Helen (Liquid-Glass-Design, statisch)
-- `restaurants/data.json` – Daten; Bewertungen/Listen kommen aus der Notion-Datenbank „Restaurants“, Details (Adresse, Zeiten, Links) sind recherchiert
-- `restaurants/config.json` – optional `google_maps_api_key` (Places API New + Maps JavaScript API, auf `wochenangebote-bs.de/*` beschränken) für Fotos, Live-Öffnungszeiten und Google-Bewertungen
-- `tools/restaurants_sync.py` – mischt Notion-Zeilen in `data.json` (wird vom täglichen Sync-Auftrag aufgerufen)
+- `restaurants/index.html` – Restaurant-Liste von Noah & Helen (Liquid-Glass-Design, statisch). Bewerten, Hinzufügen, Bearbeiten direkt auf der Seite.
+- Daten live in **Firebase Firestore** (Collection `restaurants`, `personen`); Login mit Google, schreiben dürfen nur die in den Firestore-Regeln eingetragenen Konten.
+- `restaurants/data.json` – Startliste (wird beim ersten Login einmalig nach Firestore übernommen) und Anzeige, solange Firebase nicht erreichbar ist.
+- `restaurants/config.json` – `firebase` (Web-App-Konfiguration, öffentlich unbedenklich) und optional `google_maps_api_key` (Places API New + Maps JavaScript API, auf `wochenangebote-bs.de/*` beschränkt) für Fotos, Live-Öffnungszeiten und Google-Bewertungen.
