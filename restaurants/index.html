@@ -15,6 +15,7 @@
 <link rel="apple-touch-icon" href="../icon-180.png">
 <style>
 :root {
+  --sab: env(safe-area-inset-bottom);
   --text: #1c1917; --muted: #6b625c; --faint: #a39a93;
   --glass: rgba(255, 255, 255, .52); --glass-strong: rgba(255, 255, 255, .72);
   --glass-line: rgba(255, 255, 255, .75); --glass-edge: rgba(0, 0, 0, .06);
@@ -377,10 +378,9 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   .scrim { background: rgba(10, 6, 4, .28); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 }
 /* iPad quer: drei Spalten */
-@media (min-width: 1000px) and (max-width: 1099px) { .list { grid-template-columns: repeat(3, 1fr); } }
 
 /* Desktop (und großes iPad quer): Liste + Karte nebeneinander, Details als Seitenleiste */
-@media (min-width: 1100px) {
+@media (min-width: 1024px) {
   .wrap { max-width: 2600px; padding: 0 40px 40px; }
   header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 28px; padding-top: 30px; padding-bottom: 14px; }
   h1 { font-size: 40px; white-space: nowrap; }
@@ -388,7 +388,7 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   .tabbar { justify-self: center; align-self: end; }
   .tab[data-tab="karte"] { display: none; }
   .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, 40%); gap: 28px; align-items: start; }
-  #mapview { display: block !important; position: sticky; top: 20px; height: calc(100vh - 40px); }
+  #mapview { display: block !important; position: sticky; top: 20px; height: calc(100vh - 140px); }
   #mapview #mapwrap { height: 100%; min-height: 0; }
   .controls { position: sticky; top: 0; }
   .list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
@@ -428,6 +428,13 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   h1 { font-size: 46px; }
 }
 @media (min-width: 2400px) { .list { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); } }
+
+.footin { display: none; }
+@media (min-width: 1024px) {
+  .wrap > footer { display: none; }
+  .footin { display: block; margin-top: 22px; }
+  .wrap { padding-bottom: 20px !important; }
+}
 </style>
 </head>
 <body>
@@ -469,6 +476,7 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
         </div>
       </div>
       <main id="list" class="list" aria-live="polite"></main>
+      <footer id="footer2" class="footin"></footer>
     </div>
     <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div></div></section>
   </div>
@@ -497,7 +505,7 @@ const KUECHE_EMO = { Italienisch: "🍕", Türkisch: "🧆", Griechisch: "🫒",
 const FARBEN = ["#ff6b35", "#7b61ff", "#00a389", "#e0457b", "#2f80ed", "#c27c0e"];
 const PERS = [{ k: "noah", n: "Noah", c: "var(--noah)" }, { k: "helen", n: "Helen", c: "var(--helen)" }];
 const FBV = "10.12.2";
-const MQ = { wide: matchMedia("(min-width: 768px)"), desk: matchMedia("(min-width: 1100px)") };
+const MQ = { wide: matchMedia("(min-width: 768px)"), desk: matchMedia("(min-width: 1024px)") };
 
 let D = { restaurants: [] }, CFG = {}, G = {};
 let FB = null;                                         // Firebase-Handles, sobald konfiguriert
@@ -665,7 +673,7 @@ function render() {
   const list = sorted(filtered(map ? "alle" : st.tab));
   const L = st.tab === "ranking" ? list.filter(r => avg(r) != null) : list;
   $("count").textContent = map ? `${list.length} auf der Karte` : st.tab === "ranking" ? (L.length ? `${L.length} bewertet · nach Ø von euch beiden` : "") : `${L.length} ${L.length === 1 ? "Restaurant" : "Restaurants"}`;
-  if (map) { showMap(list); return; }
+  if (map) { showMap(list); fitMap(); return; }
   if (!L.length) {
     const e = st.tab === "ranking" && !st.q && !st.chips.size
       ? `<b>🏆</b>Noch keine Bewertungen.<br>${canEdit() ? "Restaurant antippen und Sterne vergeben – dann steht hier euer Ranking." : "Oben rechts anmelden, dann könnt ihr direkt hier bewerten."}`
@@ -675,7 +683,33 @@ function render() {
   }
   $("list").innerHTML = L.map((r, i) => card(r, st.tab === "ranking" ? i + 1 : 0)).join("");
   if (desk) showMap(L);
+  fitMap();
 }
+/* Karte genau bis zum Fensterrand */
+function fitMap() {
+  const mv = $("mapview"), mw = $("mapwrap");
+  if (mv.hidden) return;
+  if (MQ.desk.matches) {
+    mw.style.height = "";
+    const top = Math.max(20, mv.getBoundingClientRect().top);
+    mv.style.height = Math.max(320, innerHeight - top - 20) + "px";
+  } else {
+    mv.style.height = "";
+    const top = mw.getBoundingClientRect().top + scrollY;
+    const unten = MQ.wide.matches ? 28 : 112 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sab")) || 0);
+    mw.style.height = Math.max(340, innerHeight - top - unten) + "px";
+  }
+  if (MAP && MAPKIND === "leaflet") MAP.invalidateSize();
+  const h = mw.getBoundingClientRect().height;               // nach Größenänderung Ausschnitt neu einpassen
+  if (MAP && Math.abs(h - LASTH) > 40) {
+    LASTH = h;
+    if (MAPKIND === "google" && LASTB) setTimeout(() => { MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }, 60);
+    else if (MAPKIND === "leaflet") { MAPKEY = ""; }
+  }
+}
+let fitRaf = 0;
+addEventListener("scroll", () => { if (!MQ.desk.matches) return; cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitMap); }, { passive: true });
+addEventListener("resize", () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitMap); });
 function renderAll() { renderStats(); renderChips(); render(); refreshSheet(); }
 
 /* ---------- Sheet-Grundlagen ---------- */
@@ -1117,7 +1151,7 @@ async function initFirebase(seed) {
     if (snap.empty && !LIVE) { if (ME.user) seedIfEmpty(seed); return; }   // noch nichts in der Datenbank → Startdaten
     LIVE = true;
     D.restaurants = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    $("footer").querySelector(".live")?.removeAttribute("hidden");
+    document.querySelectorAll(".live").forEach(e => e.removeAttribute("hidden"));
     renderAll();
   }, err => console.warn("Firestore:", err.code));
   auth.onAuthStateChanged(authObj, async u => {
@@ -1178,6 +1212,7 @@ function openDice() {
 }
 
 /* ---------- Karte: Google Maps im schlichten Dark-Stil, Fallback Leaflet/OSM ---------- */
+let LASTB = null, LASTH = 0;
 let MAP = null, MAPKIND = null, LAYER = null, MAPLOADING = null, MAPKEY = "", MK = {}, HOT = null, GOV = [];
 const DARK_STYLE = [
   { elementType: "geometry", stylers: [{ color: "#1b1e24" }] },
@@ -1259,7 +1294,7 @@ async function showMap(list) {
     if (pts.length && key !== MAPKEY) {
       MAPKEY = key;
       const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c }));
-      MAP.fitBounds(b, 70);
+      LASTB = b; MAP.fitBounds(b, 70);
       google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); });
     }
     return;
@@ -1384,7 +1419,7 @@ Promise.all([
   CFG = cfg || {};
   const seed = d.restaurants || [];
   D.restaurants = seed.map(r => ({ ...r }));       // sofort anzeigen, Firestore ersetzt es live
-  $("footer").innerHTML = `${CFG.firebase ? `<span class="live" hidden>Live synchronisiert</span> · ` : ""}Öffnungszeiten &amp; Infos ohne Gewähr${CFG.google_maps_api_key ? " · Fotos &amp; Live-Daten von Google" : ""}<br><a href="../">Wochenangebote</a>`;
+  $("footer").innerHTML = $("footer2").innerHTML = `${CFG.firebase ? `<span class="live" hidden>Live synchronisiert</span> · ` : ""}Öffnungszeiten &amp; Infos ohne Gewähr${CFG.google_maps_api_key ? " · Fotos &amp; Live-Daten von Google" : ""}<br><a href="../">Wochenangebote</a>`;
   renderAll();
   const id = location.hash.slice(1); if (id) openSheet(id, false);
   if (CFG.firebase && CFG.firebase.apiKey) initFirebase(seed).catch(e => { console.error("Firebase:", e); toast("Live-Sync gerade nicht erreichbar"); });
