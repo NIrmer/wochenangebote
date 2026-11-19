@@ -493,11 +493,27 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   .toast { right: 24px; }
 }
 @keyframes slidein { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
-@media (min-width: 1024px) and (max-width: 1599px) {
-  .layout.d.m { grid-template-columns: minmax(0, 1fr) clamp(420px, 38vw, 620px); }
-  .layout.d.m > #mapview { display: none !important; }
-}
+
 @media (min-width: 1900px) { .layout > .sheet .scroll { padding: 22px 28px 30px; } .layout > .sheet { font-size: 17px; } }
+
+/* Kartenmodus: Liste links · Karte als Mittelpunkt · Details von rechts */
+@media (min-width: 1024px) {
+  .layout.m { grid-template-columns: clamp(360px, 28vw, 720px) minmax(0, 1fr); }
+  .layout.d.m { grid-template-columns: clamp(340px, 24vw, 640px) minmax(0, 1fr) clamp(420px, 26vw, 600px); }
+  .layout > .sheet.on { animation: slidein .4s cubic-bezier(.2,.9,.25,1); }
+  @keyframes slidein { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+}
+@media (min-width: 1024px) and (max-width: 1599px) {
+  .layout.d.m { grid-template-columns: clamp(340px, 30vw, 520px) minmax(0, 1fr); }
+  .layout.d.m > .sheet { position: fixed; top: 20px; right: 20px; bottom: 20px; height: auto; margin: 0; width: clamp(380px, 34vw, 520px); z-index: 30;
+    box-shadow: -20px 0 60px rgba(0,0,0,.35), var(--shadow); }
+}
+/* schmale Listenspalte: Kopf untereinander */
+@container (max-width: 760px) {
+  header { grid-template-columns: 1fr; grid-template-areas: "title" "btns" "tabs"; row-gap: 14px; }
+  .hbtns { justify-self: start; }
+  h1 { font-size: 34px; }
+}
 </style>
 </head>
 <body>
@@ -796,7 +812,7 @@ function renderAll() { if (RAF) return; RAF = requestAnimationFrame(() => { RAF 
 /* ---------- Sheet-Grundlagen ---------- */
 function placeSheet() {   // Desktop: Details als Spalte im Layout, sonst als Overlay
   const sh = $("sheet"), lay = $("layout");
-  if (MQ.desk.matches) { if (sh.parentElement !== lay) lay.insertBefore(sh, $("mapview")); }
+  if (MQ.desk.matches) { if (sh.parentElement !== lay || sh.nextElementSibling) lay.appendChild(sh); }
   else if (sh.parentElement !== document.body) document.body.insertBefore(sh, $("toast"));
 }
 let SHEETHTML = "";
@@ -1350,10 +1366,10 @@ let FOCUSED = false, LASTPTS = [], MAPFITTED = false, PINSIG = "";
 const gb = pts => { const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c })); return b; };
 const allVisible = () => { const cur = MAP.getBounds(); return !!cur && LASTPTS.every(([a, c]) => cur.contains({ lat: a, lng: c })); };
 let CAM = 0;                                   // jede neue Kamerabewegung bricht die alte ab
-function smoothZoom(target, tok = ++CAM, n = 0) {
+function smoothZoom(target, tok = ++CAM, n = 0, done = null) {
   if (tok !== CAM || n > 8) return;
-  const z = MAP.getZoom(); if (z == null || z === target) return;
-  google.maps.event.addListenerOnce(MAP, "idle", () => setTimeout(() => smoothZoom(target, tok, n + 1), 40));
+  const z = MAP.getZoom(); if (z == null || z === target) { if (done) done(); return; }
+  google.maps.event.addListenerOnce(MAP, "idle", () => setTimeout(() => smoothZoom(target, tok, n + 1, done), 40));
   MAP.setZoom(z + (target > z ? 1 : -1));
 }
 function stepOut(n, tok) {
@@ -1384,7 +1400,18 @@ function focusMap(r) {
   if (!MAP || $("mapview").hidden) return;
   const l = locs(r).find(x => x.lat); if (!l) return;
   FOCUSED = true; setHot(r.id);
-  if (MAPKIND === "google") { const tok = ++CAM; MAP.panTo({ lat: l.lat, lng: l.lng }); google.maps.event.addListenerOnce(MAP, "idle", () => { if (tok === CAM) smoothZoom(Math.max(MAP.getZoom(), 15), tok); }); }
+  if (MAPKIND === "google") {
+    const tok = ++CAM;
+    const shift = () => {                     // liegt die Detailkarte über der Karte, Pin in den freien Bereich schieben
+      if (tok !== CAM) return;
+      const sh = $("sheet"), mw = $("mapwrap");
+      if (getComputedStyle(sh).position !== "fixed" || !MQ.desk.matches) return;
+      const over = mw.getBoundingClientRect().right - sh.getBoundingClientRect().left;
+      if (over > 0) MAP.panBy(Math.round(over / 2), 0);
+    };
+    MAP.panTo({ lat: l.lat, lng: l.lng });
+    google.maps.event.addListenerOnce(MAP, "idle", () => { if (tok === CAM) smoothZoom(Math.max(MAP.getZoom(), 15), tok, 0, shift); });
+  }
   else MAP.flyTo([l.lat, l.lng], Math.max(MAP.getZoom(), 15), { duration: .8 });
 }
 $("mapwrap").addEventListener("click", e => {
