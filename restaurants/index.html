@@ -111,7 +111,7 @@ h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), va
 
 /* ---------- Karten ---------- */
 .list { display: grid; gap: 14px; }
-@media (min-width: 640px) { .list { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 600px) { .list { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; } }
 .card { border-radius: var(--r); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
 .cover { position: relative; height: 150px; background: var(--c, #888); overflow: hidden; }
 .cover .art { position: absolute; inset: 0; background:
@@ -339,6 +339,75 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 @keyframes rot { to { transform: rotate(360deg); } }
 .form .psearch label.search { display: flex; align-items: center; gap: 8px; height: 50px; color: var(--text); font-weight: 400; }
 .psearch .search input { font-size: 17px; }
+
+/* =================== Responsive: iPhone · iPad · Desktop =================== */
+.addbtn { border: 0; border-radius: 22px; height: 44px; padding: 0 18px; font-weight: 800; font-size: 15px; color: #fff; cursor: pointer; white-space: nowrap;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 1px 0 rgba(255,255,255,.35); transition: transform .18s cubic-bezier(.3,.7,.4,1.4); }
+.addbtn:active { transform: scale(.96); }
+.leaflet-marker-icon .pin { transition: transform .25s cubic-bezier(.3,.7,.4,1.5), box-shadow .25s; }
+.leaflet-marker-icon.hot .pin { transform: rotate(-45deg) scale(1.3); box-shadow: 0 10px 24px rgba(0,0,0,.45); }
+.maptip { font: 700 13px/1.2 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; border-radius: 10px; padding: 5px 9px; border: 0; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+
+/* iPhone: alles wie gehabt, „Hinzufügen“ nur als runder Knopf */
+@media (max-width: 767px) { .addbtn { display: none !important; } }
+
+/* iPad & größer: Tabs oben, Details als zentriertes Fenster */
+@media (min-width: 768px) {
+  .fab { display: none !important; }
+  .wrap { max-width: 1100px; padding: 0 28px 48px; }
+  header { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "title btns" "tabs tabs"; align-items: end; row-gap: 18px; padding-top: calc(28px + env(safe-area-inset-top)); }
+  .titlebox { grid-area: title; } .hbtns { grid-area: btns; align-items: center; }
+  h1 { font-size: 42px; }
+  .tabbar { grid-area: tabs; position: static; transform: none; width: auto; justify-self: start; display: inline-flex; gap: 4px; padding: 5px; border-radius: 20px; }
+  .tab { flex-direction: row; gap: 8px; padding: 9px 16px; border-radius: 15px; }
+  .tab b { font-size: 18px; } .tab span { font-size: 15px; }
+  .controls { margin-top: 8px; }
+  .cover { height: 170px; }
+  #mapwrap { height: calc(100vh - 300px); min-height: 520px; }
+  .toast { top: 20px; }
+
+  .sheet { left: 50%; right: auto; top: 50%; bottom: auto; margin: 0; width: min(640px, calc(100vw - 56px)); max-width: none; max-height: min(88vh, 940px); border-radius: 30px;
+    opacity: 0; transform: translate(-50%, -46%) scale(.96); transition: transform .38s cubic-bezier(.2, .9, .25, 1), opacity .25s, visibility 0s .38s; }
+  .sheet.on { opacity: 1; transform: translate(-50%, -50%) scale(1); transition: transform .38s cubic-bezier(.2, .9, .25, 1), opacity .25s; }
+  .sheet .grab { visibility: hidden; padding: 6px 0 0; }
+  .sheet .scroll { padding: 6px 24px 26px; }
+  .sx { right: 18px; top: 16px; }
+  .hero { height: 250px; }
+  .actions { gap: 10px; }
+  .scrim { background: rgba(10, 6, 4, .28); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+}
+/* iPad quer: drei Spalten */
+@media (min-width: 1000px) and (max-width: 1099px) { .list { grid-template-columns: repeat(3, 1fr); } }
+
+/* Desktop (und großes iPad quer): Liste + Karte nebeneinander, Details als Seitenleiste */
+@media (min-width: 1100px) {
+  .wrap { max-width: 1480px; padding: 0 32px 40px; }
+  header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 28px; padding-top: 30px; padding-bottom: 14px; }
+  h1 { font-size: 40px; white-space: nowrap; }
+  h1 em { display: inline; }
+  .tabbar { justify-self: center; align-self: end; }
+  .tab[data-tab="karte"] { display: none; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 42%); gap: 28px; align-items: start; }
+  #mapview { display: block !important; position: sticky; top: 20px; height: calc(100vh - 40px); }
+  #mapview #mapwrap { height: 100%; min-height: 0; }
+  .controls { position: sticky; top: 0; }
+  .list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  footer { text-align: left; }
+  .sheet { left: auto; right: 20px; top: 20px; bottom: 20px; width: 480px; max-height: none; opacity: 1;
+    transform: translateX(calc(100% + 40px)); transition: transform .42s cubic-bezier(.2, .9, .25, 1), visibility 0s .42s; }
+  .sheet.on { transform: translateX(0); transition: transform .42s cubic-bezier(.2, .9, .25, 1); }
+  .hero { height: 230px; }
+  .scrim { background: rgba(10, 6, 4, .14); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .toast { left: auto; right: 520px; transform: translateY(-20px); } .toast.on { transform: translateY(0); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .card { transition: transform .25s cubic-bezier(.2,.9,.25,1), box-shadow .25s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(60, 30, 10, .2), inset 0 1px 0 rgba(255,255,255,.55); }
+  .card:hover .emo { transform: rotate(-4deg) scale(1.06); }
+  .cover .emo { transition: transform .4s cubic-bezier(.3,.7,.4,1.4); }
+  .chip:hover, .cbtn:hover, .tab:hover, .pbtn:hover, .srow:hover { filter: brightness(1.04); }
+  .tapstars button:hover { transform: scale(1.15); }
+}
 </style>
 </head>
 <body>
@@ -346,47 +415,48 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 
 <div class="wrap">
   <header>
-    <div>
+    <div class="titlebox">
       <div class="eyebrow" id="eyebrow">Noah &amp; Helen · Braunschweig</div>
       <h1>Unsere <em>Restaurants</em></h1>
     </div>
+    <nav class="tabbar glass" role="tablist" aria-label="Ansichten">
+      <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
+      <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
+      <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
+      <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
+    </nav>
     <div class="hbtns">
+      <button class="addbtn" id="addbtn" hidden>＋ Hinzufügen</button>
       <button class="cbtn glass" id="locbtn" aria-pressed="false" aria-label="Entfernung anzeigen" title="Entfernung anzeigen">📍</button>
       <button class="cbtn glass" id="dicebtn" aria-label="Zufall: Wo essen wir heute?" title="Wo essen wir heute?">🎲</button>
       <button class="cbtn glass avatar" id="acctbtn" aria-label="Anmelden" title="Anmelden">👤</button>
     </div>
   </header>
 
-
-  <div class="controls" id="controls">
-    <label class="search glass">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Restaurant, Küche, Gericht …" autocomplete="off" enterkeyhint="search">
-    </label>
-    <div class="chips" id="chips"></div>
-  </div>
-
-  <div class="sortrow" id="sortrow">
-    <div class="count" id="count"></div>
-    <div class="seg glass" id="sortseg" role="group" aria-label="Sortieren">
-      <button data-sort="score">Ø</button><button data-sort="dist">Nähe</button><button data-sort="name">A–Z</button>
+  <div class="layout">
+    <div class="col">
+      <div class="controls" id="controls">
+        <label class="search glass">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Restaurant, Küche, Gericht …" autocomplete="off" enterkeyhint="search">
+        </label>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="sortrow" id="sortrow">
+        <div class="count" id="count"></div>
+        <div class="seg glass" id="sortseg" role="group" aria-label="Sortieren">
+          <button data-sort="score">Ø</button><button data-sort="dist">Nähe</button><button data-sort="name">A–Z</button>
+        </div>
+      </div>
+      <main id="list" class="list" aria-live="polite"></main>
     </div>
+    <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div></div></section>
   </div>
-
-  <main id="list" class="list" aria-live="polite"></main>
-  <section id="mapview" hidden><div id="mapwrap" class="glass"><div id="map"></div></div></section>
 
   <footer id="footer"></footer>
 </div>
 
 <button class="fab" id="fab" aria-label="Restaurant hinzufügen" hidden>+</button>
-
-<nav class="tabbar glass" role="tablist" aria-label="Ansichten">
-  <button class="tab" role="tab" data-tab="ranking"><b>🏆</b><span>Ranking</span></button>
-  <button class="tab" role="tab" data-tab="neu"><b>🍽️</b><span>Ausprobieren</span></button>
-  <button class="tab" role="tab" data-tab="fav"><b>❤️</b><span>Favoriten</span></button>
-  <button class="tab" role="tab" data-tab="karte"><b>🗺️</b><span>Karte</span></button>
-</nav>
 
 <div class="scrim" id="scrim"></div>
 <div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-label="Details">
@@ -407,6 +477,7 @@ const KUECHE_EMO = { Italienisch: "🍕", Türkisch: "🧆", Griechisch: "🫒",
 const FARBEN = ["#ff6b35", "#7b61ff", "#00a389", "#e0457b", "#2f80ed", "#c27c0e"];
 const PERS = [{ k: "noah", n: "Noah", c: "var(--noah)" }, { k: "helen", n: "Helen", c: "var(--helen)" }];
 const FBV = "10.12.2";
+const MQ = { wide: matchMedia("(min-width: 768px)"), desk: matchMedia("(min-width: 1100px)") };
 
 let D = { restaurants: [] }, CFG = {}, G = {};
 let FB = null;                                         // Firebase-Handles, sobald konfiguriert
@@ -565,9 +636,12 @@ function render() {
   document.querySelectorAll("#sortseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.sort === st.sort));
   document.querySelectorAll("[data-chip]").forEach(b => b.setAttribute("aria-pressed", st.chips.has(b.dataset.chip)));
   $("sortseg").hidden = st.tab === "ranking" || st.tab === "karte";
-  $("fab").hidden = !canEdit();
+  $("fab").hidden = !canEdit(); $("addbtn").hidden = !canEdit();
+  const desk = MQ.desk.matches;
+  if (desk && st.tab === "karte") st.tab = "neu";
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === st.tab));
   const map = st.tab === "karte";
-  $("mapview").hidden = !map; $("list").hidden = map;
+  $("mapview").hidden = !(map || desk); $("list").hidden = map; $("sortrow").hidden = false;
   const list = sorted(filtered(map ? "alle" : st.tab));
   const L = st.tab === "ranking" ? list.filter(r => avg(r) != null) : list;
   $("count").textContent = map ? `${list.length} auf der Karte` : st.tab === "ranking" ? (L.length ? `${L.length} bewertet · nach Ø von euch beiden` : "") : `${L.length} ${L.length === 1 ? "Restaurant" : "Restaurants"}`;
@@ -576,9 +650,11 @@ function render() {
     const e = st.tab === "ranking" && !st.q && !st.chips.size
       ? `<b>🏆</b>Noch keine Bewertungen.<br>${canEdit() ? "Restaurant antippen und Sterne vergeben – dann steht hier euer Ranking." : "Oben rechts anmelden, dann könnt ihr direkt hier bewerten."}`
       : `<b>🔍</b>Nichts gefunden. Filter oder Suche anpassen.`;
-    $("list").innerHTML = `<div class="empty glass">${e}</div>`; return;
+    $("list").innerHTML = `<div class="empty glass">${e}</div>`;
+    if (desk) showMap(list); return;
   }
   $("list").innerHTML = L.map((r, i) => card(r, st.tab === "ranking" ? i + 1 : 0)).join("");
+  if (desk) showMap(L);
 }
 function renderAll() { renderStats(); renderChips(); render(); refreshSheet(); }
 
@@ -729,7 +805,7 @@ $("sheetbody").addEventListener("click", async e => {
 /* Sheet nach unten wischen */
 (() => {
   let y0 = null, dy = 0; const sh = $("sheet"), sc = $("sheetbody");
-  sh.addEventListener("touchstart", e => { if (e.target.closest("textarea,input,select")) return; if (e.target.closest("#grab") || sc.scrollTop <= 0) { y0 = e.touches[0].clientY; dy = 0; sh.style.transition = "none"; } }, { passive: true });
+  sh.addEventListener("touchstart", e => { if (MQ.wide.matches || e.target.closest("textarea,input,select")) return; if (e.target.closest("#grab") || sc.scrollTop <= 0) { y0 = e.touches[0].clientY; dy = 0; sh.style.transition = "none"; } }, { passive: true });
   sh.addEventListener("touchmove", e => { if (y0 == null) return; dy = Math.max(0, e.touches[0].clientY - y0); if (dy > 0 && sc.scrollTop <= 0) { sh.style.transform = `translateY(${dy}px)`; if (e.cancelable) e.preventDefault(); } }, { passive: false });
   sh.addEventListener("touchend", () => { if (y0 == null) return; sh.style.transition = ""; y0 = null; if (dy > 110) closeSheet(); else sh.style.transform = ""; });
 })();
@@ -1082,7 +1158,13 @@ function openDice() {
 }
 
 /* ---------- Karte ---------- */
-let MAP = null, LAYER = null, MAPLOADING = null;
+let MAP = null, LAYER = null, MAPLOADING = null, MAPKEY = "", MK = {}, HOT = null;
+function setHot(id) {
+  if (HOT) (MK[HOT] || []).forEach(m => { m.getElement()?.classList.remove("hot"); m.setZIndexOffset(0); });
+  HOT = id;
+  if (id) (MK[id] || []).forEach(m => { m.getElement()?.classList.add("hot"); m.setZIndexOffset(1000); });
+}
+document.addEventListener("mouseover", e => { if (!MQ.desk.matches) return; const c = e.target.closest && e.target.closest(".card[data-id]"); const id = c ? c.dataset.id : null; if (id !== HOT) setHot(id); });
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
   return MAPLOADING ||= new Promise((ok, err) => {
@@ -1099,14 +1181,17 @@ async function showMap(list) {
     LAYER = L.layerGroup().addTo(MAP);
   }
   setTimeout(() => MAP.invalidateSize(), 50);
-  LAYER.clearLayers(); const pts = [];
+  LAYER.clearLayers(); MK = {}; HOT = null; const pts = [];
   list.forEach(r => locs(r).filter(l => l.lat).forEach(l => {
     const icon = L.divIcon({ className: "", iconSize: [44, 44], iconAnchor: [6, 44], html: `<div class="pin" style="--c:${color(r)}"><span>${emoji(r)}</span></div>` });
-    L.marker([l.lat, l.lng], { icon, title: r.name }).addTo(LAYER).on("click", () => openSheet(r.id));
+    const m = L.marker([l.lat, l.lng], { icon, title: r.name }).addTo(LAYER).on("click", () => openSheet(r.id));
+    if (MQ.wide.matches) m.bindTooltip(esc(r.name) + (avg(r) != null ? ` · Ø ${fmt1(avg(r))} ★` : ""), { direction: "top", offset: [16, -42], className: "maptip" });
+    (MK[r.id] ||= []).push(m);
     pts.push([l.lat, l.lng]);
   }));
   if (st.pos) { L.circleMarker([st.pos.lat, st.pos.lng], { radius: 8, color: "#fff", weight: 3, fillColor: "#0a84ff", fillOpacity: 1 }).addTo(LAYER); pts.push([st.pos.lat, st.pos.lng]); }
-  if (pts.length) MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 15 });
+  const key = pts.map(p => p.join()).join("|");
+  if (pts.length && key !== MAPKEY) { MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 15 }); MAPKEY = key; }
 }
 
 /* ---------- Google Places (optional, mit API-Key) ---------- */
@@ -1200,7 +1285,9 @@ document.addEventListener("keydown", e => {
 $("scrim").onclick = () => closeSheet(); $("sx").onclick = () => closeSheet();
 $("q").addEventListener("input", e => { st.q = e.target.value; render(); });
 $("locbtn").onclick = locate; $("dicebtn").onclick = openDice; $("acctbtn").onclick = openAccount;
-$("fab").onclick = () => openForm(null);
+$("fab").onclick = () => openForm(null); $("addbtn").onclick = () => openForm(null);
+const onResize = () => { render(); setTimeout(() => { if (MAP) { MAP.invalidateSize(); MAPKEY = ""; if (!$("mapview").hidden) render(); } }, 120); };
+MQ.desk.addEventListener("change", onResize); MQ.wide.addEventListener("change", onResize);
 addEventListener("popstate", () => { const id = location.hash.slice(1); if (id && byId(id)) openSheet(id, false); else closeSheet(false); });
 const ctl = $("controls"); new IntersectionObserver(([e]) => ctl.classList.toggle("stuck", e.intersectionRatio < 1), { threshold: [1], rootMargin: "-1px 0px 0px 0px" }).observe(ctl);
 setInterval(() => { if (!st.open) render(); }, 60000);
