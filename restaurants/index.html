@@ -790,7 +790,8 @@ addEventListener("resize", () => {           // nur echte Fensteränderungen, ni
   if (Math.abs(innerWidth - lastW) < 30 && Math.abs(innerHeight - lastH) < 30) return;
   lastW = innerWidth; lastH = innerHeight; clearTimeout(fitT); fitT = setTimeout(fitMap, 150);
 });
-function renderAll() { renderStats(); renderChips(); render(); refreshSheet(); }
+let RAF = 0;
+function renderAll() { if (RAF) return; RAF = requestAnimationFrame(() => { RAF = 0; renderChips(); render(); refreshSheet(); }); }
 
 /* ---------- Sheet-Grundlagen ---------- */
 function placeSheet() {   // Desktop: Details als Spalte im Layout, sonst als Overlay
@@ -798,9 +799,11 @@ function placeSheet() {   // Desktop: Details als Spalte im Layout, sonst als Ov
   if (MQ.desk.matches) { if (sh.parentElement !== lay) lay.insertBefore(sh, $("mapview")); }
   else if (sh.parentElement !== document.body) document.body.insertBefore(sh, $("toast"));
 }
+let SHEETHTML = "";
 function showSheet(html, id, push = true, keepScroll = false) {
   const sc = $("sheetbody"), top = sc.scrollTop, was = st.open;
-  st.open = id; sc.innerHTML = html;
+  if (keepScroll && was === id && html === SHEETHTML) return false;   // nichts geändert → nichts tun
+  st.open = id; sc.innerHTML = html; SHEETHTML = html;
   $("scrim").classList.add("on"); $("sheet").classList.add("on"); $("sheet").style.transform = "";
   $("layout").classList.add("d");
   sc.scrollTop = keepScroll ? top : 0;
@@ -810,10 +813,11 @@ function showSheet(html, id, push = true, keepScroll = false) {
     else { history.pushState({ id }, "", "#" + id); st.pushed = true; }
   }
   if (MAP && MAPKIND === "leaflet") setTimeout(() => MAP.invalidateSize(), 60);
+  return true;
 }
 function closeSheet(pop = true) {
   if (!st.open) return;
-  st.open = null; $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); $("sheet").style.transform = "";
+  st.open = null; SHEETHTML = ""; $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); $("sheet").style.transform = "";
   document.body.classList.remove("locked"); $("layout").classList.remove("d");
   if (FOCUSED) { FOCUSED = false; setHot(null); setTimeout(() => overview(false), 120); }
   if (MAP && MAPKIND === "leaflet") setTimeout(() => MAP.invalidateSize(), 60);
@@ -877,7 +881,7 @@ function openSheet(id, push = true, keepScroll = false) {
   const ext = g.rating != null ? { wert: g.rating, anzahl: g.count, quelle: "Google · live" } : dd.extern;
   const reviews = (g.reviews || []).slice(0, 3);
 
-  showSheet(`
+  if (!showSheet(`
     <div class="hero" style="--c:${color(r)}"><div class="art"></div><div class="emo">${emoji(r)}</div>
       ${photos.length ? `<div class="gallery" id="gal">${photos.map(p => `<figure><img src="${esc(p.url)}" alt="" loading="lazy">${p.attr ? `<figcaption>📷 ${p.attr}</figcaption>` : ""}</figure>`).join("")}</div>
       <span class="bdg gcount" id="gcount">1 / ${photos.length}</span>` : ""}
@@ -918,7 +922,7 @@ function openSheet(id, push = true, keepScroll = false) {
       ${canEdit() && !r._disc ? `<a href="#" data-act="edit"><b>✏️</b><span>Bearbeiten</span><i>›</i></a>` : ""}
     </div>
     ${dd.hinweis ? `<div class="hint" style="margin-top:10px">ℹ️ ${esc(dd.hinweis)}</div>` : ""}
-    </section>`, id, push, keepScroll);
+    </section>`, id, push, keepScroll)) return;
 
   const gal = $("gal");
   if (gal) gal.addEventListener("scroll", () => { $("gcount").textContent = `${Math.round(gal.scrollLeft / gal.clientWidth) + 1} / ${gal.children.length}`; }, { passive: true });
@@ -1342,31 +1346,35 @@ function setHot(id) {
   if (id) els(id).forEach(e => { e.classList.add("hot"); e.style.zIndex = 1000; });
 }
 document.addEventListener("mouseover", e => { if (!MQ.desk.matches || !MAP) return; const c = e.target.closest && e.target.closest(".card[data-id]"); const id = c ? c.dataset.id : (FOCUSED && st.open ? st.open : null); if (id !== HOT) setHot(id); });
-let FOCUSED = false, LASTPTS = [], MAPFITTED = false;
+let FOCUSED = false, LASTPTS = [], MAPFITTED = false, PINSIG = "";
 const gb = pts => { const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c })); return b; };
 const allVisible = () => { const cur = MAP.getBounds(); return !!cur && LASTPTS.every(([a, c]) => cur.contains({ lat: a, lng: c })); };
-function smoothZoom(target) {
-  const z = MAP.getZoom(); if (z === target) return;
-  google.maps.event.addListenerOnce(MAP, "zoom_changed", () => setTimeout(() => smoothZoom(target), 110));
+let CAM = 0;                                   // jede neue Kamerabewegung bricht die alte ab
+function smoothZoom(target, tok = ++CAM, n = 0) {
+  if (tok !== CAM || n > 8) return;
+  const z = MAP.getZoom(); if (z == null || z === target) return;
+  google.maps.event.addListenerOnce(MAP, "idle", () => setTimeout(() => smoothZoom(target, tok, n + 1), 40));
   MAP.setZoom(z + (target > z ? 1 : -1));
 }
-function stepOut(n) {
-  if (n > 6 || allVisible()) return;
-  google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(n + 1));
+function stepOut(n, tok) {
+  if (tok !== CAM || n > 6 || allVisible()) return;
+  google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(n + 1, tok));
   MAP.setZoom(MAP.getZoom() - 1);
 }
 function fitAll() {
   if (!MAP || !LASTPTS.length) return;
-  if (MAPKIND === "google") { LASTB = gb(LASTPTS); MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); }); }
+  if (MAPKIND === "google") { const tok = ++CAM; LASTB = gb(LASTPTS); MAP.fitBounds(LASTB, 70); google.maps.event.addListenerOnce(MAP, "idle", () => { if (tok === CAM && MAP.getZoom() > 15) MAP.setZoom(15); }); }
   else MAP.flyToBounds(LASTPTS, { padding: [50, 50], maxZoom: 15, duration: .7 });
 }
 function overview(force) {     // nur bewegen, wenn nötig – und dann sanft
   if (!MAP || !LASTPTS.length) return;
   if (force) return fitAll();
+  if ($("mapview").hidden) return;
   if (MAPKIND === "google") {
     if (allVisible()) return;
+    const tok = ++CAM;
     MAP.panToBounds(gb(LASTPTS), 70);
-    google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(0));
+    google.maps.event.addListenerOnce(MAP, "idle", () => stepOut(0, tok));
   } else {
     const b = L.latLngBounds(LASTPTS); if (MAP.getBounds().contains(b)) return;
     MAP.flyToBounds(b, { padding: [50, 50], maxZoom: MAP.getZoom(), duration: .7 });
@@ -1376,7 +1384,7 @@ function focusMap(r) {
   if (!MAP || $("mapview").hidden) return;
   const l = locs(r).find(x => x.lat); if (!l) return;
   FOCUSED = true; setHot(r.id);
-  if (MAPKIND === "google") { MAP.panTo({ lat: l.lat, lng: l.lng }); google.maps.event.addListenerOnce(MAP, "idle", () => smoothZoom(Math.max(MAP.getZoom(), 15))); }
+  if (MAPKIND === "google") { const tok = ++CAM; MAP.panTo({ lat: l.lat, lng: l.lng }); google.maps.event.addListenerOnce(MAP, "idle", () => { if (tok === CAM) smoothZoom(Math.max(MAP.getZoom(), 15), tok); }); }
   else MAP.flyTo([l.lat, l.lng], Math.max(MAP.getZoom(), 15), { duration: .8 });
 }
 $("mapwrap").addEventListener("click", e => {
@@ -1388,7 +1396,7 @@ $("mapwrap").addEventListener("click", e => {
   if (k === "out") MAPKIND === "google" ? smoothZoom(MAP.getZoom() - 1) : MAP.zoomOut();
   if (k === "all") { FOCUSED = false; fitAll(); }
   if (k === "me") {
-    const go = () => { if (!st.pos) return; MAPKIND === "google" ? (MAP.panTo(st.pos), smoothZoom(Math.max(MAP.getZoom(), 15))) : MAP.flyTo([st.pos.lat, st.pos.lng], 15); };
+    const go = () => { if (!st.pos) return; if (MAPKIND === "google") { const tok = ++CAM; MAP.panTo(st.pos); google.maps.event.addListenerOnce(MAP, "idle", () => smoothZoom(Math.max(MAP.getZoom(), 15), tok)); } else MAP.flyTo([st.pos.lat, st.pos.lng], 15); };
     if (st.pos) go(); else { locate(); setTimeout(go, 2500); }
   }
 });
@@ -1432,6 +1440,9 @@ async function showMap(list) {
     })();
     try { await MAPINIT; } catch (e) { $("map").innerHTML = `<div class="empty">Karte konnte nicht geladen werden.</div>`; return; }
   }
+  const sig = list.map(r => r.id + ":" + (avg(r) ?? "") + ":" + emoji(r) + ":" + locs(r).map(l => l.lat).join()).join("|") + "|" + (st.pos ? st.pos.lat : "");
+  if (sig === PINSIG && MAPKIND === "google") { if (FOCUSED && st.open) setHot(st.open); return; }
+  PINSIG = sig;
   MK = {}; HOT = null; const pts = [];
   if (MAPKIND === "google") {
     GOV.forEach(o => o.setMap(null)); GOV = [];
