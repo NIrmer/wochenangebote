@@ -145,7 +145,7 @@ h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), va
 .empty b { display: block; font-size: 40px; margin-bottom: 6px; }
 
 /* ---------- Karte (Map) ---------- */
-#mapwrap { border-radius: var(--r); overflow: hidden; height: calc(100vh - 280px); min-height: 380px; }
+#mapwrap { border-radius: var(--r); overflow: hidden; height: calc(100dvh - 400px - env(safe-area-inset-bottom)); min-height: 340px; }
 #map { width: 100%; height: 100%; }
 .pin { width: 44px; height: 44px; border-radius: 50% 50% 50% 4px; transform: rotate(-45deg); display: grid; place-items: center;
   background: var(--c); border: 3px solid #fff; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
@@ -381,13 +381,13 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
 
 /* Desktop (und großes iPad quer): Liste + Karte nebeneinander, Details als Seitenleiste */
 @media (min-width: 1100px) {
-  .wrap { max-width: 1480px; padding: 0 32px 40px; }
+  .wrap { max-width: 2600px; padding: 0 40px 40px; }
   header { grid-template-columns: auto 1fr auto; grid-template-areas: "title tabs btns"; column-gap: 28px; padding-top: 30px; padding-bottom: 14px; }
   h1 { font-size: 40px; white-space: nowrap; }
   h1 em { display: inline; }
   .tabbar { justify-self: center; align-self: end; }
   .tab[data-tab="karte"] { display: none; }
-  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 42%); gap: 28px; align-items: start; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, 40%); gap: 28px; align-items: start; }
   #mapview { display: block !important; position: sticky; top: 20px; height: calc(100vh - 40px); }
   #mapview #mapwrap { height: 100%; min-height: 0; }
   .controls { position: sticky; top: 0; }
@@ -408,6 +408,26 @@ textarea.notiz { min-height: 64px; margin-top: 4px; }
   .chip:hover, .cbtn:hover, .tab:hover, .pbtn:hover, .srow:hover { filter: brightness(1.04); }
   .tapstars button:hover { transform: scale(1.15); }
 }
+
+/* Karte: Google-Pins & dunkles Schema */
+#mapwrap { background: #1b1e24; }
+.gpin { position: absolute; width: 44px; height: 44px; transform: translate(-6px, -44px); cursor: pointer; }
+.gpin .pin { transition: transform .25s cubic-bezier(.3,.7,.4,1.5), box-shadow .25s; border-color: #1b1e24; box-shadow: 0 6px 18px rgba(0,0,0,.55); }
+.gpin.hot .pin, .gpin:hover .pin { transform: rotate(-45deg) scale(1.28); }
+.gpin .gtip { position: absolute; left: 22px; bottom: 54px; transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .2s, transform .2s;
+  font: 700 13px/1.2 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; color: #f2f2f4; padding: 6px 10px; border-radius: 10px;
+  background: rgba(30, 32, 38, .82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.12); }
+.gpin:hover .gtip, .gpin.hot .gtip { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+.gpin.hot, .gpin:hover { z-index: 1000; }
+.gme { position: absolute; width: 18px; height: 18px; border-radius: 50%; transform: translate(-50%, -50%); background: #0a84ff; border: 3px solid #fff; box-shadow: 0 0 0 8px rgba(10,132,255,.25); }
+.gm-style .gmnoprint, .gm-style-cc { opacity: .75; }
+/* Sehr große Monitore */
+@media (min-width: 1800px) {
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(560px, 38%); gap: 36px; }
+  .list { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 20px; }
+  h1 { font-size: 46px; }
+}
+@media (min-width: 2400px) { .list { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); } }
 </style>
 </head>
 <body>
@@ -1157,14 +1177,38 @@ function openDice() {
   };
 }
 
-/* ---------- Karte ---------- */
-let MAP = null, LAYER = null, MAPLOADING = null, MAPKEY = "", MK = {}, HOT = null;
+/* ---------- Karte: Google Maps im schlichten Dark-Stil, Fallback Leaflet/OSM ---------- */
+let MAP = null, MAPKIND = null, LAYER = null, MAPLOADING = null, MAPKEY = "", MK = {}, HOT = null, GOV = [];
+const DARK_STYLE = [
+  { elementType: "geometry", stylers: [{ color: "#1b1e24" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#7d838e" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#1b1e24" }, { weight: 3 }] },
+  { featureType: "administrative", elementType: "geometry", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#b4bac4" }] },
+  { featureType: "administrative.neighborhood", elementType: "labels.text.fill", stylers: [{ color: "#5f6672" }] },
+  { featureType: "poi", stylers: [{ visibility: "off" }] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [{ visibility: "on" }, { color: "#1d2a23" }] },
+  { featureType: "landscape.man_made", elementType: "geometry", stylers: [{ color: "#1f2329" }] },
+  { featureType: "road", elementType: "geometry.stroke", stylers: [{ visibility: "off" }] },
+  { featureType: "road.local", elementType: "geometry", stylers: [{ color: "#262a32" }] },
+  { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
+  { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#2f343e" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3b414d" }] },
+  { featureType: "road.highway", elementType: "labels", stylers: [{ visibility: "off" }] },
+  { featureType: "transit", stylers: [{ visibility: "off" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#0e1822" }] },
+  { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
+];
 function setHot(id) {
-  if (HOT) (MK[HOT] || []).forEach(m => { m.getElement()?.classList.remove("hot"); m.setZIndexOffset(0); });
+  const els = k => (MK[k] || []).map(m => m.el || m.getElement?.()).filter(Boolean);
+  if (HOT) els(HOT).forEach(e => { e.classList.remove("hot"); e.style.zIndex = ""; });
   HOT = id;
-  if (id) (MK[id] || []).forEach(m => { m.getElement()?.classList.add("hot"); m.setZIndexOffset(1000); });
+  if (id) els(id).forEach(e => { e.classList.add("hot"); e.style.zIndex = 1000; });
 }
 document.addEventListener("mouseover", e => { if (!MQ.desk.matches) return; const c = e.target.closest && e.target.closest(".card[data-id]"); const id = c ? c.dataset.id : null; if (id !== HOT) setHot(id); });
+const pinHtml = r => `<div class="pin" style="--c:${color(r)}"><span>${emoji(r)}</span></div><div class="gtip">${esc(r.name)}${avg(r) != null ? ` · Ø ${fmt1(avg(r))} ★` : ""}</div>`;
+
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
   return MAPLOADING ||= new Promise((ok, err) => {
@@ -1172,16 +1216,56 @@ function loadLeaflet() {
     const s = document.createElement("script"); s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload = ok; s.onerror = err; document.head.append(s);
   });
 }
+let PinOverlay = null;
+async function initGoogleMap() {
+  await withTimeout(loadGoogleApi(), 8000);
+  const { Map } = await google.maps.importLibrary("maps");
+  PinOverlay = class extends google.maps.OverlayView {
+    constructor(pos, html, onClick, cls = "gpin") { super(); this.pos = pos; this.el = document.createElement("div"); this.el.className = cls; this.el.innerHTML = html;
+      if (onClick) this.el.addEventListener("click", e => { e.stopPropagation(); onClick(); }); }
+    onAdd() { this.getPanes().overlayMouseTarget.appendChild(this.el); }
+    draw() { const p = this.getProjection().fromLatLngToDivPixel(this.pos); if (p) { this.el.style.left = p.x + "px"; this.el.style.top = p.y + "px"; } }
+    onRemove() { this.el.remove(); }
+  };
+  MAP = new Map($("map"), { center: { lat: 52.2689, lng: 10.5268 }, zoom: 13, styles: DARK_STYLE, backgroundColor: "#1b1e24",
+    disableDefaultUI: true, zoomControl: MQ.wide.matches, zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP }, clickableIcons: false, gestureHandling: MQ.wide.matches ? "greedy" : "cooperative", keyboardShortcuts: false });
+  MAPKIND = "google";
+}
+async function initLeafletMap() {
+  await loadLeaflet();
+  MAP = L.map("map", { zoomControl: false }).setView([52.2689, 10.5268], 13);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, className: "darktiles", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(MAP);
+  LAYER = L.layerGroup().addTo(MAP);
+  MAPKIND = "leaflet";
+}
+let MAPINIT = null;
 async function showMap(list) {
-  try { await loadLeaflet(); } catch (e) { $("map").innerHTML = `<div class="empty">Karte konnte nicht geladen werden.</div>`; return; }
   if (!MAP) {
-    MAP = L.map("map", { zoomControl: false }).setView([52.2689, 10.5268], 13);
-    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, className: dark ? "darktiles" : "", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(MAP);
-    LAYER = L.layerGroup().addTo(MAP);
+    MAPINIT ||= (async () => {
+      if (CFG.google_maps_api_key && !GFAIL) { try { await initGoogleMap(); return; } catch (e) { console.warn("Google-Karte nicht verfügbar:", e); $("map").innerHTML = ""; } }
+      await initLeafletMap();
+    })();
+    try { await MAPINIT; } catch (e) { $("map").innerHTML = `<div class="empty">Karte konnte nicht geladen werden.</div>`; return; }
+  }
+  MK = {}; HOT = null; const pts = [];
+  if (MAPKIND === "google") {
+    GOV.forEach(o => o.setMap(null)); GOV = [];
+    list.forEach(r => locs(r).filter(l => l.lat).forEach(l => {
+      const o = new PinOverlay(new google.maps.LatLng(l.lat, l.lng), pinHtml(r), () => openSheet(r.id));
+      o.setMap(MAP); GOV.push(o); (MK[r.id] ||= []).push(o); pts.push([l.lat, l.lng]);
+    }));
+    if (st.pos) { const o = new PinOverlay(new google.maps.LatLng(st.pos.lat, st.pos.lng), "", null, "gme"); o.setMap(MAP); GOV.push(o); pts.push([st.pos.lat, st.pos.lng]); }
+    const key = pts.map(p => p.join()).join("|");
+    if (pts.length && key !== MAPKEY) {
+      MAPKEY = key;
+      const b = new google.maps.LatLngBounds(); pts.forEach(([a, c]) => b.extend({ lat: a, lng: c }));
+      MAP.fitBounds(b, 70);
+      google.maps.event.addListenerOnce(MAP, "idle", () => { if (MAP.getZoom() > 15) MAP.setZoom(15); });
+    }
+    return;
   }
   setTimeout(() => MAP.invalidateSize(), 50);
-  LAYER.clearLayers(); MK = {}; HOT = null; const pts = [];
+  LAYER.clearLayers();
   list.forEach(r => locs(r).filter(l => l.lat).forEach(l => {
     const icon = L.divIcon({ className: "", iconSize: [44, 44], iconAnchor: [6, 44], html: `<div class="pin" style="--c:${color(r)}"><span>${emoji(r)}</span></div>` });
     const m = L.marker([l.lat, l.lng], { icon, title: r.name }).addTo(LAYER).on("click", () => openSheet(r.id));
@@ -1286,7 +1370,7 @@ $("scrim").onclick = () => closeSheet(); $("sx").onclick = () => closeSheet();
 $("q").addEventListener("input", e => { st.q = e.target.value; render(); });
 $("locbtn").onclick = locate; $("dicebtn").onclick = openDice; $("acctbtn").onclick = openAccount;
 $("fab").onclick = () => openForm(null); $("addbtn").onclick = () => openForm(null);
-const onResize = () => { render(); setTimeout(() => { if (MAP) { MAP.invalidateSize(); MAPKEY = ""; if (!$("mapview").hidden) render(); } }, 120); };
+const onResize = () => { render(); setTimeout(() => { if (MAP) { if (MAPKIND === "leaflet") MAP.invalidateSize(); MAPKEY = ""; if (!$("mapview").hidden) render(); } }, 120); };
 MQ.desk.addEventListener("change", onResize); MQ.wide.addEventListener("change", onResize);
 addEventListener("popstate", () => { const id = location.hash.slice(1); if (id && byId(id)) openSheet(id, false); else closeSheet(false); });
 const ctl = $("controls"); new IntersectionObserver(([e]) => ctl.classList.toggle("stuck", e.intersectionRatio < 1), { threshold: [1], rootMargin: "-1px 0px 0px 0px" }).observe(ctl);
