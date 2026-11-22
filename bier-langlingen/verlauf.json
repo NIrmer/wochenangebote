@@ -1025,6 +1025,312 @@
     "preis": 22,
     "eur_l": 2.78
    }
+  ],
+  "2026-W48": [
+   {
+    "markt": "Trinkgut",
+    "marke": "Hasseröder",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 7.99,
+    "eur_l": 0.8
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Hasseröder",
+    "produkt": "Premium Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 8.99,
+    "eur_l": 0.9
+   },
+   {
+    "markt": "combi",
+    "marke": "Ratskeller, Gilde",
+    "produkt": "Premium Pils / Pilsener",
+    "gebinde": "30 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.11
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Brinkhoff's",
+    "produkt": "No. 1",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.49,
+    "eur_l": 1.15
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Tyskie",
+    "produkt": "Premium-Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.99,
+    "eur_l": 1.2
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Veltins",
+    "produkt": "Pilsener",
+    "gebinde": "20 × 0,5 l",
+    "preis": 11.99,
+    "eur_l": 1.2
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Gilde",
+    "produkt": "Pilsener",
+    "gebinde": "30 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.21
+   },
+   {
+    "markt": "combi",
+    "marke": "Veltins",
+    "produkt": "Pilsener Dosenkoffer",
+    "gebinde": "18 × 0,33 l",
+    "preis": 7.99,
+    "eur_l": 1.35
+   },
+   {
+    "markt": "Netto",
+    "marke": "Beck's",
+    "produkt": "",
+    "gebinde": "24 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.39
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Erdinger Brauhaus",
+    "produkt": "Helles",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Paulaner",
+    "produkt": "Hefe-Weißbier Original naturtrüb / Hefe-Weißbier Alkoholfrei 0,0 %",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Tyskie",
+    "produkt": "Premium Pils / Radler",
+    "gebinde": "20 × 0,5 l",
+    "preis": 13.99,
+    "eur_l": 1.4
+   },
+   {
+    "markt": "METRO",
+    "marke": "Pilsner Urquell",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.86,
+    "eur_l": 1.49
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Allgäuer Büble",
+    "produkt": "Edelbräu",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Budweiser",
+    "produkt": "Budvar",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Allgäuer Büble",
+    "produkt": "",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Keiler",
+    "produkt": "Kellerbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Schöfferhofer",
+    "produkt": "Weizen Naturtrüb / Weizen 0,0% Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "combi",
+    "marke": "Spaten",
+    "produkt": "Münchner Hell / Tyskie",
+    "gebinde": "20 × 0,5 l",
+    "preis": 14.99,
+    "eur_l": 1.5
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "König Pilsener",
+    "produkt": "Steinie",
+    "gebinde": "20 × 0,33 l",
+    "preis": 9.99,
+    "eur_l": 1.51
+   },
+   {
+    "markt": "Netto",
+    "marke": "Jever",
+    "produkt": "Fun Alkoholfrei",
+    "gebinde": "24 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.51
+   },
+   {
+    "markt": "METRO",
+    "marke": "Krombacher",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.46,
+    "eur_l": 1.55
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Carlsberg",
+    "produkt": "Lager",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Hofbräu",
+    "produkt": "Münchner Weisse",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Tucher",
+    "produkt": "Christ-kindlesmarkt",
+    "gebinde": "20 × 0,5 l",
+    "preis": 15.99,
+    "eur_l": 1.6
+   },
+   {
+    "markt": "Netto",
+    "marke": "Wolters, Gilde",
+    "produkt": "Pilsener / Ratskeller Pils",
+    "gebinde": "24 × 0,33 l",
+    "preis": 12.99,
+    "eur_l": 1.64
+   },
+   {
+    "markt": "METRO",
+    "marke": "Beck's",
+    "produkt": "Pils",
+    "gebinde": "20 × 0,5 l",
+    "preis": 16.65,
+    "eur_l": 1.66
+   },
+   {
+    "markt": "Netto",
+    "marke": "Einbecker",
+    "produkt": "Weihnachtsbier",
+    "gebinde": "20 × 0,33 l",
+    "preis": 10.99,
+    "eur_l": 1.67
+   },
+   {
+    "markt": "Netto",
+    "marke": "Veltins",
+    "produkt": "Helles Pülleken",
+    "gebinde": "24 × 0,33 l",
+    "preis": 13.99,
+    "eur_l": 1.77
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Anheuser-Busch",
+    "produkt": "Bud Lagerbier",
+    "gebinde": "24 × 0,3 l",
+    "preis": 12.99,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Benediktiner",
+    "produkt": "Hell / Hell Alkoholfrei",
+    "gebinde": "20 × 0,5 l",
+    "preis": 17.99,
+    "eur_l": 1.8
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Maximilian",
+    "produkt": "Bayrisch Hell",
+    "gebinde": "20 × 0,33 l",
+    "preis": 11.99,
+    "eur_l": 1.82
+   },
+   {
+    "markt": "METRO",
+    "marke": "Benediktiner",
+    "produkt": "Hell oder Weissbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 20.22,
+    "eur_l": 2.02
+   },
+   {
+    "markt": "METRO",
+    "marke": "Hofbräuhaus",
+    "produkt": "Helles Vollbier",
+    "gebinde": "20 × 0,5 l",
+    "preis": 20.69,
+    "eur_l": 2.07
+   },
+   {
+    "markt": "Kaufland",
+    "marke": "Corona",
+    "produkt": "Extra / Cero 0.0 %",
+    "gebinde": "20 × 0,355 l",
+    "preis": 14.99,
+    "eur_l": 2.11
+   },
+   {
+    "markt": "Trinkgut",
+    "marke": "Peroni",
+    "produkt": "Nastro Azzurro",
+    "gebinde": "24 × 0,33 l",
+    "preis": 18.99,
+    "eur_l": 2.4
+   },
+   {
+    "markt": "METRO",
+    "marke": "Birra Moretti",
+    "produkt": "Bier",
+    "gebinde": "24 × 0,33 l",
+    "preis": 20.58,
+    "eur_l": 2.6
+   },
+   {
+    "markt": "METRO",
+    "marke": "Heineken",
+    "produkt": "",
+    "gebinde": "28 × 0,25 l",
+    "preis": 19.98,
+    "eur_l": 2.85
+   }
   ]
  }
 }

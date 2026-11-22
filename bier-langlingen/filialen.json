@@ -1,5 +1,5 @@
 {
- "stand": "2026-10-19T00:02+02:00",
+ "stand": "2026-11-22T14:09+01:00",
  "radius_km": 25,
  "filialen": {
   "ALDI Nord": [
@@ -30,6 +30,13 @@
     "ort": "31311 Uetze",
     "km": 11.7,
     "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Burgdorfer%20Stra%C3%9Fe%2023%2031311%20Uetze"
+   },
+   {
+    "name": "ALDI Nord",
+    "adresse": "Itagstraße 22",
+    "ort": "29221 Celle",
+    "km": 16.4,
+    "maps": "https://www.google.com/maps/search/?api=1&query=ALDI%20Nord%20Itagstra%C3%9Fe%2022%2029221%20Celle"
    },
    {
     "name": "ALDI Nord",
