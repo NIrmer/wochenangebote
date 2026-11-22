@@ -193,9 +193,9 @@ ZUSATZ_AUSSCHLUSS = {
     "TK-Fertiggerichte": [r"herzstücke.{0,40}(auflauf|gratin)"],
     "Gemüse (frisch & TK)": SALAT_FERTIG + [r"hot-?dog", r"börek", r"rote bete", r"rote beete", r"kohlrabi", r"süßkartoffel", r"gefüllte paprika",
                               r"hering", r"schmalz", r"frischkäse", r"schnittkäse", r"kürbiskern", r"funny.?frisch",
-                              r"arabica", r"kaffee", r"frikassee"],
+                              r"arabica", r"kaffee", r"frikassee", r"barista", r"espresso"],
     "Kartoffeln": [r"bratkartoffel", r"omelett", r"gratin", r"puffer", r"rösti", r"knödel", r"gnocchi", r"salat", r"auflauf"],
-    "Milch": [r"vollmilch", r"hemme", r"3[,.]5"],
+    "Milch": [r"vollmilch", r"hemme", r"3[,.]5", r"choc", r"weihnachtsfigur"],
     "Proteinpudding / High Protein": SALAT_FERTIG + [r"curry", r"protein\+"],
     "Nudeln (LIDL)": [r"delverde", r"glocken", r"ravioli", r"tortellini"],
     # Drogerie: nur was wir wirklich nutzen
